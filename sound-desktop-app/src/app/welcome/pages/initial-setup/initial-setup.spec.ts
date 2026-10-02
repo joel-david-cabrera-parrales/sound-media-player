@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { InitialSetup } from './initial-setup';
 
@@ -9,6 +10,7 @@ describe('InitialSetup', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [InitialSetup],
+      providers: [{ provide: Router, useValue: { navigate: () => Promise.resolve(true) } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InitialSetup);

@@ -1,0 +1,64 @@
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* 3-Second Timed Animation for Progress Bar */
+@keyframes progress3s {
+  0% { width: 0%; }
+  30% { width: 35%; }
+  65% { width: 78%; }
+  100% { width: 100%; }
+}
+
+/* Audio Equalizer visualizer wave */
+@keyframes eqBar {
+  0%, 100% { height: 12px; }
+  50% { height: 48px; }
+}
+
+/* Sound Frequency Ring expansion */
+@keyframes sonarWave {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes orbitalRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes stepReveal1 {
+  0% { opacity: 0.3; transform: translateX(-4px); }
+  33% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 1; }
+}
+
+@keyframes stepReveal2 {
+  0%, 33% { opacity: 0.3; transform: translateX(-4px); }
+  66% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 1; }
+}
+
+@keyframes stepReveal3 {
+  0%, 66% { opacity: 0.3; transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.animate-progress-3s {
+  animation: progress3s 3.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.sonar-1 { animation: sonarWave 2.8s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
+.sonar-2 { animation: sonarWave 2.8s cubic-bezier(0, 0.2, 0.8, 1) infinite 0.9s; }
+.sonar-3 { animation: sonarWave 2.8s cubic-bezier(0, 0.2, 0.8, 1) infinite 1.8s; }
+
+.orbit-spinner {
+  animation: orbitalRotate 6s linear infinite;
+}
+
+.step-check-1 { animation: stepReveal1 3.2s forwards; }
+.step-check-2 { animation: stepReveal2 3.2s forwards; }
+.step-check-3 { animation: stepReveal3 3.2s forwards; }

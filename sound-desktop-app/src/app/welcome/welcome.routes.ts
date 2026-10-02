@@ -3,6 +3,7 @@ import { WelcomeLayout } from './layouts/welcome-layout';
 import { WelcomeApp } from './pages/welcome-app/welcome-app';
 import { InitialSetup } from './pages/initial-setup/initial-setup';
 import { GeneralSetup } from './pages/general-setup/general-setup';
+import { profileSetupGuard } from './guards/profile-setup.guard';
 
 export const routes: Route[] = [
   {
@@ -16,6 +17,7 @@ export const routes: Route[] = [
       {
         path: 'initial-setup',
         component: InitialSetup,
+        canActivate: [profileSetupGuard],
       },
       {
         path: 'general-setup',

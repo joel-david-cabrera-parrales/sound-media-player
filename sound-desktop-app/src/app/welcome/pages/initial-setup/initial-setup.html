@@ -1,1 +1,151 @@
-<p>initial-setup works!</p>
+<section class="bg-[#0a0a0c] text-white min-h-screen overflow-x-hidden relative select-none antialiased flex flex-col justify-between m-0 p-0">
+  <!-- Subtle ambient glow background -->
+  <div class="absolute inset-0 bg-grid-pattern pointer-events-none"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-[#00d2ff]/15 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Header with progress -->
+  <header class="relative z-10 w-full px-12 py-8 flex justify-between items-center max-w-7xl mx-auto">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-xl bg-[#131316] border border-white/10 flex items-center justify-center text-[#00d2ff]">
+        <span class="material-symbols-outlined text-lg">graphic_eq</span>
+      </div>
+      <div>
+        <span class="text-sm font-bold tracking-tight text-white block">Sound</span>
+        <span class="text-[9px] uppercase font-bold tracking-wider text-[#00d2ff] block">High-Fidelity Audio</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="text-right hidden sm:block">
+        <span class="text-xs text-white font-medium block">Paso 2: Datos de perfil</span>
+        <span class="text-[11px] text-neutral-400">Personalización de tu cuenta</span>
+      </div>
+      <div class="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div class="w-2/3 h-full bg-[#00d2ff] rounded-full shadow-[0_0_8px_#00d2ff]"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main User Form Section -->
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-6 max-w-2xl mx-auto w-full">
+    <div class="w-full bg-[#131316]/85 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+      <!-- Top subtle cyan accent border highlight -->
+      <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00d2ff] to-transparent"></div>
+
+      <!-- Heading -->
+      <div class="mb-8 text-center sm:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00d2ff]/10 border border-[#00d2ff]/20 text-[#00d2ff] text-xs font-semibold mb-3">
+          <span class="material-symbols-outlined text-sm">person_outline</span>
+          <span>Bienvenido a la comunidad</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">Cuéntanos sobre ti</h2>
+        <p class="text-neutral-400 text-sm">Personalizaremos tus recomendaciones diarias, mezclas de cumpleaños y biblioteca según tu identidad.</p>
+      </div>
+
+      <!-- Avatar Picker Preview -->
+      <div class="flex items-center gap-5 p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-8">
+        <div class="relative w-16 h-16 rounded-full bg-gradient-to-tr from-[#0088cc] to-[#00d2ff] p-0.5 shadow-[0_0_15px_rgba(0,210,255,0.3)]">
+          <div class="w-full h-full rounded-full bg-[#131316] flex items-center justify-center overflow-hidden">
+            <img alt="Foto de perfil" class="w-full h-full object-cover" [src]="safePhotoUrl" (error)="onPhotoError()" />
+          </div>
+          <button type="button" aria-label="Cambiar foto de perfil" (click)="onEditPhoto()" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#00d2ff] text-black flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-xs font-bold">edit</span>
+          </button>
+          <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)" />
+        </div>
+        <div>
+          <span class="text-sm font-semibold text-white block">Foto de perfil</span>
+          <span class="text-xs text-neutral-400">Avatar predeterminado asignado. Puedes cambiarlo ahora o más tarde.</span>
+          @if (photoError) {
+            <span class="text-xs text-red-400 block mt-1">{{ photoError }}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Form Inputs -->
+      <form class="space-y-6" [formGroup]="form" (ngSubmit)="onSave()">
+        <!-- Campo Nombre Completo / Apodo -->
+        <div>
+          <label for="fullName" class="block text-xs font-semibold uppercase tracking-wider text-neutral-300 mb-2 flex items-center justify-between">
+            <span>Nombre o Nombre de Usuario</span>
+            <span class="text-neutral-500 lowercase font-normal">Visible en tus playlists</span>
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-4 text-neutral-400 text-lg">badge</span>
+            <input
+              id="fullName"
+              formControlName="fullName"
+              class="w-full bg-[#0d0d10] border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-[#00d2ff] focus:ring-2 focus:ring-[#00d2ff]/20 transition-all font-medium"
+              placeholder="Ej. Alex Vance"
+              type="text"
+              autocomplete="name" />
+          </div>
+          @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+            <p class="mt-2 text-xs text-red-400">
+              @if (form.controls.fullName.errors?.['required']) {
+                <span>El nombre es obligatorio.</span>
+              } @else if (form.controls.fullName.errors?.['fullName']) {
+                <span>{{ form.controls.fullName.errors?.['fullName'] }}</span>
+              } @else {
+                <span>Ingresa al menos 3 caracteres.</span>
+              }
+            </p>
+          }
+        </div>
+
+        <!-- Campo Fecha de Cumpleaños -->
+        <div>
+          <label for="birthdate" class="block text-xs font-semibold uppercase tracking-wider text-neutral-300 mb-2 flex items-center justify-between">
+            <span>Fecha de Cumpleaños</span>
+            <span class="text-[#00d2ff] text-[11px] font-medium flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">cake</span> Playlist especial en tu día
+            </span>
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-4 text-neutral-400 text-lg">calendar_today</span>
+            <input
+              id="birthdate"
+              formControlName="birthdate"
+              [max]="maxDate"
+              class="w-full bg-[#0d0d10] border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-[#00d2ff] focus:ring-2 focus:ring-[#00d2ff]/20 transition-all font-medium"
+              type="date" />
+          </div>
+          @if (form.controls.birthdate.touched && form.controls.birthdate.invalid) {
+            <p class="mt-2 text-xs text-red-400">
+              @if (form.controls.birthdate.errors?.['required']) {
+                <span>La fecha de cumpleaños es obligatoria.</span>
+              } @else {
+                <span>{{ form.controls.birthdate.errors?.['birthdate'] }}</span>
+              }
+            </p>
+          }
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center gap-3">
+          <button
+            class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#00d2ff] to-[#0088cc] text-black font-bold text-sm tracking-wide shadow-[0_0_20px_rgba(0,210,255,0.45)] hover:shadow-[0_0_30px_rgba(0,210,255,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
+            type="submit"
+            [disabled]="form.invalid">
+            <span>Guardar y continuar</span>
+            <span class="material-symbols-outlined text-base font-bold">arrow_forward</span>
+          </button>
+          <button
+            class="w-full sm:w-auto py-3.5 px-6 rounded-full bg-transparent hover:bg-white/5 text-neutral-400 hover:text-white font-medium text-xs transition-colors"
+            type="button"
+            (click)="onSkip()">
+            Omitir por ahora
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer Info -->
+  <footer class="relative z-10 w-full px-12 py-5 border-t border-white/5 flex justify-between items-center text-xs text-neutral-500 max-w-7xl mx-auto">
+    <span>Tus datos se almacenan de manera local y encriptada.</span>
+    <div class="flex items-center gap-2 text-[#00d2ff]">
+      <span class="material-symbols-outlined text-sm">verified_user</span>
+      <span class="text-[11px] font-semibold">Sound Privacy Shield</span>
+    </div>
+  </footer>
+</section>
