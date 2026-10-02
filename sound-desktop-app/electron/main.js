@@ -12,6 +12,9 @@ function createWindow() {
     },
   });
 
+  // Se oculta el menu de windows
+  win.setMenuBarVisibility(false);
+
   // En desarrollo, cargamos el servidor de Angular
   win.loadURL('http://localhost:4200');
 }
