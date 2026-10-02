@@ -10,5 +10,5 @@ export const routes: Routes = [
     path: 'not-found',
     loadChildren: () => import('./shared/shared.routes'),
   },
-  { path: '**', redirectTo: 'not-found' },
+  { path: '**', redirectTo: 'not-found', pathMatch: 'full' },
 ];
