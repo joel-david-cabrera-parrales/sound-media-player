@@ -1,0 +1,98 @@
+{
+  "common": {
+    "brandTagline": "High-Fidelity Audio",
+    "photoAlt": "Foto de perfil",
+    "changePhoto": "Cambiar foto de perfil",
+    "installApp": "Instalar app",
+    "searchApp": "Buscar en la app"
+  },
+  "welcome": {
+    "app": {
+      "description": "La nueva era del streaming musical y bibliotecas locales de alta resolución. Sonido puro sin pérdida."
+    },
+    "profile": {
+      "step": "Paso 2: Datos de perfil",
+      "stepDesc": "Personalización de tu cuenta",
+      "badge": "Bienvenido a la comunidad",
+      "title": "Cuéntanos sobre ti",
+      "subtitle": "Personalizaremos tus recomendaciones diarias, mezclas de cumpleaños y biblioteca según tu identidad.",
+      "photoTitle": "Foto de perfil",
+      "photoDesc": "Avatar predeterminado asignado. Puedes cambiarlo ahora o más tarde.",
+      "nameLabel": "Nombre o Nombre de Usuario",
+      "nameHint": "Visible en tus playlists",
+      "namePlaceholder": "Ej. Alex Vance",
+      "birthLabel": "Fecha de Cumpleaños",
+      "birthHint": "Playlist especial en tu día",
+      "save": "Guardar y continuar",
+      "skip": "Omitir por ahora",
+      "footer": "Tus datos se almacenan de manera local y encriptada.",
+      "errors": {
+        "nameRequired": "El nombre es obligatorio.",
+        "nameTwoWords": "Ingresa tu nombre y apellido.",
+        "nameLetters": "Solo se permiten letras.",
+        "nameMin": "Ingresa al menos 3 caracteres.",
+        "birthRequired": "La fecha de cumpleaños es obligatoria.",
+        "birthInvalid": "Fecha inválida.",
+        "birthFuture": "La fecha no puede ser futura.",
+        "photoType": "El archivo debe ser una imagen.",
+        "photoSize": "La imagen no puede superar los 5 MB."
+      }
+    },
+    "setup": {
+      "finishing": "Finalizando configuración",
+      "title": "Configurando Sound para ti...",
+      "subtitle": "Alineando el códec de audio lossless, indexando bibliotecas locales y calibrando tu perfil acústico.",
+      "localFiles": "Archivos locales",
+      "indexerReady": "Indexador listo",
+      "birthdayMix": "Mix Cumpleaños",
+      "synced": "Sincronizado"
+    }
+  },
+  "shell": {
+    "sidebar": {
+      "home": "Inicio",
+      "search": "Buscar",
+      "library": "Tu Biblioteca",
+      "import": "Importar archivos locales",
+      "createList": "Crear lista",
+      "liked": "Canciones que te gustan",
+      "episodes": "Tus episodios",
+      "legal": "Avisos legales",
+      "privacy": "Privacidad",
+      "closeMenu": "Cerrar menú"
+    },
+    "topbar": {
+      "searchPlaceholder": "Buscar en archivos locales...",
+      "filters": "Filtros y ajustes",
+      "all": "Todo",
+      "folders": "Carpetas",
+      "history": "Historial",
+      "notifications": "Notificaciones",
+      "openMenu": "Abrir menú",
+      "toLight": "Cambiar a tema claro",
+      "toDark": "Cambiar a tema oscuro"
+    },
+    "dock": {
+      "idleTitle": "Sin reproducción activa",
+      "idleSubtitle": "Selecciona una pista o álbum para iniciar",
+      "favorite": "Añadir a favoritas",
+      "shuffle": "Aleatorio",
+      "previous": "Anterior",
+      "play": "Reproducir",
+      "pause": "Pausar",
+      "next": "Siguiente",
+      "repeat": "Repetir",
+      "lyrics": "Letras",
+      "queue": "Cola de reproducción",
+      "devices": "Dispositivos disponibles",
+      "mute": "Silenciar"
+    }
+  },
+  "notFound": {
+    "badge": "Módulo no disponible",
+    "subtitle": "Módulo o sección no encontrada",
+    "description": "La pestaña, sección o módulo que intentas abrir no está disponible, fue reubicada o no tienes permisos para acceder. Vuelve a la navegación principal.",
+    "backHome": "Volver al Inicio",
+    "goLibrary": "Ir a Tu Biblioteca"
+  }
+}

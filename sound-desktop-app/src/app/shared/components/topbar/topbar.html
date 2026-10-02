@@ -5,7 +5,7 @@
     <button
       type="button"
       (click)="toggleSidebar()"
-      aria-label="Abrir menú"
+      aria-label="{{ 'shell.topbar.openMenu' | translate }}"
       class="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors flex-shrink-0"
     >
       <span class="material-symbols-outlined text-[22px]">menu</span>
@@ -18,9 +18,9 @@
       <input
         [(ngModel)]="search"
         class="w-full h-10 pl-10 pr-10 bg-slate-100 dark:bg-[#181818] hover:bg-slate-200 dark:hover:bg-[#242424] focus:bg-white dark:focus:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[#00d2ff] focus:outline-none focus:ring-1 focus:ring-[#00d2ff] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all duration-200"
-        placeholder="Buscar en archivos locales..."
+        [placeholder]="'shell.topbar.searchPlaceholder' | translate"
         type="text" />
-      <button type="button" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" title="Filtros y ajustes">
+      <button type="button" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.topbar.filters' | translate">
         <span class="material-symbols-outlined text-[18px]">tune</span>
       </button>
     </div>
@@ -34,7 +34,7 @@
           ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_rgba(0,210,255,0.35)] transition-all'
           : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-slate-200 dark:border-white/[0.08]'"
       >
-        Todo
+        {{ 'shell.topbar.all' | translate }}
       </button>
       <!-- Inactive Pill: Carpetas -->
       <button
@@ -44,7 +44,7 @@
           ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_rgba(0,210,255,0.35)] transition-all'
           : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-slate-200 dark:border-white/[0.08]'"
       >
-        Carpetas
+        {{ 'shell.topbar.folders' | translate }}
       </button>
     </div>
   </div>
@@ -55,18 +55,18 @@
       <span class="material-symbols-outlined text-[20px]">{{ theme() === 'dark' ? 'dark_mode' : 'light_mode' }}</span>
     </button>
     <!-- History Action -->
-    <button type="button" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" title="Historial">
+    <button type="button" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="'shell.topbar.history' | translate">
       <span class="material-symbols-outlined text-[20px]">history</span>
     </button>
     <!-- Notifications Action with Electric Cyan Badge -->
-    <button type="button" class="relative w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" title="Notificaciones">
+    <button type="button" class="relative w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="'shell.topbar.notifications' | translate">
       <span class="material-symbols-outlined text-[20px]">notifications</span>
       <span class="absolute top-2 right-2 w-2 h-2 bg-[#00d2ff] rounded-full ring-2 ring-white dark:ring-[#121212] dark:shadow-[0_0_6px_#00d2ff]"></span>
     </button>
     <!-- User Avatar -->
     <div class="ml-1 pl-2 border-l border-slate-200 dark:border-white/[0.08] flex items-center">
       <button type="button" class="relative w-9 h-9 rounded-full overflow-hidden ring-1 ring-slate-300 dark:ring-white/16 hover:ring-[#00d2ff] transition-all">
-        <img class="w-full h-full object-cover" alt="Foto de perfil" [src]="avatarUrl" (error)="onAvatarError($event)" />
+        <img class="w-full h-full object-cover" [alt]="'common.photoAlt' | translate" [src]="avatarUrl" (error)="onAvatarError($event)" />
       </button>
     </div>
   </div>

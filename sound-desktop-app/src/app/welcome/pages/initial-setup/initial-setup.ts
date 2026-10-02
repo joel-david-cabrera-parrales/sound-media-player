@@ -10,16 +10,17 @@ import {
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { PROFILE_STORAGE_KEY } from '../../guards/profile-setup.guard';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 function fullNameValidator(control: AbstractControl): ValidationErrors | null {
   const value = (control.value ?? '').trim();
   if (!value) return null;
   const parts = value.split(/\s+/);
   if (parts.length < 2) {
-    return { fullName: 'Ingresa tu nombre y apellido' };
+    return { fullName: 'nameTwoWords' };
   }
   if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ'\- ]+$/.test(value)) {
-    return { fullName: 'Solo se permiten letras' };
+    return { fullName: 'nameLetters' };
   }
   return null;
 }
@@ -48,19 +49,19 @@ function pastDateValidator(control: AbstractControl): ValidationErrors | null {
   if (!value) return null;
   const date = new Date(`${value}T00:00:00`);
   if (Number.isNaN(date.getTime())) {
-    return { birthdate: 'Fecha inválida' };
+    return { birthdate: 'birthInvalid' };
   }
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   if (date > today) {
-    return { birthdate: 'La fecha no puede ser futura' };
+    return { birthdate: 'birthFuture' };
   }
   return null;
 }
 
 @Component({
   selector: 'welcome-initial-setup',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
   templateUrl: './initial-setup.html',
   styleUrl: './initial-setup.css',
 })
@@ -121,12 +122,12 @@ export class InitialSetup {
     const file = input.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      this.photoError = 'El archivo debe ser una imagen.';
+      this.photoError = 'photoType';
       input.value = '';
       return;
     }
     if (file.size > MAX_PHOTO_BYTES) {
-      this.photoError = 'La imagen no puede superar los 5 MB.';
+      this.photoError = 'photoSize';
       input.value = '';
       return;
     }

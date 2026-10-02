@@ -11,13 +11,13 @@
       </div>
       <div>
         <span class="text-sm font-bold tracking-tight text-slate-900 dark:text-white block">Sound</span>
-        <span class="text-[9px] uppercase font-bold tracking-wider text-[#005575] dark:text-[#00d2ff] block">High-Fidelity Audio</span>
+        <span class="text-[9px] uppercase font-bold tracking-wider text-[#005575] dark:text-[#00d2ff] block">{{ 'common.brandTagline' | translate }}</span>
       </div>
     </div>
     <div class="flex items-center gap-4">
       <div class="text-right hidden sm:block">
-        <span class="text-xs text-slate-900 dark:text-white font-medium block">Paso 2: Datos de perfil</span>
-        <span class="text-[11px] text-slate-500 dark:text-neutral-400">Personalización de tu cuenta</span>
+        <span class="text-xs text-slate-900 dark:text-white font-medium block">{{ 'welcome.profile.step' | translate }}</span>
+        <span class="text-[11px] text-slate-500 dark:text-neutral-400">{{ 'welcome.profile.stepDesc' | translate }}</span>
       </div>
       <div class="w-24 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
         <div class="w-2/3 h-full bg-[#00d2ff] rounded-full dark:shadow-[0_0_8px_#00d2ff]"></div>
@@ -35,28 +35,28 @@
       <div class="mb-8 text-center sm:text-left">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00d2ff]/10 border border-[#00d2ff]/20 text-[#005575] dark:text-[#00d2ff] text-xs font-semibold mb-3">
           <span class="material-symbols-outlined text-sm">person_outline</span>
-          <span>Bienvenido a la comunidad</span>
+          <span>{{ 'welcome.profile.badge' | translate }}</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">Cuéntanos sobre ti</h2>
-        <p class="text-slate-500 dark:text-neutral-400 text-sm">Personalizaremos tus recomendaciones diarias, mezclas de cumpleaños y biblioteca según tu identidad.</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">{{ 'welcome.profile.title' | translate }}</h2>
+        <p class="text-slate-500 dark:text-neutral-400 text-sm">{{ 'welcome.profile.subtitle' | translate }}</p>
       </div>
 
       <!-- Avatar Picker Preview -->
       <div class="flex items-center gap-5 p-4 rounded-2xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 mb-8">
         <div class="relative w-16 h-16 rounded-full bg-gradient-to-tr from-[#0088cc] to-[#00d2ff] p-0.5 dark:shadow-[0_0_15px_rgba(0,210,255,0.3)]">
           <div class="w-full h-full rounded-full bg-slate-200 dark:bg-[#131316] flex items-center justify-center overflow-hidden">
-            <img alt="Foto de perfil" class="w-full h-full object-cover" [src]="safePhotoUrl" (error)="onPhotoError()" />
+            <img [alt]="'common.photoAlt' | translate" class="w-full h-full object-cover" [src]="safePhotoUrl" (error)="onPhotoError()" />
           </div>
-          <button type="button" aria-label="Cambiar foto de perfil" (click)="onEditPhoto()" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#00d2ff] text-black flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+          <button type="button" [attr.aria-label]="'common.changePhoto' | translate" (click)="onEditPhoto()" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#00d2ff] text-black flex items-center justify-center shadow-md hover:scale-110 transition-transform">
             <span class="material-symbols-outlined text-xs font-bold">edit</span>
           </button>
           <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)" />
         </div>
         <div>
-          <span class="text-sm font-semibold text-slate-900 dark:text-white block">Foto de perfil</span>
-          <span class="text-xs text-slate-500 dark:text-neutral-400">Avatar predeterminado asignado. Puedes cambiarlo ahora o más tarde.</span>
+          <span class="text-sm font-semibold text-slate-900 dark:text-white block">{{ 'welcome.profile.photoTitle' | translate }}</span>
+          <span class="text-xs text-slate-500 dark:text-neutral-400">{{ 'welcome.profile.photoDesc' | translate }}</span>
           @if (photoError) {
-            <span class="text-xs text-red-600 dark:text-red-400 block mt-1">{{ photoError }}</span>
+            <span class="text-xs text-red-600 dark:text-red-400 block mt-1">{{ 'welcome.profile.errors.' + photoError | translate }}</span>
           }
         </div>
       </div>
@@ -66,8 +66,8 @@
         <!-- Campo Nombre Completo / Apodo -->
         <div>
           <label for="fullName" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-300 mb-2 flex items-center justify-between">
-            <span>Nombre o Nombre de Usuario</span>
-            <span class="text-slate-400 dark:text-neutral-500 lowercase font-normal">Visible en tus playlists</span>
+            <span>{{ 'welcome.profile.nameLabel' | translate }}</span>
+            <span class="text-slate-400 dark:text-neutral-500 lowercase font-normal">{{ 'welcome.profile.nameHint' | translate }}</span>
           </label>
           <div class="relative flex items-center">
             <span class="material-symbols-outlined absolute left-4 text-slate-400 dark:text-neutral-400 text-lg">badge</span>
@@ -75,18 +75,18 @@
               id="fullName"
               formControlName="fullName"
               class="w-full bg-slate-50 dark:bg-[#0d0d10] border border-slate-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-[#00d2ff] focus:ring-2 focus:ring-[#00d2ff]/20 transition-all font-medium"
-              placeholder="Ej. Alex Vance"
+              [placeholder]="'welcome.profile.namePlaceholder' | translate"
               type="text"
               autocomplete="name" />
           </div>
           @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
             <p class="mt-2 text-xs text-red-600 dark:text-red-400">
               @if (form.controls.fullName.errors?.['required']) {
-                <span>El nombre es obligatorio.</span>
+                <span>{{ 'welcome.profile.errors.nameRequired' | translate }}</span>
               } @else if (form.controls.fullName.errors?.['fullName']) {
-                <span>{{ form.controls.fullName.errors?.['fullName'] }}</span>
+                <span>{{ 'welcome.profile.errors.' + form.controls.fullName.errors?.['fullName'] | translate }}</span>
               } @else {
-                <span>Ingresa al menos 3 caracteres.</span>
+                <span>{{ 'welcome.profile.errors.nameMin' | translate }}</span>
               }
             </p>
           }
@@ -95,9 +95,9 @@
         <!-- Campo Fecha de Cumpleaños -->
         <div>
           <label for="birthdate" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-300 mb-2 flex items-center justify-between">
-            <span>Fecha de Cumpleaños</span>
+            <span>{{ 'welcome.profile.birthLabel' | translate }}</span>
             <span class="text-[#005575] dark:text-[#00d2ff] text-[11px] font-medium flex items-center gap-1">
-              <span class="material-symbols-outlined text-xs">cake</span> Playlist especial en tu día
+              <span class="material-symbols-outlined text-xs">cake</span> {{ 'welcome.profile.birthHint' | translate }}
             </span>
           </label>
           <div class="relative flex items-center">
@@ -112,9 +112,9 @@
           @if (form.controls.birthdate.touched && form.controls.birthdate.invalid) {
             <p class="mt-2 text-xs text-red-600 dark:text-red-400">
               @if (form.controls.birthdate.errors?.['required']) {
-                <span>La fecha de cumpleaños es obligatoria.</span>
+                <span>{{ 'welcome.profile.errors.birthRequired' | translate }}</span>
               } @else {
-                <span>{{ form.controls.birthdate.errors?.['birthdate'] }}</span>
+                <span>{{ 'welcome.profile.errors.' + form.controls.birthdate.errors?.['birthdate'] | translate }}</span>
               }
             </p>
           }
@@ -126,14 +126,14 @@
             class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#00d2ff] to-[#0088cc] text-black font-bold text-sm tracking-wide shadow-lg dark:shadow-[0_0_20px_rgba(0,210,255,0.45)] hover:shadow-xl dark:hover:shadow-[0_0_30px_rgba(0,210,255,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
             type="submit"
             [disabled]="form.invalid">
-            <span>Guardar y continuar</span>
+            <span>{{ 'welcome.profile.save' | translate }}</span>
             <span class="material-symbols-outlined text-base font-bold">arrow_forward</span>
           </button>
           <button
             class="w-full sm:w-auto py-3.5 px-6 rounded-full bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-colors"
             type="button"
             (click)="onSkip()">
-            Omitir por ahora
+            {{ 'welcome.profile.skip' | translate }}
           </button>
         </div>
       </form>
@@ -142,7 +142,7 @@
 
   <!-- Footer Info -->
   <footer class="relative z-10 w-full px-12 py-5 border-t border-slate-200 dark:border-white/5 flex justify-between items-center text-xs text-slate-500 dark:text-neutral-500 max-w-7xl mx-auto">
-    <span>Tus datos se almacenan de manera local y encriptada.</span>
+    <span>{{ 'welcome.profile.footer' | translate }}</span>
     <div class="flex items-center gap-2 text-[#005575] dark:text-[#00d2ff]">
       <span class="material-symbols-outlined text-sm">verified_user</span>
       <span class="text-[11px] font-semibold">Sound Privacy Shield</span>

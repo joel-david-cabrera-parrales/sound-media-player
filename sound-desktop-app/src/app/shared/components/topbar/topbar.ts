@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { DEFAULT_AVATAR, getStoredPhotoUrl } from '../../utils/profile-photo';
 import { ShellUiService } from '../../services/shell-ui.service';
 import { ThemeService } from '../../services/theme.service';
@@ -9,7 +10,7 @@ type FilterPill = 'todo' | 'carpetas';
 
 @Component({
   selector: 'app-topbar',
-  imports: [FormsModule],
+  imports: [FormsModule, TranslatePipe],
   templateUrl: './topbar.html',
   styleUrl: './topbar.css',
 })

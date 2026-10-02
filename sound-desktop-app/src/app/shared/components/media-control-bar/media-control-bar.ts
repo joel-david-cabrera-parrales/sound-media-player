@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-media-control-bar',
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './media-control-bar.html',
   styleUrl: './media-control-bar.css',
 })

@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'welcome-general-setup',
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './general-setup.html',
   styleUrl: './general-setup.css',
 })

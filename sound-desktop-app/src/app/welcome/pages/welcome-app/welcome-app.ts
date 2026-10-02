@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'welcome-app',
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './welcome-app.html',
   styleUrl: './welcome-app.css',
 })

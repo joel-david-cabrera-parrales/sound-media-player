@@ -67,7 +67,7 @@
         <!-- Error Pill Badge -->
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200 dark:bg-[#242424] border border-slate-300 dark:border-white/[0.08] mb-3">
           <span class="w-2 h-2 rounded-full bg-[#00d2ff] animate-pulse"></span>
-          <span class="text-[11px] font-medium tracking-[0.04em] text-[#005575] dark:text-[#00d2ff] font-semibold uppercase">Módulo no disponible</span>
+          <span class="text-[11px] font-medium tracking-[0.04em] text-[#005575] dark:text-[#00d2ff] font-semibold uppercase">{{ 'notFound.badge' | translate }}</span>
         </div>
         <!-- Gigantic Display Error -->
         <h1 class="text-[32px] leading-[38px] md:text-[56px] md:leading-[64px] font-extrabold text-slate-900 dark:text-white tracking-tighter mb-2">
@@ -75,28 +75,28 @@
         </h1>
         <!-- Subtitle -->
         <h2 class="text-2xl leading-[30px] font-bold text-slate-900 dark:text-white mb-3">
-          Módulo o sección no encontrada
+          {{ 'notFound.subtitle' | translate }}
         </h2>
         <!-- Empathetic Module Description -->
         <p class="text-base leading-6 text-slate-600 dark:text-[#b3b3b3] max-w-xl mb-8">
-          La pestaña, sección o módulo que intentas abrir no está disponible, fue reubicada o no tienes permisos para acceder. Vuelve a la navegación principal.
+          {{ 'notFound.description' | translate }}
         </p>
         <!-- Action Cluster -->
         <div class="flex flex-wrap items-center justify-center gap-4 w-full">
           <!-- Primary CTA Button -->
           <a class="h-12 px-7 rounded-full bg-[#00d2ff] text-[#001f28] text-sm font-semibold font-bold flex items-center justify-center gap-2.5 hover:brightness-110 active:scale-95 transition-all cyan-glow" routerLink="/">
             <span class="material-symbols-outlined text-xl">home</span>
-            <span>Volver al Inicio</span>
+            <span>{{ 'notFound.backHome' | translate }}</span>
           </a>
           <!-- Secondary CTA Button: Explorar secciones / biblioteca -->
           <a class="h-12 px-6 rounded-full bg-slate-200 dark:bg-[#242424] hover:bg-slate-300 dark:hover:bg-[#2a2a2a] text-slate-900 dark:text-white border border-slate-300 dark:border-white/16 text-sm font-semibold flex items-center justify-center gap-2.5 active:scale-95 transition-all" routerLink="/library">
             <span class="material-symbols-outlined text-xl text-[#005575] dark:text-[#00d2ff]">library_music</span>
-            <span>Ir a Tu Biblioteca</span>
+            <span>{{ 'notFound.goLibrary' | translate }}</span>
           </a>
           <!-- Search Link -->
           <a class="h-12 px-5 rounded-full text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#181818] transition-colors text-sm font-semibold flex items-center justify-center gap-2" routerLink="/">
             <span class="material-symbols-outlined text-xl">search</span>
-            <span>Buscar en la app</span>
+            <span>{{ 'common.searchApp' | translate }}</span>
           </a>
         </div>
       </div>

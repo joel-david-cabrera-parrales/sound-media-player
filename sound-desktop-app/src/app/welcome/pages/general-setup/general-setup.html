@@ -11,14 +11,14 @@
       </div>
       <div>
         <span class="text-sm font-bold tracking-tight text-slate-900 dark:text-white block">Sound</span>
-        <span class="text-[9px] uppercase font-bold tracking-wider text-[#005575] dark:text-[#00d2ff] block">High-Fidelity Audio</span>
+        <span class="text-[9px] uppercase font-bold tracking-wider text-[#005575] dark:text-[#00d2ff] block">{{ 'common.brandTagline' | translate }}</span>
       </div>
     </div>
 
     <div class="flex items-center gap-4">
       <span class="text-xs text-[#005575] dark:text-[#00d2ff] font-semibold tracking-wider uppercase flex items-center gap-1.5">
         <span class="w-2 h-2 rounded-full bg-[#00d2ff] animate-ping"></span>
-        Finalizando configuración
+        {{ 'welcome.setup.finishing' | translate }}
       </span>
       <div class="w-24 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
         <div class="w-full h-full bg-[#00d2ff] rounded-full dark:shadow-[0_0_8px_#00d2ff]"></div>
@@ -60,10 +60,10 @@
     <!-- Main Title & Dynamic Feedback -->
     <div class="w-full">
       <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
-        Configurando Sound para ti...
+        {{ 'welcome.setup.title' | translate }}
       </h2>
       <p class="text-slate-500 dark:text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-        Alineando el códec de audio lossless, indexando bibliotecas locales y calibrando tu perfil acústico.
+        {{ 'welcome.setup.subtitle' | translate }}
       </p>
 
       <!-- 3-Second Custom Progress Meter -->
@@ -79,8 +79,8 @@
             <span class="material-symbols-outlined text-sm">folder_special</span>
           </div>
           <div>
-            <span class="text-xs font-bold text-slate-900 dark:text-white block">Archivos locales</span>
-            <span class="text-[10px] text-slate-500 dark:text-neutral-400">Indexador listo</span>
+            <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ 'welcome.setup.localFiles' | translate }}</span>
+            <span class="text-[10px] text-slate-500 dark:text-neutral-400">{{ 'welcome.setup.indexerReady' | translate }}</span>
           </div>
         </div>
 
@@ -90,8 +90,8 @@
             <span class="material-symbols-outlined text-sm">celebration</span>
           </div>
           <div>
-            <span class="text-xs font-bold text-slate-900 dark:text-white block">Mix Cumpleaños</span>
-            <span class="text-[10px] text-[#005575] dark:text-[#00d2ff]">Sincronizado</span>
+            <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ 'welcome.setup.birthdayMix' | translate }}</span>
+            <span class="text-[10px] text-[#005575] dark:text-[#00d2ff]">{{ 'welcome.setup.synced' | translate }}</span>
           </div>
         </div>
       </div>

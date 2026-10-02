@@ -1,0 +1,98 @@
+{
+  "common": {
+    "brandTagline": "High-Fidelity Audio",
+    "photoAlt": "Profile photo",
+    "changePhoto": "Change profile photo",
+    "installApp": "Install app",
+    "searchApp": "Search in the app"
+  },
+  "welcome": {
+    "app": {
+      "description": "The new era of music streaming and high-resolution local libraries. Pure lossless sound."
+    },
+    "profile": {
+      "step": "Step 2: Profile details",
+      "stepDesc": "Personalizing your account",
+      "badge": "Welcome to the community",
+      "title": "Tell us about you",
+      "subtitle": "We will personalize your daily recommendations, birthday mixes, and library based on your identity.",
+      "photoTitle": "Profile photo",
+      "photoDesc": "Default avatar assigned. You can change it now or later.",
+      "nameLabel": "Name or Username",
+      "nameHint": "Visible on your playlists",
+      "namePlaceholder": "E.g. Alex Vance",
+      "birthLabel": "Birthday",
+      "birthHint": "Special playlist on your day",
+      "save": "Save and continue",
+      "skip": "Skip for now",
+      "footer": "Your data is stored locally and encrypted.",
+      "errors": {
+        "nameRequired": "Name is required.",
+        "nameTwoWords": "Enter your first and last name.",
+        "nameLetters": "Only letters are allowed.",
+        "nameMin": "Enter at least 3 characters.",
+        "birthRequired": "Birthday is required.",
+        "birthInvalid": "Invalid date.",
+        "birthFuture": "Date cannot be in the future.",
+        "photoType": "File must be an image.",
+        "photoSize": "Image cannot exceed 5 MB."
+      }
+    },
+    "setup": {
+      "finishing": "Finishing setup",
+      "title": "Setting up Sound for you...",
+      "subtitle": "Aligning the lossless audio codec, indexing local libraries, and calibrating your acoustic profile.",
+      "localFiles": "Local files",
+      "indexerReady": "Indexer ready",
+      "birthdayMix": "Birthday Mix",
+      "synced": "Synced"
+    }
+  },
+  "shell": {
+    "sidebar": {
+      "home": "Home",
+      "search": "Search",
+      "library": "Your Library",
+      "import": "Import local files",
+      "createList": "Create playlist",
+      "liked": "Liked songs",
+      "episodes": "Your episodes",
+      "legal": "Legal notices",
+      "privacy": "Privacy",
+      "closeMenu": "Close menu"
+    },
+    "topbar": {
+      "searchPlaceholder": "Search local files...",
+      "filters": "Filters and settings",
+      "all": "All",
+      "folders": "Folders",
+      "history": "History",
+      "notifications": "Notifications",
+      "openMenu": "Open menu",
+      "toLight": "Switch to light theme",
+      "toDark": "Switch to dark theme"
+    },
+    "dock": {
+      "idleTitle": "Nothing playing",
+      "idleSubtitle": "Select a track or album to start",
+      "favorite": "Add to favorites",
+      "shuffle": "Shuffle",
+      "previous": "Previous",
+      "play": "Play",
+      "pause": "Pause",
+      "next": "Next",
+      "repeat": "Repeat",
+      "lyrics": "Lyrics",
+      "queue": "Play queue",
+      "devices": "Available devices",
+      "mute": "Mute"
+    }
+  },
+  "notFound": {
+    "badge": "Module unavailable",
+    "subtitle": "Module or section not found",
+    "description": "The tab, section, or module you are trying to open is unavailable, was moved, or you lack permission to access it. Return to the main navigation.",
+    "backHome": "Back to Home",
+    "goLibrary": "Go to Your Library"
+  }
+}
