@@ -1,0 +1,15 @@
+.cyan-glow {
+  box-shadow: 0 4px 14px -4px rgba(0, 130, 180, 0.4);
+}
+
+:host-context(.dark) .cyan-glow {
+  box-shadow: 0 0 24px -2px rgba(0, 210, 255, 0.45);
+}
+
+.cyan-glow-subtle {
+  box-shadow: 0 2px 8px -2px rgba(0, 130, 180, 0.3);
+}
+
+:host-context(.dark) .cyan-glow-subtle {
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.25);
+}

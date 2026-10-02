@@ -94,5 +94,53 @@
     "description": "The tab, section, or module you are trying to open is unavailable, was moved, or you lack permission to access it. Return to the main navigation.",
     "backHome": "Back to Home",
     "goLibrary": "Go to Your Library"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Good morning, {{name}}",
+      "afternoon": "Good afternoon, {{name}}",
+      "night": "Good evening, {{name}}"
+    },
+    "heroQuestion": "What would you like to hear today?",
+    "resume": "Resume playback",
+    "quickTitle": "Quick access",
+    "recentTag": "Recent",
+    "quick": {
+      "weeklyTitle": "Weekly Discovery",
+      "favoritesTitle": "Your all-time favorites",
+      "spatial": "84 tracks • Spatial Audio",
+      "weekly": "Updated today, Monday",
+      "album": "Album • 2011 • Remaster 24/96",
+      "selected": "320 selected songs",
+      "masters": "192kHz Direct recordings"
+    },
+    "releases": {
+      "title": "New releases",
+      "subtitle": "The best premieres and recommendations picked for you.",
+      "seeAll": "See all"
+    },
+    "continue": {
+      "title": "Continue listening",
+      "tag": "In-progress history",
+      "podcast": "Podcast • Ep. 142",
+      "album": "Album in Progress",
+      "live": "Live Session",
+      "remaining": "{{time}} left",
+      "trackOf": "Track {{current}} of {{total}}"
+    },
+    "genres": {
+      "title": "Your favorite stations and genres",
+      "explore": "Explore genres",
+      "electronic": "Electronic",
+      "ambient": "Ambient",
+      "synthwave": "Synthwave",
+      "rock": "Classic Rock",
+      "lofi": "Lo-Fi Hi-Fi",
+      "radio": "Radio 24/7",
+      "immersive": "Immersive 3D",
+      "retro": "Retro Studio",
+      "master": "Master Tapes",
+      "focus": "Focus & Relax"
+    }
   }
 }

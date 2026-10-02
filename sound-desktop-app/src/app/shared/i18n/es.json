@@ -94,5 +94,53 @@
     "description": "La pestaña, sección o módulo que intentas abrir no está disponible, fue reubicada o no tienes permisos para acceder. Vuelve a la navegación principal.",
     "backHome": "Volver al Inicio",
     "goLibrary": "Ir a Tu Biblioteca"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Buenos días, {{name}}",
+      "afternoon": "Buenas tardes, {{name}}",
+      "night": "Buenas noches, {{name}}"
+    },
+    "heroQuestion": "¿Qué te gustaría escuchar hoy?",
+    "resume": "Reanudar reproducción",
+    "quickTitle": "Accesos rápidos",
+    "recentTag": "Recientes",
+    "quick": {
+      "weeklyTitle": "Descubrimiento Semanal",
+      "favoritesTitle": "Tus favoritos de siempre",
+      "spatial": "84 pistas • Sonido Espacial",
+      "weekly": "Actualizado hoy lunes",
+      "album": "Álbum • 2011 • Remaster 24/96",
+      "selected": "320 canciones seleccionadas",
+      "masters": "192kHz Grabaciones directas"
+    },
+    "releases": {
+      "title": "Nuevos lanzamientos",
+      "subtitle": "Los mejores estrenos y recomendaciones seleccionados para ti.",
+      "seeAll": "Ver todos"
+    },
+    "continue": {
+      "title": "Continuar escuchando",
+      "tag": "Historial en progreso",
+      "podcast": "Pódcast • Ep. 142",
+      "album": "Álbum en Curso",
+      "live": "Sesión en Vivo",
+      "remaining": "Restan {{time}}",
+      "trackOf": "Pista {{current}} de {{total}}"
+    },
+    "genres": {
+      "title": "Tus estaciones y géneros favoritos",
+      "explore": "Explorar géneros",
+      "electronic": "Electrónica",
+      "ambient": "Ambient",
+      "synthwave": "Synthwave",
+      "rock": "Rock Clásico",
+      "lofi": "Lo-Fi Hi-Fi",
+      "radio": "Radio 24/7",
+      "immersive": "Inmersivo 3D",
+      "retro": "Retro Studio",
+      "master": "Master Tapes",
+      "focus": "Enfoque y Relax"
+    }
   }
 }
