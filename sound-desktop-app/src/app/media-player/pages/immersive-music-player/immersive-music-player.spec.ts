@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { ImmersiveMusicPlayer } from './immersive-music-player';
 
@@ -9,6 +10,7 @@ describe('ImmersiveMusicPlayer', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ImmersiveMusicPlayer],
+      providers: [{ provide: Router, useValue: { navigate: () => Promise.resolve(true) } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ImmersiveMusicPlayer);

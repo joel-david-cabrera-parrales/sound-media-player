@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
-  selector: 'app-media-control-bar',
-  imports: [TranslatePipe],
+  selector: 'shared-media-control-bar',
+  imports: [RouterLink, TranslatePipe],
   templateUrl: './media-control-bar.html',
   styleUrl: './media-control-bar.css',
 })

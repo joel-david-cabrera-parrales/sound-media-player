@@ -1,9 +1,17 @@
 <footer class="fixed bottom-0 left-0 w-full h-[76px] sm:h-[90px] bg-white/90 dark:bg-[#121212]/90 backdrop-blur-2xl border-t border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 z-40 select-none">
   <!-- Left Segment: Track Information (Minimalist State) -->
   <div class="flex items-center gap-3.5 min-w-0 flex-1 sm:flex-none sm:w-1/4 sm:min-w-[200px]">
-    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-slate-100 dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] flex-shrink-0">
+    <a
+      routerLink="/library/immersive/immersive"
+      [attr.aria-label]="'shell.dock.expand' | translate"
+      [title]="'shell.dock.expand' | translate"
+      class="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-slate-100 dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] flex-shrink-0 overflow-hidden"
+    >
       <span class="material-symbols-outlined text-[24px]">music_note</span>
-    </div>
+      <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+        <span class="material-symbols-outlined text-white text-lg">open_in_full</span>
+      </span>
+    </a>
     <div class="flex flex-col min-w-0">
       <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</span>
       <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</span>

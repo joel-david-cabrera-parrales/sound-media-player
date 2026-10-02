@@ -1,1 +1,77 @@
-<p>immersive-music-player works!</p>
+<section
+  class="immersive-enter relative w-full h-full overflow-hidden bg-slate-100 dark:bg-[#0e0e0e] text-slate-900 dark:text-white select-none flex flex-col">
+  <!-- CAPA 0: Fondo de Carátula con Mezcla Suave -->
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    <img [alt]="trackTitle" class="w-full h-full object-cover object-center scale-105 opacity-35 blur-3xl contrast-125"
+      [src]="coverUrl" />
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-slate-100 via-slate-100/80 to-slate-100/40 dark:from-[#0e0e0e] dark:via-[#0e0e0e]/80 dark:to-[#0e0e0e]/40 mix-blend-multiply dark:mix-blend-multiply">
+    </div>
+    <div class="absolute inset-0 bg-slate-100/60 dark:bg-[#0e0e0e]/60"></div>
+  </div>
+  <!-- CAPA 1: Animación WebGL Shader de Ondas Sonoras -->
+  <div class="absolute inset-0 w-full h-full pointer-events-none opacity-40 dark:opacity-80 z-0">
+    <media-player-soundwave-shader></media-player-soundwave-shader>
+  </div>
+
+  <!-- BARRA SUPERIOR FLOTANTE (Header Inmersivo) -->
+  <header class="relative z-20 w-full px-4 sm:px-6 py-5 flex items-center justify-between gap-2">
+    <!-- Botón Salir / Colapsar a Vista Regular -->
+    <div class="flex items-center gap-3">
+      <button routerLink="/library/home" [attr.aria-label]="'immersive.close' | translate" type="button"
+        class="group flex items-center gap-2 px-3 py-2 rounded-full bg-white/60 dark:bg-[#121212]/60 hover:bg-slate-200 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/16 text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-all duration-200 backdrop-blur-md active:scale-95">
+        <span
+          class="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-y-0.5">keyboard_arrow_down</span>
+        <span class="text-[12px] leading-[16px] font-medium hidden sm:inline-block pr-1">{{ 'immersive.close' |
+          translate }}</span>
+      </button>
+    </div>
+    <!-- Indicador Contextual Central -->
+    <div
+      class="hidden md:flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/50 dark:bg-[#121212]/50 border border-slate-200 dark:border-white/[0.08] backdrop-blur-xl">
+      <span class="w-2 h-2 rounded-full bg-[#00d2ff] dark:shadow-[0_0_12px_#00d2ff] animate-pulse"></span>
+      <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] tracking-wide">
+        {{ 'immersive.playingFrom' | translate }} <span class="text-slate-400 dark:text-[#6a6a6a] mx-1">•</span> <span
+          class="text-slate-900 dark:text-white font-medium">Pop Latino</span>
+      </span>
+    </div>
+    <!-- Acciones Trailing Superior Derecha -->
+    <div class="flex items-center gap-2">
+      <button type="button" [attr.aria-label]="'immersive.share' | translate"
+        class="w-9 h-9 flex items-center justify-center rounded-full bg-white/60 dark:bg-[#121212]/60 hover:bg-slate-200 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors duration-150 backdrop-blur-md active:scale-95">
+        <span class="material-symbols-outlined text-[20px]">share</span>
+      </button>
+      <button type="button" [attr.aria-label]="'immersive.more' | translate"
+        class="w-9 h-9 flex items-center justify-center rounded-full bg-white/60 dark:bg-[#121212]/60 hover:bg-slate-200 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors duration-150 backdrop-blur-md active:scale-95">
+        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+      </button>
+      <button type="button" (click)="toggleFullscreen()" [attr.aria-label]="'immersive.fullscreen' | translate"
+        class="w-9 h-9 flex items-center justify-center rounded-full bg-white/60 dark:bg-[#121212]/60 hover:bg-slate-200 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors duration-150 backdrop-blur-md active:scale-95">
+        <span class="material-symbols-outlined text-[20px]">{{ isFullscreen ? 'fullscreen_exit' : 'fullscreen' }}</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ZONA CENTRAL: Canvas Inmersivo Libre para Espectro Visual -->
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none px-6 min-h-0">
+    <div
+      class="text-center opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-auto cursor-default">
+      <span
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/60 dark:bg-[#181818]/60 backdrop-blur-md border border-slate-200 dark:border-white/[0.08] text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">
+        <span class="material-symbols-outlined text-[14px] text-[#005575] dark:text-[#00d2ff]">graphic_eq</span>
+        {{ 'immersive.lossless' | translate }}
+      </span>
+    </div>
+    <!-- Track Meta (pantalla pequeña / referencia) -->
+    <div class="mt-4 flex items-center gap-3 md:hidden pointer-events-auto">
+      <img [alt]="trackTitle" class="w-12 h-12 rounded-md object-cover border border-slate-200 dark:border-white/[0.08]"
+        [src]="coverUrl" />
+      <div class="text-left">
+        <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate max-w-[40vw]">{{
+          trackTitle }}</p>
+        <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate max-w-[40vw]">{{ trackArtist }}
+        </p>
+      </div>
+    </div>
+  </main>
+</section>

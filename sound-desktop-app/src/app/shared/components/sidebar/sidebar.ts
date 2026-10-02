@@ -4,7 +4,7 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
 import { ShellUiService } from '../../services/shell-ui.service';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'shared-sidebar',
   imports: [RouterLink, RouterLinkActive, TranslatePipe],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',

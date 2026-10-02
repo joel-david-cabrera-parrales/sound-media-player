@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Sidebar } from '../../shared/components/sidebar/sidebar';
-import { Topbar } from '../../shared/components/topbar/topbar';
-import { MediaControlBar } from '../../shared/components/media-control-bar/media-control-bar';
+import { Sidebar } from '../../../shared/components/sidebar/sidebar';
+import { Topbar } from '../../../shared/components/topbar/topbar';
+import { MediaControlBar } from '../../../shared/components/media-control-bar/media-control-bar';
 
 @Component({
   selector: 'media-player-layout',

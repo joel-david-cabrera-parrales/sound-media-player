@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="#0e3a52"/>
+      <stop offset="45%" stop-color="#0a1626"/>
+      <stop offset="100%" stop-color="#05070d"/>
+    </radialGradient>
+    <linearGradient id="wave" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#0088cc"/>
+      <stop offset="1" stop-color="#00d2ff"/>
+    </linearGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <g fill="none" stroke="url(#wave)" stroke-linecap="round">
+    <path d="M40 330 Q 120 300 170 330 T 300 320 T 430 335 T 560 315" stroke-width="7" opacity="0.95"/>
+    <path d="M40 370 Q 130 340 190 368 T 310 360 T 440 372 T 560 352" stroke-width="4" opacity="0.6"/>
+    <path d="M40 290 Q 120 262 180 292 T 300 282 T 430 296 T 560 276" stroke-width="3" opacity="0.45"/>
+    <circle cx="300" cy="180" r="10" fill="#00d2ff" stroke="none" opacity="0.9"/>
+    <circle cx="300" cy="180" r="22" stroke="#00d2ff" stroke-width="2" opacity="0.35" filter="url(#soft)"/>
+  </g>
+  <text x="300" y="520" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="6" fill="#b6ebff" opacity="0.85">SOUNDWAVE</text>
+  <text x="300" y="548" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" letter-spacing="4" fill="#0088cc">HI-RES LOSSLESS</text>
+</svg>

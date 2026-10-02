@@ -85,7 +85,8 @@
       "lyrics": "Lyrics",
       "queue": "Play queue",
       "devices": "Available devices",
-      "mute": "Mute"
+      "mute": "Mute",
+      "expand": "Open immersive player"
     }
   },
   "notFound": {
@@ -142,5 +143,13 @@
       "master": "Master Tapes",
       "focus": "Focus & Relax"
     }
+  },
+  "immersive": {
+    "close": "Exit full screen",
+    "playingFrom": "Playing from your library",
+    "share": "Share track",
+    "more": "More playback options",
+    "fullscreen": "Full screen",
+    "lossless": "Lossless FLAC 24-bit / 96kHz Audio"
   }
 }

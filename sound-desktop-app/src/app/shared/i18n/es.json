@@ -85,11 +85,11 @@
       "lyrics": "Letras",
       "queue": "Cola de reproducción",
       "devices": "Dispositivos disponibles",
-      "mute": "Silenciar"
+      "mute": "Silenciar",
+      "expand": "Abrir reproductor inmersivo"
     }
   },
-  "notFound": {
-    "badge": "Módulo no disponible",
+  "notFound": {    "badge": "Módulo no disponible",
     "subtitle": "Módulo o sección no encontrada",
     "description": "La pestaña, sección o módulo que intentas abrir no está disponible, fue reubicada o no tienes permisos para acceder. Vuelve a la navegación principal.",
     "backHome": "Volver al Inicio",
@@ -142,5 +142,13 @@
       "master": "Master Tapes",
       "focus": "Enfoque y Relax"
     }
+  },
+  "immersive": {
+    "close": "Cerrar pantalla completa",
+    "playingFrom": "Reproduciendo desde la biblioteca",
+    "share": "Compartir pista",
+    "more": "Más opciones de reproducción",
+    "fullscreen": "Pantalla completa",
+    "lossless": "Audio Lossless FLAC 24-bit / 96kHz"
   }
 }

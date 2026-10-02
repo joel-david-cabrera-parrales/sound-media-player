@@ -9,7 +9,7 @@ import { ThemeService } from '../../services/theme.service';
 type FilterPill = 'todo' | 'carpetas';
 
 @Component({
-  selector: 'app-topbar',
+  selector: 'shared-topbar',
   imports: [FormsModule, TranslatePipe],
   templateUrl: './topbar.html',
   styleUrl: './topbar.css',
