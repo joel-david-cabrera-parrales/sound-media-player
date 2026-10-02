@@ -1,0 +1,6 @@
+frontend-design/**/*.html
+frontend-design/**/*.ts
+frontend-design/**/*.css
+frontend-design/**/*.scss
+frontend-design/**/*.js
+frontend-design/**/*.json
