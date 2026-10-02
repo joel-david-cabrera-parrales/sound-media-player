@@ -3,6 +3,7 @@ import { MediaPlayerLayout } from './layouts/media-player/media-player-layout';
 import { Home } from './pages/home/home';
 import { ImmersiveMusicPlayer } from './pages/immersive-music-player/immersive-music-player';
 import { ImmersiveMediaPlayerLayout } from './layouts/immersive-media-player/immersive-media-player';
+import { ImportLocalFiles } from './pages/import-local-files/import-local-files';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,10 @@ export const routes: Routes = [
       {
         path: 'home',
         component: Home,
+      },
+      {
+        path: 'import-local-files',
+        component: ImportLocalFiles,
       },
     ],
   },

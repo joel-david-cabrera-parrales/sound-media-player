@@ -1,0 +1,252 @@
+<div class="px-4 sm:px-8 py-6 space-y-8 max-w-7xl mx-auto">
+  <!-- SECTION 1: HEADER & ACTIONS -->
+  <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-2 border-b border-slate-200 dark:border-white/[0.08]">
+    <div class="space-y-2 max-w-3xl">
+      <!-- Breadcrumbs -->
+      <div class="flex items-center gap-2 text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] tracking-wide">
+        <a routerLink="/library/home" class="hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors">{{ 'shell.sidebar.library' | translate }}</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#005575] dark:text-[#00d2ff] font-medium">{{ 'import.crumbHere' | translate }}</span>
+      </div>
+      <h2 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-bold text-slate-900 dark:text-white tracking-tight">
+        {{ 'import.title' | translate }}
+      </h2>
+      <p class="text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3] leading-relaxed">
+        {{ 'import.subtitle' | translate }}
+      </p>
+    </div>
+    <!-- Header Action Buttons -->
+    <div class="flex flex-wrap items-center gap-3 shrink-0">
+      <button
+        type="button"
+        (click)="library.rescan()"
+        [disabled]="library.scanning()"
+        class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 hover:border-[#00d2ff] text-slate-900 dark:text-white text-[14px] leading-[18px] font-semibold hover:bg-slate-100 dark:hover:bg-[#242424] transition-all duration-150 ease-out active:scale-95 disabled:opacity-50"
+      >
+        <span class="material-symbols-outlined text-[18px] text-[#005575] dark:text-[#00d2ff]" [class.animate-spin]="library.scanning()">sync</span>
+        <span>{{ library.scanning() ? ('import.scanning' | translate) : ('import.rescanNow' | translate) }}</span>
+      </button>
+      <button
+        type="button"
+        (click)="addFolder()"
+        class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] dark:shadow-[0_0_24px_-2px_rgba(0,210,255,0.45)] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all duration-150 ease-out active:scale-95"
+      >
+        <span class="material-symbols-outlined text-[20px] fill">drive_folder_upload</span>
+        <span>{{ 'import.addFolder' | translate }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sync Indicator Status Bar -->
+  <div class="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-none">
+    <div class="flex items-center gap-3 min-w-0">
+      <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00d2ff] opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00d2ff]"></span>
+      </span>
+      <span class="text-[12px] leading-[16px] font-medium text-slate-900 dark:text-white truncate">{{ 'import.autoActive' | translate }}</span>
+      <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] hidden sm:inline truncate">{{ 'import.watching' | translate }}</span>
+    </div>
+    <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold flex-shrink-0">{{ 'import.connected' | translate: { count: library.connectedCount() } }}</span>
+  </div>
+
+  <!-- SECTION 2: DRAG & DROP PICKER DROPZONE -->
+  <div
+    role="button"
+    tabindex="0"
+    (click)="addFolder()"
+    (keydown.enter)="addFolder()"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    [class]="isDragging()
+      ? 'relative group rounded-2xl border-2 border-dashed border-[#00d2ff] bg-[#00d2ff]/5 dark:bg-[#181818]/70 p-8 transition-all duration-300 text-center flex flex-col items-center justify-center gap-4 cursor-pointer'
+      : 'relative group rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[#00d2ff] bg-white/40 dark:bg-[#181818]/40 hover:bg-slate-50 dark:hover:bg-[#181818]/70 p-8 transition-all duration-300 text-center flex flex-col items-center justify-center gap-4 cursor-pointer'"
+  >
+    <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-[#005575] dark:text-[#00d2ff] group-hover:scale-110 dark:group-hover:shadow-[0_0_24px_rgba(0,210,255,0.3)] transition-all duration-300">
+      <span class="material-symbols-outlined text-[36px]">folder_open</span>
+    </div>
+    <div class="space-y-1">
+      <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">
+        {{ 'import.dropTitle' | translate }}
+      </h3>
+      <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">
+        {{ 'import.dropDesc' | translate }}
+      </p>
+      @if (showDropHint()) {
+        <p class="text-[12px] leading-[16px] text-amber-600 dark:text-amber-400 font-medium pt-1">
+          {{ 'import.dropHint' | translate }}
+        </p>
+      }
+    </div>
+    <!-- Codec Badges -->
+    <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+      @for (codec of ['FLAC', 'WAV', 'ALAC', 'AIFF', 'MP3', 'DSD (DSF/DFF)', 'AAC']; track codec) {
+        <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-[11px] font-mono font-semibold text-slate-900 dark:text-white tracking-wide">{{ codec }}</span>
+      }
+      <span class="px-3 py-1 rounded-full bg-[#00d2ff]/10 border border-[#00d2ff]/40 text-[11px] font-semibold text-[#005575] dark:text-[#00d2ff] flex items-center gap-1">
+        <span class="material-symbols-outlined text-[14px]">high_quality</span>
+        {{ 'import.hiresReady' | translate }}
+      </span>
+    </div>
+  </div>
+  <input #dirInput type="file" webkitdirectory class="hidden" (change)="onDirectoryPicked($event)" />
+
+  <!-- SECTION 3: CONFIGURED / MONITORED DIRECTORIES LIST -->
+  <div class="space-y-4">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="material-symbols-outlined text-[#005575] dark:text-[#00d2ff] text-[20px] flex-shrink-0">folder_copy</span>
+        <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white truncate">{{ 'import.syncedTitle' | translate }}</h3>
+        <span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#242424] text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] flex-shrink-0">{{ 'import.activeCount' | translate: { count: library.connectedCount() } }}</span>
+      </div>
+      <button type="button" class="text-[12px] leading-[16px] text-[#005575] dark:text-[#00d2ff] hover:underline flex items-center gap-1 flex-shrink-0">
+        <span class="material-symbols-outlined text-[16px]">settings</span>
+        <span class="hidden sm:inline">{{ 'import.scanPrefs' | translate }}</span>
+      </button>
+    </div>
+
+    @if (library.folders().length === 0) {
+      <div class="p-8 rounded-xl bg-white dark:bg-[#181818] border border-dashed border-slate-300 dark:border-white/16 text-center shadow-sm dark:shadow-none">
+        <p class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white mb-1">{{ 'import.emptyTitle' | translate }}</p>
+        <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] mb-4">{{ 'import.emptyDesc' | translate }}</p>
+        <button
+          type="button"
+          (click)="addFolder()"
+          class="px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95"
+        >
+          {{ 'import.addFolder' | translate }}
+        </button>
+      </div>
+    }
+
+    <!-- Directory Cards -->
+    <div class="grid grid-cols-1 gap-3">
+      @for (folder of library.folders(); track folder.id) {
+        <div class="p-4 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/16 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm dark:shadow-none">
+          <div class="flex items-start gap-3.5 min-w-0">
+            <div class="w-11 h-11 rounded-lg bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/16 flex items-center justify-center text-[#005575] dark:text-[#00d2ff] shrink-0">
+              <span class="material-symbols-outlined text-[24px]">hard_drive</span>
+            </div>
+            <div class="space-y-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white break-all">{{ folder.path }}</span>
+                @if (folder.badge) {
+                  <span
+                    class="px-2 py-0.5 rounded text-[10px] font-bold border"
+                    [class]="folder.badgeHiRes
+                      ? 'bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border-[#00d2ff]/30'
+                      : 'bg-slate-100 dark:bg-[#242424] text-slate-500 dark:text-[#b3b3b3] border-slate-200 dark:border-white/[0.08]'"
+                  >{{ folder.badge }}</span>
+                }
+                @if (folder.online) {
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span> {{ 'import.online' | translate }}
+                  </span>
+                }
+              </div>
+              <div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">
+                <span class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">music_note</span> {{ library.formatTracks(folder.tracksCount) }}
+                </span>
+                <span>•</span>
+                <span class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">database</span> {{ folder.size }}
+                </span>
+                <span>•</span>
+                <span>{{ 'import.lastScan' | translate: { when: library.formatLastScan(folder.lastScanIso) } }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- Controls & Toggles -->
+          <div class="flex items-center justify-between md:justify-end gap-5 pt-2 md:pt-0 border-t border-slate-200 dark:border-white/[0.08] md:border-t-0">
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                role="switch"
+                [attr.aria-checked]="folder.autoSync"
+                [attr.aria-label]="'import.autosync' | translate"
+                (click)="library.toggleAutoSync(folder.id)"
+                [class]="folder.autoSync ? 'bg-[#00d2ff]' : 'bg-slate-300 dark:bg-[#242424]'"
+                class="relative inline-flex w-10 h-5 rounded-full transition-colors flex-shrink-0"
+              >
+                <span
+                  [class]="folder.autoSync ? 'translate-x-[22px]' : 'translate-x-0.5'"
+                  class="absolute top-0.5 left-0 w-4 h-4 rounded-full bg-white shadow transition-transform"
+                ></span>
+              </button>
+              <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'import.autosync' | translate }}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button type="button" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors" [title]="'import.explore' | translate">
+                <span class="material-symbols-outlined text-[18px]">{{ folder.icon }}</span>
+              </button>
+              <button type="button" (click)="library.rescan(folder.id)" [disabled]="library.scanning()" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-[#005575] dark:hover:text-[#00d2ff] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors disabled:opacity-50" [title]="'import.rescan' | translate">
+                <span class="material-symbols-outlined text-[18px]" [class.animate-spin]="library.scanning()">refresh</span>
+              </button>
+              <button type="button" (click)="library.removeFolder(folder.id)" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-red-600 dark:hover:text-[#ef4444] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors" [title]="'import.removeDir' | translate">
+                <span class="material-symbols-outlined text-[18px]">delete_outline</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- SECTION 4: RECENTLY INDEXED LOCAL TRACKS PREVIEW -->
+  <div class="space-y-3 pb-8">
+    <div class="flex items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ 'import.recentTitle' | translate }}</h3>
+        <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ 'import.recentDesc' | translate }}</p>
+      </div>
+      <a routerLink="/not-found" class="text-[12px] leading-[16px] text-[#005575] dark:text-[#00d2ff] hover:underline flex-shrink-0">
+        {{ 'import.seeAll' | translate: { total: '5.396' } }}
+      </a>
+    </div>
+    <!-- Structured Track Table -->
+    <div class="w-full bg-white dark:bg-[#181818] rounded-xl border border-slate-200 dark:border-white/[0.08] overflow-hidden shadow-sm dark:shadow-none">
+      <!-- Table Header -->
+      <div class="hidden md:grid grid-cols-12 gap-4 px-4 py-2.5 text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] border-b border-slate-200 dark:border-white/[0.08] uppercase tracking-wider">
+        <div class="col-span-1 text-center">{{ 'import.colNumber' | translate }}</div>
+        <div class="col-span-4">{{ 'import.colTitle' | translate }}</div>
+        <div class="col-span-3">{{ 'import.colAlbum' | translate }}</div>
+        <div class="col-span-2">{{ 'import.colFormat' | translate }}</div>
+        <div class="col-span-1">{{ 'import.colSize' | translate }}</div>
+        <div class="col-span-1 text-right">{{ 'import.colDuration' | translate }}</div>
+      </div>
+      @for (track of recentTracks; track track.title; let i = $index) {
+        <div class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0">
+          <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
+            <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
+            <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] hidden group-hover:inline">play_arrow</span>
+          </div>
+          <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
+            <img class="w-10 h-10 rounded object-cover shrink-0" [class]="track.hue" [src]="track.img" [alt]="track.title" loading="lazy" />
+            <div class="truncate min-w-0">
+              <div class="text-[14px] leading-[20px] text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] font-semibold truncate">{{ track.title }}</div>
+              <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
+            </div>
+          </div>
+          <div class="hidden md:block md:col-span-4 lg:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.album }}</div>
+          <div class="hidden lg:block lg:col-span-2">
+            <span
+              class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold border"
+              [class]="track.hiRes
+                ? 'bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border-[#00d2ff]/30'
+                : 'bg-slate-100 dark:bg-[#242424] text-slate-500 dark:text-[#b3b3b3] border-slate-200 dark:border-white/[0.08]'"
+            >
+              {{ track.format }}
+            </span>
+          </div>
+          <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ track.size }}</div>
+          <div class="col-span-2 md:col-span-1 text-[14px] md:text-[12px] leading-[20px] md:leading-[16px] text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-2">
+            <span>{{ track.duration }}</span>
+            <button type="button" class="material-symbols-outlined text-[18px] text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">more_horiz</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

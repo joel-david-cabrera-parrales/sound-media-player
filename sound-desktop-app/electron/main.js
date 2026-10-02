@@ -23,6 +23,18 @@ ipcMain.handle('dialog:openFile', async () => {
   return { canceled: false, filePath: filePaths[0] };
 });
 
+// Diálogo nativo para elegir carpeta de música (preload: dialog:openDirectory)
+ipcMain.handle('dialog:openDirectory', async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    title: 'Elige una carpeta de música',
+    properties: ['openDirectory'],
+  });
+  if (canceled || filePaths.length === 0) {
+    return { canceled: true, dirPath: null };
+  }
+  return { canceled: false, dirPath: filePaths[0] };
+});
+
 // Convierte sound-photo:///C:/ruta/foto.png -> archivo local servido al renderer
 function registerPhotoProtocol() {
   protocol.handle('sound-photo', (request) => {

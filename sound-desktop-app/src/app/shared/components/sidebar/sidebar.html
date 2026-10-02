@@ -1,78 +1,68 @@
 @if (drawerOpen()) {
-  <div class="fixed inset-0 z-[45] bg-black/60 md:hidden" (click)="closeDrawer()" aria-hidden="true"></div>
+<div class="fixed inset-0 z-[45] bg-black/60 md:hidden" (click)="closeDrawer()" aria-hidden="true"></div>
 }
-<aside
-  [class.drawer-open]="drawerOpen()"
-  class="w-[260px] md:w-20 lg:w-[260px] max-md:w-[260px] flex-shrink-0 h-[calc(100vh-90px)] max-md:h-full bg-white dark:bg-[#121212] border-r border-slate-200 dark:border-white/[0.08] flex flex-col justify-between p-4 md:px-3 lg:p-4 z-30 max-md:z-50 max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:-translate-x-full max-md:transition-transform max-md:duration-200 select-none"
->
+<aside [class.drawer-open]="drawerOpen()"
+  class="w-[260px] md:w-20 lg:w-[260px] max-md:w-[260px] flex-shrink-0 h-[calc(100vh-90px)] max-md:h-full bg-white dark:bg-[#121212] border-r border-slate-200 dark:border-white/[0.08] flex flex-col justify-between p-4 md:px-3 lg:p-4 z-30 max-md:z-50 max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:-translate-x-full max-md:transition-transform max-md:duration-200 select-none">
   <!-- Top Section: Brand + Navigation -->
   <div class="flex flex-col gap-6">
     <!-- Header Brand Anchor -->
     <div class="flex items-center justify-start md:justify-center lg:justify-start gap-3 px-2 pt-2">
-      <div class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[#005575] dark:text-[#00d2ff] dark:shadow-[0_0_15px_rgba(0,210,255,0.25)] border border-slate-200 dark:border-white/[0.08] flex-shrink-0">
+      <div
+        class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[#005575] dark:text-[#00d2ff] dark:shadow-[0_0_15px_rgba(0,210,255,0.25)] border border-slate-200 dark:border-white/[0.08] flex-shrink-0">
         <span class="material-symbols-outlined text-[24px]">graphic_eq</span>
       </div>
       <div class="drawer-label flex flex-col">
-        <span class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white tracking-tight leading-none">Soundwave</span>
-        <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold tracking-wider uppercase mt-1">{{ 'common.brandTagline' | translate }}</span>
+        <span
+          class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white tracking-tight leading-none">Soundwave</span>
+        <span
+          class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold tracking-wider uppercase mt-1">{{
+          'common.brandTagline' | translate }}</span>
       </div>
-      <button
-        type="button"
-        (click)="closeDrawer()"
-        aria-label="{{ 'shell.sidebar.closeMenu' | translate }}"
-        class="md:hidden ml-auto w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors"
-      >
+      <button type="button" (click)="closeDrawer()" aria-label="{{ 'shell.sidebar.closeMenu' | translate }}"
+        class="md:hidden ml-auto w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors">
         <span class="material-symbols-outlined text-[20px]">close</span>
       </button>
     </div>
     <!-- Primary Navigation Links -->
     <nav class="flex flex-col gap-1">
       <!-- Inicio -->
-      <a
-        routerLink="/library/home"
-        routerLinkActive="nav-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="closeDrawer()"
-        [title]="'shell.sidebar.home' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group"
-      >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">home</span>
-        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.home' | translate }}</span>
+      <a routerLink="/media-player/home" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeDrawer()" [title]="'shell.sidebar.home' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group">
+        <span
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">home</span>
+        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.home' | translate
+          }}</span>
       </a>
       <!-- Buscar -->
-      <a
-        routerLink="/not-found"
-        (click)="closeDrawer()"
-        [title]="'shell.sidebar.search' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
-      >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">search</span>
-        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.search' | translate }}</span>
+      <a routerLink="/not-found" (click)="closeDrawer()" [title]="'shell.sidebar.search' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
+        <span
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">search</span>
+        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.search' | translate
+          }}</span>
       </a>
       <!-- Tu Biblioteca (Active Tab with Pill & Cyan Dot indicator) -->
-      <a
-        routerLink="/library"
-        routerLinkActive="nav-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="closeDrawer()"
-        [title]="'shell.sidebar.library' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-between px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group"
-      >
+      <a routerLink="/not-found" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeDrawer()" [title]="'shell.sidebar.library' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-between px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group">
         <span class="flex items-center gap-4">
-          <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">library_music</span>
-          <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.library' | translate }}</span>
+          <span
+            class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">library_music</span>
+          <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.library' | translate
+            }}</span>
         </span>
-        <span class="nav-dot drawer-label inline-block w-1.5 h-1.5 rounded-full bg-[#00d2ff] dark:shadow-[0_0_8px_#00d2ff]"></span>
+        <span
+          class="nav-dot drawer-label inline-block w-1.5 h-1.5 rounded-full bg-[#00d2ff] dark:shadow-[0_0_8px_#00d2ff]"></span>
       </a>
       <!-- Importar archivos locales -->
-      <a
-        routerLink="/not-found"
-        (click)="closeDrawer()"
+      <a routerLink="/media-player/import-local-files" routerLinkActive="nav-active" (click)="closeDrawer()"
         [title]="'shell.sidebar.import' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
-      >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">drive_folder_upload</span>
-        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.import' | translate }}</span>
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
+        <span
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">drive_folder_upload</span>
+        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.import' | translate
+          }}</span>
       </a>
     </nav>
     <!-- Divider line -->
@@ -80,34 +70,28 @@
     <!-- Secondary Section -->
     <div class="flex flex-col gap-1">
       <!-- Crear lista -->
-      <a
-        routerLink="/not-found"
-        (click)="closeDrawer()"
-        [title]="'shell.sidebar.createList' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
-      >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">add_box</span>
-        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.createList' | translate }}</span>
+      <a routerLink="/not-found" (click)="closeDrawer()" [title]="'shell.sidebar.createList' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
+        <span
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">add_box</span>
+        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.createList' | translate
+          }}</span>
       </a>
       <!-- Canciones que te gustan -->
-      <a
-        routerLink="/not-found"
-        (click)="closeDrawer()"
-        [title]="'shell.sidebar.liked' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
-      >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">favorite</span>
-        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.liked' | translate }}</span>
+      <a routerLink="/not-found" (click)="closeDrawer()" [title]="'shell.sidebar.liked' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
+        <span
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">favorite</span>
+        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.liked' | translate
+          }}</span>
       </a>
       <!-- Tus episodios -->
-      <a
-        routerLink="/not-found"
-        (click)="closeDrawer()"
-        [title]="'shell.sidebar.episodes' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
-      >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">podcasts</span>
-        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.episodes' | translate }}</span>
+      <a routerLink="/not-found" (click)="closeDrawer()" [title]="'shell.sidebar.episodes' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
+        <span
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">podcasts</span>
+        <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.episodes' | translate
+          }}</span>
       </a>
     </div>
   </div>
@@ -115,11 +99,13 @@
   <div class="flex flex-col gap-4 px-1 pb-1">
     <!-- Footer Links: Avisos legales y Privacidad -->
     <div class="drawer-label flex items-center justify-start gap-4 px-1 pt-1 text-slate-500 dark:text-[#6a6a6a]">
-      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
+      <a routerLink="/not-found"
+        class="text-[11px] leading-[14px] font-medium hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
         <span class="material-symbols-outlined text-[14px]">gavel</span>
         <span>{{ 'shell.sidebar.legal' | translate }}</span>
       </a>
-      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
+      <a routerLink="/not-found"
+        class="text-[11px] leading-[14px] font-medium hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
         <span class="material-symbols-outlined text-[14px]">verified_user</span>
         <span>{{ 'shell.sidebar.privacy' | translate }}</span>
       </a>
