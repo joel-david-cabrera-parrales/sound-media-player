@@ -1,14 +1,14 @@
-<footer class="fixed bottom-0 left-0 w-full h-[76px] sm:h-[90px] bg-[#121212]/90 backdrop-blur-2xl border-t border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 z-40 select-none">
+<footer class="fixed bottom-0 left-0 w-full h-[76px] sm:h-[90px] bg-white/90 dark:bg-[#121212]/90 backdrop-blur-2xl border-t border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 z-40 select-none">
   <!-- Left Segment: Track Information (Minimalist State) -->
   <div class="flex items-center gap-3.5 min-w-0 flex-1 sm:flex-none sm:w-1/4 sm:min-w-[200px]">
-    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-[#181818] border border-white/[0.08] flex items-center justify-center text-[#6a6a6a] flex-shrink-0">
+    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-slate-100 dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] flex-shrink-0">
       <span class="material-symbols-outlined text-[24px]">music_note</span>
     </div>
     <div class="flex flex-col min-w-0">
-      <span class="text-[14px] leading-[20px] font-semibold text-white truncate">Sin reproducción activa</span>
-      <span class="hidden sm:block text-[11px] leading-[14px] text-[#6a6a6a] truncate">Selecciona una pista o álbum para iniciar</span>
+      <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">Sin reproducción activa</span>
+      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">Selecciona una pista o álbum para iniciar</span>
     </div>
-    <button type="button" class="hidden sm:block ml-2 text-[#6a6a6a] hover:text-[#00d2ff] transition-colors flex-shrink-0" title="Añadir a favoritas">
+    <button type="button" class="hidden sm:block ml-2 text-slate-400 dark:text-[#6a6a6a] hover:text-[#005575] dark:hover:text-[#00d2ff] transition-colors flex-shrink-0" title="Añadir a favoritas">
       <span class="material-symbols-outlined text-[20px]">favorite</span>
     </button>
   </div>
@@ -19,31 +19,31 @@
       <button
         type="button"
         (click)="toggleShuffle()"
-        [class]="isShuffled() ? 'text-[#00d2ff]' : 'text-[#6a6a6a] hover:text-white'"
+        [class]="isShuffled() ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
         class="hidden sm:block transition-colors"
         title="Aleatorio"
       >
         <span class="material-symbols-outlined text-[19px]">shuffle</span>
       </button>
-      <button type="button" class="text-[#b3b3b3] hover:text-white transition-colors" title="Anterior">
+      <button type="button" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors" title="Anterior">
         <span class="material-symbols-outlined text-[22px]">skip_previous</span>
       </button>
       <!-- Primary Play Trigger with Electric Glow -->
       <button
         type="button"
         (click)="togglePlay()"
-        class="w-10 h-10 rounded-full bg-[#00d2ff] text-[#0e0e0e] flex items-center justify-center hover:scale-105 shadow-[0_0_18px_rgba(0,210,255,0.45)] transition-all"
+        class="w-10 h-10 rounded-full bg-[#00d2ff] text-[#0e0e0e] flex items-center justify-center hover:scale-105 dark:shadow-[0_0_18px_rgba(0,210,255,0.45)] transition-all"
         [title]="isPlaying() ? 'Pausar' : 'Reproducir'"
       >
         <span class="material-symbols-outlined text-[24px] fill pl-0.5">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
       </button>
-      <button type="button" class="text-[#b3b3b3] hover:text-white transition-colors" title="Siguiente">
+      <button type="button" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors" title="Siguiente">
         <span class="material-symbols-outlined text-[22px]">skip_next</span>
       </button>
       <button
         type="button"
         (click)="cycleRepeat()"
-        [class]="repeatMode() === 0 ? 'text-[#6a6a6a] hover:text-white' : 'text-[#00d2ff]'"
+        [class]="repeatMode() === 0 ? 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white' : 'text-[#005575] dark:text-[#00d2ff]'"
         class="hidden sm:block transition-colors relative"
         title="Repetir"
       >
@@ -52,32 +52,32 @@
     </div>
     <!-- Scrubber Bar -->
     <div class="w-full flex items-center gap-3">
-      <span class="hidden sm:block text-[11px] leading-[14px] text-[#6a6a6a] w-8 text-right tabular-nums">0:00</span>
-      <div class="relative flex-1 h-1 bg-[#242424] rounded-full overflow-hidden group cursor-pointer" (click)="seek($event)">
-        <div class="h-full bg-[#00d2ff] group-hover:bg-[#b6ebff] transition-all rounded-full" [style.width.%]="progress()"></div>
+      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-right tabular-nums">0:00</span>
+      <div class="relative flex-1 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer" (click)="seek($event)">
+        <div class="h-full bg-[#00d2ff] group-hover:bg-[#00a2e6] dark:group-hover:bg-[#b6ebff] transition-all rounded-full" [style.width.%]="progress()"></div>
       </div>
-      <span class="hidden sm:block text-[11px] leading-[14px] text-[#6a6a6a] w-8 text-left tabular-nums">--:--</span>
+      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-left tabular-nums">--:--</span>
     </div>
   </div>
   <!-- Right Segment: Volume & Auxiliary Controls -->
   <div class="hidden md:flex items-center justify-end gap-3 w-1/4 min-w-[200px]">
-    <button type="button" class="hidden lg:block text-[#6a6a6a] hover:text-white transition-colors" title="Letras">
+    <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" title="Letras">
       <span class="material-symbols-outlined text-[19px]">mic</span>
     </button>
-    <button type="button" class="hidden lg:block text-[#6a6a6a] hover:text-white transition-colors" title="Cola de reproducción">
+    <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" title="Cola de reproducción">
       <span class="material-symbols-outlined text-[19px]">queue_music</span>
     </button>
-    <button type="button" class="hidden lg:block text-[#6a6a6a] hover:text-white transition-colors" title="Dispositivos disponibles">
+    <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" title="Dispositivos disponibles">
       <span class="material-symbols-outlined text-[19px]">speaker_group</span>
     </button>
     <!-- Volume Slider -->
     <div class="hidden sm:flex items-center gap-2 ml-1">
-      <button type="button" (click)="toggleMute()" class="text-[#b3b3b3] hover:text-white transition-colors" title="Silenciar">
+      <button type="button" (click)="toggleMute()" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors" title="Silenciar">
         <span class="material-symbols-outlined text-[20px]">{{ isMuted() || volume() === 0 ? 'volume_off' : 'volume_up' }}</span>
       </button>
-      <div class="w-20 h-1 bg-[#242424] rounded-full overflow-hidden group cursor-pointer" (click)="setVolume($event)">
+      <div class="w-20 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer" (click)="setVolume($event)">
         <div
-          class="h-full bg-[#b3b3b3] group-hover:bg-[#00d2ff] rounded-full transition-colors"
+          class="h-full bg-slate-400 dark:bg-[#b3b3b3] group-hover:bg-[#00d2ff] rounded-full transition-colors"
           [style.width.%]="isMuted() ? 0 : volume()"
         ></div>
       </div>

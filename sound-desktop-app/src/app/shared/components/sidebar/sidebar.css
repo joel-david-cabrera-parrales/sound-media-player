@@ -4,15 +4,25 @@
 }
 
 .nav-link.nav-active {
-  background-color: #242424;
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.08);
+  background-color: #e2e8f0;
+  color: #0f172a;
+  border-color: #cbd5e1;
   font-weight: 700;
 }
 
+.dark .nav-link.nav-active {
+  background-color: #242424;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 .nav-link.nav-active .nav-icon {
-  color: #00d2ff;
+  color: #005575;
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.dark .nav-link.nav-active .nav-icon {
+  color: #00d2ff;
 }
 
 .nav-link.nav-active .nav-dot {

@@ -3,24 +3,24 @@
 }
 <aside
   [class.drawer-open]="drawerOpen()"
-  class="w-[260px] md:w-20 lg:w-[260px] max-md:w-[260px] flex-shrink-0 h-[calc(100vh-90px)] max-md:h-full bg-[#121212] border-r border-white/[0.08] flex flex-col justify-between p-4 md:px-3 lg:p-4 z-30 max-md:z-50 max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:-translate-x-full max-md:transition-transform max-md:duration-200 select-none"
+  class="w-[260px] md:w-20 lg:w-[260px] max-md:w-[260px] flex-shrink-0 h-[calc(100vh-90px)] max-md:h-full bg-white dark:bg-[#121212] border-r border-slate-200 dark:border-white/[0.08] flex flex-col justify-between p-4 md:px-3 lg:p-4 z-30 max-md:z-50 max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:-translate-x-full max-md:transition-transform max-md:duration-200 select-none"
 >
   <!-- Top Section: Brand + Navigation -->
   <div class="flex flex-col gap-6">
     <!-- Header Brand Anchor -->
     <div class="flex items-center justify-start md:justify-center lg:justify-start gap-3 px-2 pt-2">
-      <div class="w-9 h-9 rounded-lg bg-[#242424] flex items-center justify-center text-[#00d2ff] shadow-[0_0_15px_rgba(0,210,255,0.25)] border border-white/[0.08] flex-shrink-0">
+      <div class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[#005575] dark:text-[#00d2ff] dark:shadow-[0_0_15px_rgba(0,210,255,0.25)] border border-slate-200 dark:border-white/[0.08] flex-shrink-0">
         <span class="material-symbols-outlined text-[24px]">graphic_eq</span>
       </div>
       <div class="drawer-label flex flex-col">
-        <span class="text-[20px] leading-[26px] font-semibold text-white tracking-tight leading-none">Soundwave</span>
-        <span class="text-[11px] leading-[14px] text-[#00d2ff] font-semibold tracking-wider uppercase mt-1">High-Fidelity Audio</span>
+        <span class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white tracking-tight leading-none">Soundwave</span>
+        <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold tracking-wider uppercase mt-1">High-Fidelity Audio</span>
       </div>
       <button
         type="button"
         (click)="closeDrawer()"
         aria-label="Cerrar menú"
-        class="md:hidden ml-auto w-9 h-9 rounded-full flex items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors"
+        class="md:hidden ml-auto w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors"
       >
         <span class="material-symbols-outlined text-[20px]">close</span>
       </button>
@@ -34,9 +34,9 @@
         [routerLinkActiveOptions]="{ exact: true }"
         (click)="closeDrawer()"
         title="Inicio"
-        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] border border-transparent group"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group"
       >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">home</span>
+        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">home</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">Inicio</span>
       </a>
       <!-- Buscar -->
@@ -44,9 +44,9 @@
         routerLink="/not-found"
         (click)="closeDrawer()"
         title="Buscar"
-        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
       >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">search</span>
+        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">search</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">Buscar</span>
       </a>
       <!-- Tu Biblioteca (Active Tab with Pill & Cyan Dot indicator) -->
@@ -56,27 +56,27 @@
         [routerLinkActiveOptions]="{ exact: true }"
         (click)="closeDrawer()"
         title="Tu Biblioteca"
-        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-start md:justify-center lg:justify-between px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] border border-transparent group"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-between px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group"
       >
         <span class="flex items-center gap-4">
-          <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">library_music</span>
+          <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">library_music</span>
           <span class="drawer-label text-[14px] leading-[18px] font-semibold">Tu Biblioteca</span>
         </span>
-        <span class="nav-dot drawer-label inline-block w-1.5 h-1.5 rounded-full bg-[#00d2ff] shadow-[0_0_8px_#00d2ff]"></span>
+        <span class="nav-dot drawer-label inline-block w-1.5 h-1.5 rounded-full bg-[#00d2ff] dark:shadow-[0_0_8px_#00d2ff]"></span>
       </a>
       <!-- Importar archivos locales -->
       <a
         routerLink="/not-found"
         (click)="closeDrawer()"
         title="Importar archivos locales"
-        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
       >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">drive_folder_upload</span>
+        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">drive_folder_upload</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">Importar archivos locales</span>
       </a>
     </nav>
     <!-- Divider line -->
-    <div class="h-px w-full bg-white/[0.08]"></div>
+    <div class="h-px w-full bg-slate-200 dark:bg-white/[0.08]"></div>
     <!-- Secondary Section -->
     <div class="flex flex-col gap-1">
       <!-- Crear lista -->
@@ -84,9 +84,9 @@
         routerLink="/not-found"
         (click)="closeDrawer()"
         title="Crear lista"
-        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
       >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">add_box</span>
+        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">add_box</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">Crear lista</span>
       </a>
       <!-- Canciones que te gustan -->
@@ -94,9 +94,9 @@
         routerLink="/not-found"
         (click)="closeDrawer()"
         title="Canciones que te gustan"
-        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
       >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">favorite</span>
+        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">favorite</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">Canciones que te gustan</span>
       </a>
       <!-- Tus episodios -->
@@ -104,9 +104,9 @@
         routerLink="/not-found"
         (click)="closeDrawer()"
         title="Tus episodios"
-        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group"
       >
-        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">podcasts</span>
+        <span class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">podcasts</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">Tus episodios</span>
       </a>
     </div>
@@ -117,18 +117,18 @@
     <button
       type="button"
       title="Instalar app"
-      class="w-full flex items-center justify-center gap-2.5 px-4 py-2 md:px-0 lg:px-4 rounded-full border border-white/16 bg-[#181818] hover:bg-[#242424] text-white hover:border-white transition-all duration-150 active:scale-95 group"
+      class="w-full flex items-center justify-center gap-2.5 px-4 py-2 md:px-0 lg:px-4 rounded-full border border-slate-300 dark:border-white/16 bg-slate-100 dark:bg-[#181818] hover:bg-slate-200 dark:hover:bg-[#242424] text-slate-900 dark:text-white hover:border-slate-400 dark:hover:border-white transition-all duration-150 active:scale-95 group"
     >
-      <span class="material-symbols-outlined text-[18px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">download</span>
+      <span class="material-symbols-outlined text-[18px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">download</span>
       <span class="drawer-label text-[12px] leading-[16px] font-medium font-semibold">Instalar app</span>
     </button>
     <!-- Footer Links: Avisos legales y Privacidad -->
-    <div class="drawer-label flex items-center justify-start gap-4 px-1 pt-1 text-[#6a6a6a]">
-      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
+    <div class="drawer-label flex items-center justify-start gap-4 px-1 pt-1 text-slate-500 dark:text-[#6a6a6a]">
+      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
         <span class="material-symbols-outlined text-[14px]">gavel</span>
         <span>Avisos legales</span>
       </a>
-      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
+      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
         <span class="material-symbols-outlined text-[14px]">verified_user</span>
         <span>Privacidad</span>
       </a>

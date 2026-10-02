@@ -1,8 +1,16 @@
 .cyan-glow {
+  box-shadow: 0 4px 14px -4px rgba(0, 130, 180, 0.4);
+}
+
+.dark .cyan-glow {
   box-shadow: 0 0 35px -5px rgba(0, 210, 255, 0.45);
 }
 
 .cyan-text-glow {
+  text-shadow: none;
+}
+
+.dark .cyan-text-glow {
   text-shadow: 0 0 25px rgba(0, 210, 255, 0.55);
 }
 

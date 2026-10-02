@@ -1,4 +1,4 @@
-<header class="h-16 flex-shrink-0 bg-[#121212]/85 backdrop-blur-xl border-b border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 md:gap-4 z-20">
+<header class="h-16 flex-shrink-0 bg-white/85 dark:bg-[#121212]/85 backdrop-blur-xl border-b border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 md:gap-4 z-20">
   <!-- Left: Hamburger (mobile) + Search Box & Categorical Pills -->
   <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0 max-w-2xl">
     <!-- Hamburger: opens sidebar drawer on mobile -->
@@ -6,21 +6,21 @@
       type="button"
       (click)="toggleSidebar()"
       aria-label="Abrir menú"
-      class="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors flex-shrink-0"
+      class="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors flex-shrink-0"
     >
       <span class="material-symbols-outlined text-[22px]">menu</span>
     </button>
     <!-- Search Input: 'Buscar en archivos locales...' -->
     <div class="relative flex-1 min-w-0 max-w-md">
-      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#6a6a6a]">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-[#6a6a6a]">
         <span class="material-symbols-outlined text-[18px]">search</span>
       </div>
       <input
         [(ngModel)]="search"
-        class="w-full h-10 pl-10 pr-10 bg-[#181818] hover:bg-[#242424] focus:bg-[#181818] border border-white/[0.08] focus:border-[#00d2ff] focus:outline-none focus:ring-1 focus:ring-[#00d2ff] rounded-full text-white placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all duration-200"
+        class="w-full h-10 pl-10 pr-10 bg-slate-100 dark:bg-[#181818] hover:bg-slate-200 dark:hover:bg-[#242424] focus:bg-white dark:focus:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[#00d2ff] focus:outline-none focus:ring-1 focus:ring-[#00d2ff] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all duration-200"
         placeholder="Buscar en archivos locales..."
         type="text" />
-      <button type="button" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#6a6a6a] hover:text-white transition-colors" title="Filtros y ajustes">
+      <button type="button" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" title="Filtros y ajustes">
         <span class="material-symbols-outlined text-[18px]">tune</span>
       </button>
     </div>
@@ -31,8 +31,8 @@
         type="button"
         (click)="setPill('todo')"
         [class]="activePill === 'todo'
-          ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] shadow-[0_0_12px_rgba(0,210,255,0.35)] transition-all'
-          : 'bg-[#242424] text-[#b3b3b3] hover:text-white hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-white/[0.08]'"
+          ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_rgba(0,210,255,0.35)] transition-all'
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-slate-200 dark:border-white/[0.08]'"
       >
         Todo
       </button>
@@ -41,8 +41,8 @@
         type="button"
         (click)="setPill('carpetas')"
         [class]="activePill === 'carpetas'
-          ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] shadow-[0_0_12px_rgba(0,210,255,0.35)] transition-all'
-          : 'bg-[#242424] text-[#b3b3b3] hover:text-white hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-white/[0.08]'"
+          ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_rgba(0,210,255,0.35)] transition-all'
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-slate-200 dark:border-white/[0.08]'"
       >
         Carpetas
       </button>
@@ -50,22 +50,22 @@
   </div>
   <!-- Right Side: Topbar Trailing Actions -->
   <div class="flex items-center gap-2 md:gap-3 flex-shrink-0">
-    <!-- Theme Toggle (visual only) -->
-    <button type="button" class="w-9 h-9 rounded-full flex items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors" title="Cambiar tema">
-      <span class="material-symbols-outlined text-[20px]">dark_mode</span>
+    <!-- Theme Toggle -->
+    <button type="button" (click)="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="theme() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
+      <span class="material-symbols-outlined text-[20px]">{{ theme() === 'dark' ? 'dark_mode' : 'light_mode' }}</span>
     </button>
     <!-- History Action -->
-    <button type="button" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors" title="Historial">
+    <button type="button" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" title="Historial">
       <span class="material-symbols-outlined text-[20px]">history</span>
     </button>
     <!-- Notifications Action with Electric Cyan Badge -->
-    <button type="button" class="relative w-9 h-9 rounded-full flex items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors" title="Notificaciones">
+    <button type="button" class="relative w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" title="Notificaciones">
       <span class="material-symbols-outlined text-[20px]">notifications</span>
-      <span class="absolute top-2 right-2 w-2 h-2 bg-[#00d2ff] rounded-full ring-2 ring-[#121212] shadow-[0_0_6px_#00d2ff]"></span>
+      <span class="absolute top-2 right-2 w-2 h-2 bg-[#00d2ff] rounded-full ring-2 ring-white dark:ring-[#121212] dark:shadow-[0_0_6px_#00d2ff]"></span>
     </button>
     <!-- User Avatar -->
-    <div class="ml-1 pl-2 border-l border-white/[0.08] flex items-center">
-      <button type="button" class="relative w-9 h-9 rounded-full overflow-hidden ring-1 ring-white/16 hover:ring-[#00d2ff] transition-all">
+    <div class="ml-1 pl-2 border-l border-slate-200 dark:border-white/[0.08] flex items-center">
+      <button type="button" class="relative w-9 h-9 rounded-full overflow-hidden ring-1 ring-slate-300 dark:ring-white/16 hover:ring-[#00d2ff] transition-all">
         <img class="w-full h-full object-cover" alt="Foto de perfil" [src]="avatarUrl" (error)="onAvatarError($event)" />
       </button>
     </div>
