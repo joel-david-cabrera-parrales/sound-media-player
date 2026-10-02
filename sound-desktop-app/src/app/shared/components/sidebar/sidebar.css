@@ -18,3 +18,17 @@
 .nav-link.nav-active .nav-dot {
   opacity: 1;
 }
+
+@media (max-width: 767px) {
+  aside.drawer-open {
+    --tw-translate-x: 0;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+}
+
+/* Rail (md-lg): oculta etiquetas; drawer móvil y desktop las muestran */
+@media (min-width: 768px) and (max-width: 1023.5px) {
+  .drawer-label {
+    display: none;
+  }
+}

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { DEFAULT_AVATAR, getStoredPhotoUrl } from '../../utils/profile-photo';
+import { ShellUiService } from '../../services/shell-ui.service';
 
 type FilterPill = 'todo' | 'carpetas';
 
@@ -13,6 +14,7 @@ type FilterPill = 'todo' | 'carpetas';
 })
 export class Topbar implements OnInit, OnDestroy {
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly shellUi = inject(ShellUiService);
 
   protected search = '';
   protected activePill: FilterPill = 'todo';
@@ -45,5 +47,9 @@ export class Topbar implements OnInit, OnDestroy {
 
   protected setPill(pill: FilterPill): void {
     this.activePill = pill;
+  }
+
+  protected toggleSidebar(): void {
+    this.shellUi.toggleSidebar();
   }
 }

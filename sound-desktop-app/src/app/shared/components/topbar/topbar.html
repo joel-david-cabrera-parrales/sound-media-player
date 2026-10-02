@@ -1,8 +1,17 @@
-<header class="h-16 flex-shrink-0 bg-[#121212]/85 backdrop-blur-xl border-b border-white/[0.08] px-6 flex items-center justify-between gap-4 z-20">
-  <!-- Left: Search Box & Categorical Pills -->
-  <div class="flex items-center gap-4 flex-1 max-w-2xl">
+<header class="h-16 flex-shrink-0 bg-[#121212]/85 backdrop-blur-xl border-b border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 md:gap-4 z-20">
+  <!-- Left: Hamburger (mobile) + Search Box & Categorical Pills -->
+  <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0 max-w-2xl">
+    <!-- Hamburger: opens sidebar drawer on mobile -->
+    <button
+      type="button"
+      (click)="toggleSidebar()"
+      aria-label="Abrir menú"
+      class="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors flex-shrink-0"
+    >
+      <span class="material-symbols-outlined text-[22px]">menu</span>
+    </button>
     <!-- Search Input: 'Buscar en archivos locales...' -->
-    <div class="relative flex-1 max-w-md">
+    <div class="relative flex-1 min-w-0 max-w-md">
       <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#6a6a6a]">
         <span class="material-symbols-outlined text-[18px]">search</span>
       </div>
@@ -16,7 +25,7 @@
       </button>
     </div>
     <!-- Filter Pills: Todo & Carpetas -->
-    <div class="flex items-center gap-2">
+    <div class="hidden sm:flex items-center gap-2 flex-shrink-0">
       <!-- Active Pill: Todo -->
       <button
         type="button"
@@ -40,14 +49,13 @@
     </div>
   </div>
   <!-- Right Side: Topbar Trailing Actions -->
-  <div class="flex items-center gap-3">
-    <!-- Botón Instalar app -->
-    <button type="button" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/16 bg-[#181818] hover:bg-[#242424] text-white text-[12px] leading-[16px] font-medium transition-all duration-150 active:scale-95">
-      <span class="material-symbols-outlined text-[16px] text-[#00d2ff]">arrow_circle_down</span>
-      <span>Instalar app</span>
+  <div class="flex items-center gap-2 md:gap-3 flex-shrink-0">
+    <!-- Theme Toggle (visual only) -->
+    <button type="button" class="w-9 h-9 rounded-full flex items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors" title="Cambiar tema">
+      <span class="material-symbols-outlined text-[20px]">dark_mode</span>
     </button>
     <!-- History Action -->
-    <button type="button" class="w-9 h-9 rounded-full flex items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors" title="Historial">
+    <button type="button" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-[#b3b3b3] hover:text-white hover:bg-[#242424] transition-colors" title="Historial">
       <span class="material-symbols-outlined text-[20px]">history</span>
     </button>
     <!-- Notifications Action with Electric Cyan Badge -->
