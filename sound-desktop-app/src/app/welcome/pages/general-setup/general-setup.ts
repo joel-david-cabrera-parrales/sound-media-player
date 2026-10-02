@@ -17,6 +17,6 @@ export class GeneralSetup {
   }
 
   protected navigateToLibrary(): void {
-    this.router.navigate(['/library']);
+    this.router.navigate(['/media-player']);
   }
 }

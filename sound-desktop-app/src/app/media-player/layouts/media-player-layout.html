@@ -1,0 +1,15 @@
+<div class="flex h-screen w-screen overflow-hidden bg-[#0e0e0e] text-white antialiased">
+  <!-- 1. SIDEBAR LATERAL (260px) -->
+  <app-sidebar></app-sidebar>
+  <!-- RIGHT WRAPPER (TopBar + Content Area) -->
+  <div class="flex-1 flex flex-col h-[calc(100vh-90px)] min-w-0 bg-[#0e0e0e] overflow-hidden">
+    <!-- 2. TOPBAR HORIZONTAL -->
+    <app-topbar></app-topbar>
+    <!-- 3. ÁREA DE CONTENIDO -->
+    <main class="flex-1 overflow-y-auto relative">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+<!-- 4. PERSISTENT PLAYER DOCK (90px) -->
+<app-media-control-bar></app-media-control-bar>

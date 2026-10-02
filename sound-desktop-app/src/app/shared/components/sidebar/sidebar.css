@@ -1,0 +1,20 @@
+.nav-link .nav-dot {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.nav-link.nav-active {
+  background-color: #242424;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+}
+
+.nav-link.nav-active .nav-icon {
+  color: #00d2ff;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.nav-link.nav-active .nav-dot {
+  opacity: 1;
+}

@@ -7,6 +7,14 @@ export const routes: Routes = [
     loadChildren: () => import('./welcome/welcome.routes'),
   },
   {
+    path: 'media-player',
+    loadChildren: () => import('./media-player/media-player.routes'),
+  },
+  {
+    path: 'library',
+    loadChildren: () => import('./media-player/media-player.routes'),
+  },
+  {
     path: 'not-found',
     loadChildren: () => import('./shared/shared.routes'),
   },

@@ -1,7 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { PROFILE_STORAGE_KEY } from '../../shared/utils/profile-photo';
 
-export const PROFILE_STORAGE_KEY = 'sound.profile';
+export { PROFILE_STORAGE_KEY };
 
 export const profileSetupGuard: CanActivateFn = () => {
   const router = inject(Router);

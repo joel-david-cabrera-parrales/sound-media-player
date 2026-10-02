@@ -1,1 +1,108 @@
-<p>sidebar works!</p>
+<aside class="w-[260px] flex-shrink-0 h-[calc(100vh-90px)] bg-[#121212] border-r border-white/[0.08] flex flex-col justify-between p-4 z-30 select-none">
+  <!-- Top Section: Brand + Navigation -->
+  <div class="flex flex-col gap-6">
+    <!-- Header Brand Anchor -->
+    <div class="flex items-center gap-3 px-2 pt-2">
+      <div class="w-9 h-9 rounded-lg bg-[#242424] flex items-center justify-center text-[#00d2ff] shadow-[0_0_15px_rgba(0,210,255,0.25)] border border-white/[0.08]">
+        <span class="material-symbols-outlined text-[24px]">graphic_eq</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[20px] leading-[26px] font-semibold text-white tracking-tight leading-none">Soundwave</span>
+        <span class="text-[11px] leading-[14px] text-[#00d2ff] font-semibold tracking-wider uppercase mt-1">High-Fidelity Audio</span>
+      </div>
+    </div>
+    <!-- Primary Navigation Links -->
+    <nav class="flex flex-col gap-1">
+      <!-- Inicio -->
+      <a
+        routerLink="/library/home"
+        routerLinkActive="nav-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link text-[#b3b3b3] hover:text-white flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] border border-transparent group"
+      >
+        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">home</span>
+        <span class="text-[14px] leading-[18px] font-semibold">Inicio</span>
+      </a>
+      <!-- Buscar -->
+      <a
+        routerLink="/not-found"
+        class="nav-link text-[#b3b3b3] hover:text-white flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+      >
+        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">search</span>
+        <span class="text-[14px] leading-[18px] font-semibold">Buscar</span>
+      </a>
+      <!-- Tu Biblioteca (Active Tab with Pill & Cyan Dot indicator) -->
+      <a
+        routerLink="/library"
+        routerLinkActive="nav-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link text-[#b3b3b3] hover:text-white flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] border border-transparent group"
+      >
+        <span class="flex items-center gap-4">
+          <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">library_music</span>
+          <span class="text-[14px] leading-[18px] font-semibold">Tu Biblioteca</span>
+        </span>
+        <span class="nav-dot w-1.5 h-1.5 rounded-full bg-[#00d2ff] shadow-[0_0_8px_#00d2ff]"></span>
+      </a>
+      <!-- Importar archivos locales -->
+      <a
+        routerLink="/not-found"
+        class="nav-link text-[#b3b3b3] hover:text-white flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+      >
+        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">drive_folder_upload</span>
+        <span class="text-[14px] leading-[18px] font-semibold">Importar archivos locales</span>
+      </a>
+    </nav>
+    <!-- Divider line -->
+    <div class="h-px w-full bg-white/[0.08]"></div>
+    <!-- Secondary Section -->
+    <div class="flex flex-col gap-1">
+      <!-- Crear lista -->
+      <a
+        routerLink="/not-found"
+        class="nav-link text-[#b3b3b3] hover:text-white flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+      >
+        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">add_box</span>
+        <span class="text-[14px] leading-[18px] font-semibold">Crear lista</span>
+      </a>
+      <!-- Canciones que te gustan -->
+      <a
+        routerLink="/not-found"
+        class="nav-link text-[#b3b3b3] hover:text-white flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+      >
+        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">favorite</span>
+        <span class="text-[14px] leading-[18px] font-semibold">Canciones que te gustan</span>
+      </a>
+      <!-- Tus episodios -->
+      <a
+        routerLink="/not-found"
+        class="nav-link text-[#b3b3b3] hover:text-white flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-[#2a2a2a] group"
+      >
+        <span class="material-symbols-outlined nav-icon text-[22px] text-[#b3b3b3] group-hover:text-white transition-colors">podcasts</span>
+        <span class="text-[14px] leading-[18px] font-semibold">Tus episodios</span>
+      </a>
+    </div>
+  </div>
+  <!-- Bottom / Footer Navigation Area -->
+  <div class="flex flex-col gap-4 px-1 pb-1">
+    <!-- CTA Instalar App -->
+    <button
+      type="button"
+      class="w-full flex items-center justify-center gap-2.5 px-4 py-2 rounded-full border border-white/16 bg-[#181818] hover:bg-[#242424] text-white hover:border-white transition-all duration-150 active:scale-95 group"
+    >
+      <span class="material-symbols-outlined text-[18px] text-[#b3b3b3] group-hover:text-[#00d2ff] transition-colors">download</span>
+      <span class="text-[12px] leading-[16px] font-medium font-semibold">Instalar app</span>
+    </button>
+    <!-- Footer Links: Avisos legales y Privacidad -->
+    <div class="flex items-center justify-start gap-4 px-1 pt-1 text-[#6a6a6a]">
+      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-[14px]">gavel</span>
+        <span>Avisos legales</span>
+      </a>
+      <a routerLink="/not-found" class="text-[11px] leading-[14px] font-medium hover:text-[#b3b3b3] transition-colors flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-[14px]">verified_user</span>
+        <span>Privacidad</span>
+      </a>
+    </div>
+  </div>
+</aside>
