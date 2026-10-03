@@ -55,6 +55,17 @@
         <span
           class="nav-dot drawer-label inline-block w-1.5 h-1.5 rounded-full bg-[#00d2ff] dark:shadow-[0_0_8px_#00d2ff]"></span>
       </a>
+
+      <a routerLink="/media-player/list-artists" routerLinkActive="nav-active"
+        [routerLinkActiveOptions]="{ exact: true }" (click)="closeDrawer()" [title]="'shell.sidebar.artist' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
+        <span
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">groups</span>
+        <span class="drawer-label text-[14px] leading-[18px] font-semibold">
+          {{ 'shell.sidebar.artist' | translate }}
+        </span>
+      </a>
+
       <!-- Importar archivos locales -->
       <a routerLink="/media-player/import-local-files" routerLinkActive="nav-active" (click)="closeDrawer()"
         [title]="'shell.sidebar.import' | translate"

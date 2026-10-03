@@ -4,6 +4,8 @@ import { Home } from './pages/home/home';
 import { ImmersiveMusicPlayer } from './pages/immersive-music-player/immersive-music-player';
 import { ImmersiveMediaPlayerLayout } from './layouts/immersive-media-player/immersive-media-player';
 import { ImportLocalFiles } from './pages/import-local-files/import-local-files';
+import { ArtistProfile } from './pages/artist-profile/artist-profile';
+import { Artist } from './pages/artist/artist';
 
 export const routes: Routes = [
   {
@@ -22,6 +24,14 @@ export const routes: Routes = [
       {
         path: 'import-local-files',
         component: ImportLocalFiles,
+      },
+      {
+        path: 'list-artists',
+        component: Artist,
+      },
+      {
+        path: 'artist/:artistId',
+        component: ArtistProfile,
       },
     ],
   },

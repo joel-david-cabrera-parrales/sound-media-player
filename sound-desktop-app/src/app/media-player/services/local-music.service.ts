@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { TranslationService } from '../../shared/services/translation.service';
 import { formatTrackSize, type Track } from '../models/track.model';
 
@@ -17,8 +17,33 @@ export interface MusicFolder {
 
 export const LOCAL_FOLDERS_KEY = 'sound.folders';
 export const LOCAL_TRACKS_KEY = 'sound.tracks';
+export const ARTIST_IDS_KEY = 'sound.artistIds';
+export const FOLLOWS_KEY = 'sound.follows';
 
 const AUDIO_EXT_RE = /\.(mp3|flac|m4a|mp4|ogg|oga|opus|wav|aiff?|wma|aac|dsf|dff)$/i;
+
+export interface LocalArtist {
+  uuid: string;
+  name: string;
+  trackCount: number;
+  albumCount: number;
+  totalSec: number;
+  genres: string[];
+  coverTrack: Track | null;
+  lastScanIso: string;
+}
+
+export function normalizeArtistName(name: string): string {
+  return name.trim().toLowerCase();
+}
+
+function newUuid(): string {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return `artist-${Date.now()}-${Math.floor(Math.random() * 1e9)}`;
+  }
+}
 
 
 
@@ -33,6 +58,8 @@ export class LocalMusicService {
   readonly scanError = signal<string | null>(null);
   readonly connectedCount = computed(() => this.folders().length);
   readonly recentTracks = computed(() => this.tracks().slice(-8).reverse());
+  readonly artists = computed<LocalArtist[]>(() => this.buildArtists());
+  readonly follows = signal<string[]>(this.loadFollows());
 
   constructor() {
     // Progreso en vivo enviado por Electron main durante library:scanFolder
@@ -41,6 +68,117 @@ export class LocalMusicService {
     } catch {
       // entorno sin preload: se ignora
     }
+    // UUIDs estables por nombre normalizado (persisten entre escaneos)
+    effect(() => {
+      const names = new Set<string>();
+      for (const t of this.tracks()) names.add(normalizeArtistName(t.artist));
+      let map: Record<string, string>;
+      try {
+        map = { ...JSON.parse(localStorage.getItem(ARTIST_IDS_KEY) ?? '{}') };
+      } catch {
+        map = {};
+      }
+      let changed = false;
+      for (const n of names) {
+        if (!map[n]) {
+          map[n] = newUuid();
+          changed = true;
+        }
+      }
+      if (changed) {
+        try {
+          localStorage.setItem(ARTIST_IDS_KEY, JSON.stringify(map));
+        } catch {
+          // Sin almacenamiento: los UUID solo viven en memoria
+        }
+      }
+    });
+  }
+
+  artistByUuid(uuid: string): LocalArtist | null {
+    return this.artists().find((a) => a.uuid === uuid) ?? null;
+  }
+
+  isFollowing(uuid: string): boolean {
+    return this.follows().includes(uuid);
+  }
+
+  toggleFollow(uuid: string): void {
+    this.follows.update((list) =>
+      list.includes(uuid) ? list.filter((u) => u !== uuid) : [...list, uuid],
+    );
+    try {
+      localStorage.setItem(FOLLOWS_KEY, JSON.stringify(this.follows()));
+    } catch {
+      // Sin almacenamiento: solo memoria
+    }
+  }
+
+  private loadFollows(): string[] {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(FOLLOWS_KEY) ?? '[]');
+      return Array.isArray(parsed) ? parsed.filter((u) => typeof u === 'string') : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private readUuidMap(): Record<string, string> {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(ARTIST_IDS_KEY) ?? '{}');
+      return parsed && typeof parsed === 'object' ? (parsed as Record<string, string>) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  private buildArtists(): LocalArtist[] {
+    const uuidMap = this.readUuidMap();
+    const groups = new Map<string, Track[]>();
+    for (const t of this.tracks()) {
+      const key = normalizeArtistName(t.artist);
+      const list = groups.get(key);
+      if (list) list.push(t);
+      else groups.set(key, [t]);
+    }
+    const artists: LocalArtist[] = [];
+    for (const [key, tracks] of groups) {
+      // Casing más frecuente como nombre visible
+      const casing = new Map<string, number>();
+      for (const t of tracks) {
+        const name = t.artist.trim() || key;
+        casing.set(name, (casing.get(name) ?? 0) + 1);
+      }
+      let name = key;
+      let best = -1;
+      for (const [n, c] of casing) {
+        if (c > best) {
+          best = c;
+          name = n;
+        }
+      }
+      const albums = new Set(tracks.map((t) => t.album.trim().toLowerCase()));
+      const genres = [...new Set(tracks.map((t) => t.genre?.trim()).filter((g): g is string => !!g))];
+      const totalSec = tracks.reduce((acc, t) => acc + (t.durationSec ?? 0), 0);
+      const coverTrack = tracks.find((t) => !!t.coverCacheKey) ?? tracks[0] ?? null;
+      const folderIds = new Set(tracks.map((t) => t.folderId));
+      const lastScanIso = this.folders()
+        .filter((f) => folderIds.has(f.id))
+        .map((f) => f.lastScanIso)
+        .sort()
+        .at(-1) ?? new Date(0).toISOString();
+      artists.push({
+        uuid: uuidMap[key] ?? `tmp-${key}`,
+        name,
+        trackCount: tracks.length,
+        albumCount: albums.size,
+        totalSec,
+        genres,
+        coverTrack,
+        lastScanIso,
+      });
+    }
+    return artists.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   private load(): MusicFolder[] {
