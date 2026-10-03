@@ -149,8 +149,7 @@
     "playingFrom": "Playing from your library",
     "share": "Share track",
     "more": "More playback options",
-    "fullscreen": "Full screen",
-    "lossless": "Lossless FLAC 24-bit / 96kHz Audio"
+    "fullscreen": "Full screen"
   },
   "import": {
     "crumbHere": "Local Files & Directories",

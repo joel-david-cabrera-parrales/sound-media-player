@@ -29,9 +29,17 @@ const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 const DEFAULT_AVATAR = '/images/avatar-default.svg';
 
 function toSoundPhotoUrl(filePath: string): string {
+  // Formato query con host ficticio: Chromium rechaza rutas en posición de host.
+  const api = window.electronAPI as unknown as { toPhotoUrl?: (p: string) => string } | undefined;
+  if (api?.toPhotoUrl) {
+    try {
+      return api.toPhotoUrl(filePath);
+    } catch {
+      // fallback local
+    }
+  }
   const normalized = filePath.replace(/\\/g, '/');
-  const encoded = encodeURI(normalized).replace(/#/g, '%23').replace(/\?/g, '%3F');
-  return `sound-photo:///${encoded}`;
+  return `sound-photo://photo?path=${encodeURIComponent(normalized)}`;
 }
 
 function readStoredProfile(): Record<string, unknown> {

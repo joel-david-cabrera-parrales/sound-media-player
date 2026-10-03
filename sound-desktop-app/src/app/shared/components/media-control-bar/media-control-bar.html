@@ -7,14 +7,23 @@
       [title]="'shell.dock.expand' | translate"
       class="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-slate-100 dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] flex-shrink-0 overflow-hidden"
     >
-      <span class="material-symbols-outlined text-[24px]">music_note</span>
+      @if (coverUrl(); as cover) {
+        <img class="absolute inset-0 w-full h-full object-cover" [src]="cover" [alt]="currentTrack()?.title ?? ''" loading="lazy" (error)="onCoverError($event)" />
+      } @else {
+        <span class="material-symbols-outlined text-[24px]">music_note</span>
+      }
       <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
         <span class="material-symbols-outlined text-white text-lg">open_in_full</span>
       </span>
     </a>
     <div class="flex flex-col min-w-0">
-      <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</span>
-      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</span>
+      @if (currentTrack(); as track) {
+        <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ track.title }}</span>
+        <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ track.artist }} • {{ track.album }}</span>
+      } @else {
+        <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</span>
+        <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</span>
+      }
     </div>
     <button type="button" class="hidden sm:block ml-2 text-slate-400 dark:text-[#6a6a6a] hover:text-[#005575] dark:hover:text-[#00d2ff] transition-colors flex-shrink-0" [title]="'shell.dock.favorite' | translate">
       <span class="material-symbols-outlined text-[20px]">favorite</span>
@@ -33,19 +42,20 @@
       >
         <span class="material-symbols-outlined text-[19px]">shuffle</span>
       </button>
-      <button type="button" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.previous' | translate">
+      <button type="button" (click)="previousTrack()" [disabled]="!hasTrack()" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none" [title]="'shell.dock.previous' | translate">
         <span class="material-symbols-outlined text-[22px]">skip_previous</span>
       </button>
       <!-- Primary Play Trigger with Electric Glow -->
       <button
         type="button"
         (click)="togglePlay()"
-        class="w-10 h-10 rounded-full bg-[#00d2ff] text-[#0e0e0e] flex items-center justify-center hover:scale-105 dark:shadow-[0_0_18px_rgba(0,210,255,0.45)] transition-all"
+        [disabled]="!hasTrack()"
+        class="w-10 h-10 rounded-full bg-[#00d2ff] text-[#0e0e0e] flex items-center justify-center hover:scale-105 dark:shadow-[0_0_18px_rgba(0,210,255,0.45)] transition-all disabled:opacity-30 disabled:pointer-events-none"
         [title]="(isPlaying() ? 'shell.dock.pause' : 'shell.dock.play') | translate"
       >
         <span class="material-symbols-outlined text-[24px] fill pl-0.5">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
       </button>
-      <button type="button" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.next' | translate">
+      <button type="button" (click)="nextTrack()" [disabled]="!hasTrack()" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none" [title]="'shell.dock.next' | translate">
         <span class="material-symbols-outlined text-[22px]">skip_next</span>
       </button>
       <button
@@ -60,11 +70,17 @@
     </div>
     <!-- Scrubber Bar -->
     <div class="w-full flex items-center gap-3">
-      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-right tabular-nums">0:00</span>
-      <div class="relative flex-1 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer" (click)="seek($event)">
-        <div class="h-full bg-[#00d2ff] group-hover:bg-[#00a2e6] dark:group-hover:bg-[#b6ebff] transition-all rounded-full" [style.width.%]="progress()"></div>
+      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-right tabular-nums">{{ displayElapsed() }}</span>
+      <div
+        class="relative flex-1 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer touch-none"
+        (pointerdown)="onSeekPointerDown($event)"
+        (pointermove)="onSeekPointerMove($event)"
+        (pointerup)="onSeekPointerUp($event)"
+        (pointercancel)="onSeekPointerCancel()"
+      >
+        <div class="h-full bg-[#00d2ff] group-hover:bg-[#00a2e6] dark:group-hover:bg-[#b6ebff] transition-all rounded-full" [style.width.%]="displayProgress()"></div>
       </div>
-      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-left tabular-nums">--:--</span>
+      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-left tabular-nums">{{ durationLabel() }}</span>
     </div>
   </div>
   <!-- Right Segment: Volume & Auxiliary Controls -->
@@ -83,7 +99,13 @@
       <button type="button" (click)="toggleMute()" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.mute' | translate">
         <span class="material-symbols-outlined text-[20px]">{{ isMuted() || volume() === 0 ? 'volume_off' : 'volume_up' }}</span>
       </button>
-      <div class="w-20 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer" (click)="setVolume($event)">
+      <div
+        class="w-20 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer touch-none"
+        (pointerdown)="onVolumePointerDown($event)"
+        (pointermove)="onVolumePointerMove($event)"
+        (pointerup)="onVolumePointerUp()"
+        (pointercancel)="onVolumePointerCancel()"
+      >
         <div
           class="h-full bg-slate-400 dark:bg-[#b3b3b3] group-hover:bg-[#00d2ff] rounded-full transition-colors"
           [style.width.%]="isMuted() ? 0 : volume()"

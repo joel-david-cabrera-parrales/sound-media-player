@@ -148,8 +148,7 @@
     "playingFrom": "Reproduciendo desde la biblioteca",
     "share": "Compartir pista",
     "more": "Más opciones de reproducción",
-    "fullscreen": "Pantalla completa",
-    "lossless": "Audio Lossless FLAC 24-bit / 96kHz"
+    "fullscreen": "Pantalla completa"
   },
   "import": {
     "crumbHere": "Archivos Locales & Directorios",

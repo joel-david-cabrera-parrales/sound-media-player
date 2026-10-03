@@ -50,6 +50,34 @@
     <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold flex-shrink-0">{{ 'import.connected' | translate: { count: library.connectedCount() } }}</span>
   </div>
 
+  @if (library.scanning() || library.scanError() || player.error()) {
+    <div class="space-y-2 px-4 py-3 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08]">
+      @if (library.scanning()) {
+        <div class="flex items-center gap-2 text-[12px] font-medium text-slate-600 dark:text-[#b3b3b3]">
+          <span class="material-symbols-outlined text-[18px] text-[#005575] dark:text-[#00d2ff] animate-spin">sync</span>
+          <span>{{ 'import.scanning' | translate }}</span>
+          @if (library.scanProgress(); as p) {
+            <span class="tabular-nums">({{ p.done }}/{{ p.total }})</span>
+          }
+        </div>
+        @if (library.scanProgress(); as p) {
+          <div class="h-1.5 rounded-full bg-slate-200 dark:bg-[#242424] overflow-hidden">
+            <div class="h-full bg-[#00d2ff] transition-all" [style.width.%]="p.total > 0 ? (p.done / p.total) * 100 : 0"></div>
+          </div>
+        }
+      }
+      @if (library.scanError()) {
+        <p class="text-[12px] font-medium text-amber-600 dark:text-amber-400">{{ library.scanError() }}</p>
+      }
+      @if (player.error()) {
+        <p class="text-[12px] font-medium text-red-600 dark:text-red-400">{{ player.error() }}</p>
+      }
+      @if (player.currentTrack(); as current) {
+        <p class="text-[12px] text-slate-500 dark:text-[#b3b3b3] truncate">♪ {{ current.title }} — {{ current.artist }}</p>
+      }
+    </div>
+  }
+
   <!-- SECTION 2: DRAG & DROP PICKER DROPZONE -->
   <div
     role="button"
@@ -154,7 +182,7 @@
                   <span class="material-symbols-outlined text-[14px]">database</span> {{ folder.size }}
                 </span>
                 <span>•</span>
-                <span>{{ 'import.lastScan' | translate: { when: library.formatLastScan(folder.lastScanIso) } }}</span>
+                <span>{{ 'import.lastScan' | translate: { when: (folder.lastScanIso | relativeTime) } }}</span>
               </div>
             </div>
           </div>
@@ -201,9 +229,9 @@
         <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ 'import.recentTitle' | translate }}</h3>
         <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ 'import.recentDesc' | translate }}</p>
       </div>
-      <a routerLink="/not-found" class="text-[12px] leading-[16px] text-[#005575] dark:text-[#00d2ff] hover:underline flex-shrink-0">
-        {{ 'import.seeAll' | translate: { total: '5.396' } }}
-      </a>
+      <span class="text-[12px] leading-[16px] text-[#005575] dark:text-[#00d2ff] font-semibold flex-shrink-0">
+        {{ 'import.seeAll' | translate: { total: library.tracks().length } }}
+      </span>
     </div>
     <!-- Structured Track Table -->
     <div class="w-full bg-white dark:bg-[#181818] rounded-xl border border-slate-200 dark:border-white/[0.08] overflow-hidden shadow-sm dark:shadow-none">
@@ -216,14 +244,30 @@
         <div class="col-span-1">{{ 'import.colSize' | translate }}</div>
         <div class="col-span-1 text-right">{{ 'import.colDuration' | translate }}</div>
       </div>
-      @for (track of recentTracks; track track.title; let i = $index) {
-        <div class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0">
+      @if (visibleTracks().length === 0) {
+        <div class="px-4 py-8 text-center">
+          <p class="text-[14px] font-semibold text-slate-900 dark:text-white mb-1">{{ 'import.emptyTitle' | translate }}</p>
+          <p class="text-[12px] text-slate-500 dark:text-[#b3b3b3]">{{ 'import.emptyDesc' | translate }}</p>
+        </div>
+      }
+      @for (track of visibleTracks(); track track.id; let i = $index) {
+        <div
+          role="button"
+          tabindex="0"
+          (click)="playTrack(track)"
+          (keydown.enter)="playTrack(track)"
+          class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0"
+        >
           <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
-            <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
-            <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] hidden group-hover:inline">play_arrow</span>
+            @if (isPlayingTrack(track)) {
+              <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] animate-pulse">graphic_eq</span>
+            } @else {
+              <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
+              <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] hidden group-hover:inline">play_arrow</span>
+            }
           </div>
           <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
-            <img class="w-10 h-10 rounded object-cover shrink-0" [class]="track.hue" [src]="track.img" [alt]="track.title" loading="lazy" />
+            <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(track)" [alt]="track.title" loading="lazy" />
             <div class="truncate min-w-0">
               <div class="text-[14px] leading-[20px] text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] font-semibold truncate">{{ track.title }}</div>
               <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
@@ -240,10 +284,10 @@
               {{ track.format }}
             </span>
           </div>
-          <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ track.size }}</div>
+          <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ formatSize(track.sizeBytes) }}</div>
           <div class="col-span-2 md:col-span-1 text-[14px] md:text-[12px] leading-[20px] md:leading-[16px] text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-2">
-            <span>{{ track.duration }}</span>
-            <button type="button" class="material-symbols-outlined text-[18px] text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">more_horiz</button>
+            <span class="tabular-nums">{{ formatDuration(track.durationSec) }}</span>
+            <span class="material-symbols-outlined text-[18px]">{{ isPlayingTrack(track) ? 'pause_circle' : 'play_circle' }}</span>
           </div>
         </div>
       }

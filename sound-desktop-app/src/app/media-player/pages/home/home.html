@@ -28,7 +28,7 @@
       <span class="text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] tracking-wider uppercase">{{ 'home.recentTag' | translate }}</span>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-      @for (item of quickAccess; track item.title) {
+      @for (item of quickAccess; track item.img) {
         <div class="group relative flex items-center bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424] transition-all duration-200 rounded-lg p-2 gap-3.5 border border-slate-200 dark:border-white/[0.08] cursor-pointer overflow-hidden shadow-sm dark:shadow-none">
           <img class="w-14 h-14 rounded-md object-cover flex-shrink-0 shadow-md" [src]="item.img" [alt]="item.titleKey ? (item.titleKey | translate) : item.title" loading="lazy" />
           <div class="flex-1 min-w-0">
