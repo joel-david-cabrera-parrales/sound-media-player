@@ -106,15 +106,6 @@
     "resume": "Reanudar reproducción",
     "quickTitle": "Accesos rápidos",
     "recentTag": "Recientes",
-    "quick": {
-      "weeklyTitle": "Descubrimiento Semanal",
-      "favoritesTitle": "Tus favoritos de siempre",
-      "spatial": "84 pistas • Sonido Espacial",
-      "weekly": "Actualizado hoy lunes",
-      "album": "Álbum • 2011 • Remaster 24/96",
-      "selected": "320 canciones seleccionadas",
-      "masters": "192kHz Grabaciones directas"
-    },
     "releases": {
       "title": "Nuevos lanzamientos",
       "subtitle": "Los mejores estrenos y recomendaciones seleccionados para ti.",
@@ -122,26 +113,11 @@
     },
     "continue": {
       "title": "Continuar escuchando",
-      "tag": "Historial en progreso",
-      "podcast": "Pódcast • Ep. 142",
-      "album": "Álbum en Curso",
-      "live": "Sesión en Vivo",
-      "remaining": "Restan {{time}}",
-      "trackOf": "Pista {{current}} de {{total}}"
+      "tag": "Historial en progreso"
     },
     "genres": {
       "title": "Tus estaciones y géneros favoritos",
-      "explore": "Explorar géneros",
-      "electronic": "Electrónica",
-      "ambient": "Ambient",
-      "synthwave": "Synthwave",
-      "rock": "Rock Clásico",
-      "lofi": "Lo-Fi Hi-Fi",
-      "radio": "Radio 24/7",
-      "immersive": "Inmersivo 3D",
-      "retro": "Retro Studio",
-      "master": "Master Tapes",
-      "focus": "Enfoque y Relax"
+      "songs": "{{count}} canciones"
     }
   },
   "immersive": {
@@ -232,5 +208,29 @@
     "related": "Del mismo género",
     "notFound": "Artista no encontrado",
     "backToList": "Volver a artistas"
+  },
+  "library": {
+    "emptyTitle": "Tu biblioteca está vacía",
+    "emptyDesc": "Importa carpetas con música para empezar tu colección.",
+    "goImport": "Ir a importar música",
+    "heroKicker": "Tu Biblioteca",
+    "heroTitle": "Toda tu música",
+    "statsLine": "{{songs}} canciones • {{artists}} artistas • {{albums}} álbumes",
+    "playAll": "Reproducir todo",
+    "searchPlaceholder": "Buscar en tu biblioteca...",
+    "sortBy": "Ordenar por:",
+    "sortTitle": "Título (A - Z)",
+    "sortArtist": "Artista",
+    "sortAlbum": "Álbum",
+    "sortDuration": "Duración",
+    "viewList": "Vista de lista",
+    "viewGrid": "Vista en cuadrícula",
+    "noResults": "Sin resultados para esa búsqueda.",
+    "playing": "Sonando",
+    "colTitle": "Título / Artista",
+    "colAlbum": "Álbum",
+    "colFormat": "Formato & Calidad",
+    "colSize": "Tamaño",
+    "colDuration": "Duración"
   }
 }

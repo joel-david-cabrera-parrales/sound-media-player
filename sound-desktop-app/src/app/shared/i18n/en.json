@@ -107,15 +107,6 @@
     "resume": "Resume playback",
     "quickTitle": "Quick access",
     "recentTag": "Recent",
-    "quick": {
-      "weeklyTitle": "Weekly Discovery",
-      "favoritesTitle": "Your all-time favorites",
-      "spatial": "84 tracks • Spatial Audio",
-      "weekly": "Updated today, Monday",
-      "album": "Album • 2011 • Remaster 24/96",
-      "selected": "320 selected songs",
-      "masters": "192kHz Direct recordings"
-    },
     "releases": {
       "title": "New releases",
       "subtitle": "The best premieres and recommendations picked for you.",
@@ -123,26 +114,11 @@
     },
     "continue": {
       "title": "Continue listening",
-      "tag": "In-progress history",
-      "podcast": "Podcast • Ep. 142",
-      "album": "Album in Progress",
-      "live": "Live Session",
-      "remaining": "{{time}} left",
-      "trackOf": "Track {{current}} of {{total}}"
+      "tag": "In-progress history"
     },
     "genres": {
       "title": "Your favorite stations and genres",
-      "explore": "Explore genres",
-      "electronic": "Electronic",
-      "ambient": "Ambient",
-      "synthwave": "Synthwave",
-      "rock": "Classic Rock",
-      "lofi": "Lo-Fi Hi-Fi",
-      "radio": "Radio 24/7",
-      "immersive": "Immersive 3D",
-      "retro": "Retro Studio",
-      "master": "Master Tapes",
-      "focus": "Focus & Relax"
+      "songs": "{{count}} songs"
     }
   },
   "immersive": {
@@ -233,5 +209,29 @@
     "related": "Same genre",
     "notFound": "Artist not found",
     "backToList": "Back to artists"
+  },
+  "library": {
+    "emptyTitle": "Your library is empty",
+    "emptyDesc": "Import music folders to start your collection.",
+    "goImport": "Go to music import",
+    "heroKicker": "Your Library",
+    "heroTitle": "All your music",
+    "statsLine": "{{songs}} songs • {{artists}} artists • {{albums}} albums",
+    "playAll": "Play all",
+    "searchPlaceholder": "Search your library...",
+    "sortBy": "Sort by:",
+    "sortTitle": "Title (A - Z)",
+    "sortArtist": "Artist",
+    "sortAlbum": "Album",
+    "sortDuration": "Duration",
+    "viewList": "List view",
+    "viewGrid": "Grid view",
+    "noResults": "No results for that search.",
+    "playing": "Playing",
+    "colTitle": "Title / Artist",
+    "colAlbum": "Album",
+    "colFormat": "Format & Quality",
+    "colSize": "Size",
+    "colDuration": "Duration"
   }
 }

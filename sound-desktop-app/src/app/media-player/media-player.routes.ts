@@ -6,6 +6,7 @@ import { ImmersiveMediaPlayerLayout } from './layouts/immersive-media-player/imm
 import { ImportLocalFiles } from './pages/import-local-files/import-local-files';
 import { ArtistProfile } from './pages/artist-profile/artist-profile';
 import { Artist } from './pages/artist/artist';
+import { Library } from './pages/library/library';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,10 @@ export const routes: Routes = [
       {
         path: 'artist/:artistId',
         component: ArtistProfile,
+      },
+      {
+        path: 'library',
+        component: Library,
       },
     ],
   },
