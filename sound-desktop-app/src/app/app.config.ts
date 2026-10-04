@@ -9,10 +9,12 @@ import { routes } from './app.routes';
 import { withHashLocation } from '@angular/router';
 import { TranslationService } from './shared/services/translation.service';
 import { getStoredLanguage } from './shared/utils/profile-language';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideHttpClient(withFetch()),
     provideRouter(routes, withHashLocation()),
     {
       provide: APP_INITIALIZER,

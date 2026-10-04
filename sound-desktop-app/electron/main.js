@@ -392,7 +392,25 @@ ipcMain.handle('library:scanFolder', async (event, { folderId, dirPath }) => {
   // Orden estable por artista/album/pista para verificar fácil
   tracks.sort((a, b) => `${a.artist}${a.album}${a.trackNo ?? ''}${a.title}`.localeCompare(`${b.artist}${b.album}${b.trackNo ?? ''}${b.title}`));
 
-  return { tracks, total, errors, scannedMs: Date.now() - startedAt };
+return { tracks, total, errors, scannedMs: Date.now() - startedAt };
+  });
+
+// Obtiene imagen de artista desde Deezer API (sin CORS en main process)
+ipcMain.handle('artist:fetchDeezerImage', async (_event, artistName) => {
+  try {
+    const normalized = String(artistName || '').trim().toLowerCase().replace(/\s+/g, '_');
+    if (!normalized) return null;
+    const url = `https://api.deezer.com/search?q=${encodeURIComponent(normalized)}&limit=1`;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data?.data?.[0]?.artist?.picture_xl ?? null;
+  } catch {
+    return null;
+  }
 });
 
 // Convierte sound-photo://<encodeURIComponent(C:/ruta/foto.png)> -> archivo local (acepta legacy ///C:/...)

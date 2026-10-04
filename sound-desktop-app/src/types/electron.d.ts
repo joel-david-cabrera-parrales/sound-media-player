@@ -36,6 +36,7 @@ export interface ElectronAPI {
   toAudioUrl?: (filePath: string) => string;
   toCoverUrl?: (coverCacheKey: string) => string;
   toPhotoUrl?: (filePath: string) => string;
+  fetchDeezerArtistImage?: (artistName: string) => Promise<string | null>;
 }
 
 declare global {

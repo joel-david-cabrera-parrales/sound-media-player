@@ -1,6 +1,7 @@
 import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { TranslationService } from '../../shared/services/translation.service';
 import { formatTrackSize, type Track } from '../models/track.model';
+import { ArtistImageService } from './artist-image.service';
 
 export interface MusicFolder {
   id: string;
@@ -31,10 +32,15 @@ export interface LocalArtist {
   genres: string[];
   coverTrack: Track | null;
   lastScanIso: string;
+  artistImageUrl: string | null;
 }
 
 export function normalizeArtistName(name: string): string {
   return name.trim().toLowerCase();
+}
+
+export function normalizeArtistNameForApi(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, '_');
 }
 
 function newUuid(): string {
@@ -50,6 +56,7 @@ function newUuid(): string {
 @Injectable({ providedIn: 'root' })
 export class LocalMusicService {
   private readonly i18n = inject(TranslationService);
+  private readonly artistImageService = inject(ArtistImageService);
 
   readonly folders = signal<MusicFolder[]>(this.load());
   readonly tracks = signal<Track[]>(this.loadTracks());
@@ -58,8 +65,9 @@ export class LocalMusicService {
   readonly scanError = signal<string | null>(null);
   readonly connectedCount = computed(() => this.folders().length);
   readonly recentTracks = computed(() => this.tracks().slice(-8).reverse());
-  readonly artists = computed<LocalArtist[]>(() => this.buildArtists());
+  readonly artists = signal<LocalArtist[]>([]);
   readonly follows = signal<string[]>(this.loadFollows());
+  private artistsBuilt = false;
 
   constructor() {
     // Progreso en vivo enviado por Electron main durante library:scanFolder
@@ -93,6 +101,25 @@ export class LocalMusicService {
         }
       }
     });
+    this.rebuildArtists();
+  }
+
+  private rebuildArtists(): void {
+    this.artists.set(this.buildArtists());
+    this.artistsBuilt = true;
+    this.enrichArtistsWithImages();
+  }
+
+  private async enrichArtistsWithImages(): Promise<void> {
+    const current = this.artists();
+    const missing = current.filter(a => !a.artistImageUrl);
+    
+    for (const artist of missing) {
+      const url = await this.artistImageService.fetchArtistImage(artist.name);
+      this.artists.update(list => 
+        list.map(a => a.uuid === artist.uuid ? { ...a, artistImageUrl: url } : a)
+      );
+    }
   }
 
   artistByUuid(uuid: string): LocalArtist | null {
@@ -176,6 +203,7 @@ export class LocalMusicService {
         genres,
         coverTrack,
         lastScanIso,
+        artistImageUrl: null,
       });
     }
     return artists.sort((a, b) => a.name.localeCompare(b.name));
@@ -314,7 +342,7 @@ export class LocalMusicService {
           list.map((f) => (id && f.id !== id ? f : { ...f, lastScanIso: now })),
         );
         this.scanning.set(false);
-        this.persist();
+        this.rebuildArtists();
       }, 1200);
       return;
     }
@@ -353,6 +381,7 @@ export class LocalMusicService {
           this.scanError.set(`${result.errors} archivos no se pudieron leer y se omitieron.`);
         }
       }
+      this.rebuildArtists();
     } catch (err) {
       this.scanError.set(err instanceof Error ? err.message : 'Falló el escaneo de la carpeta.');
     } finally {
@@ -403,7 +432,7 @@ export class LocalMusicService {
           : { ...f, tracksCount: mapped.length, size: formatTrackSize(totalBytes), lastScanIso: new Date().toISOString() },
       ),
     );
-    this.persist();
+    this.rebuildArtists();
   }
 
   private probeWebDuration(file: File): Promise<number | null> {

@@ -29,4 +29,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   toAudioUrl: (filePath) => toMediaUrl('sound-audio', filePath),
   toCoverUrl: (coverCacheKey) => toMediaUrl('sound-cover', coverCacheKey),
   toPhotoUrl: (filePath) => toMediaUrl('sound-photo', filePath),
+  fetchDeezerArtistImage: (artistName) => ipcRenderer.invoke('artist:fetchDeezerImage', artistName),
 });

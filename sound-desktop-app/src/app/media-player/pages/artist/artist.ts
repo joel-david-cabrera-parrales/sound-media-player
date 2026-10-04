@@ -58,6 +58,9 @@ export class Artist {
   });
 
   protected artistPhoto(artist: LocalArtist): SafeUrl | string {
+    if (artist.artistImageUrl) {
+      return this.sanitizer.bypassSecurityTrustUrl(artist.artistImageUrl);
+    }
     const track = artist.coverTrack;
     if (!track?.coverCacheKey) return '/images/avatar-default.svg';
     const url = coverUrlFor(track, '');
