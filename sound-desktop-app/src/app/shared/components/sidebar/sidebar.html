@@ -35,7 +35,7 @@
           }}</span>
       </a>
       <!-- Buscar -->
-      <a routerLink="/not-found" (click)="closeDrawer()" [title]="'shell.sidebar.search' | translate"
+      <a routerLink="/media-player/search" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeDrawer()" [title]="'shell.sidebar.search' | translate"
         class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
         <span
           class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">search</span>

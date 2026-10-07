@@ -7,6 +7,7 @@ import { ImportLocalFiles } from './pages/import-local-files/import-local-files'
 import { ArtistProfile } from './pages/artist-profile/artist-profile';
 import { Artist } from './pages/artist/artist';
 import { Library } from './pages/library/library';
+import { Search } from './pages/search/search';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,10 @@ export const routes: Routes = [
       {
         path: 'library',
         component: Library,
+      },
+      {
+        path: 'search',
+        component: Search,
       },
     ],
   },

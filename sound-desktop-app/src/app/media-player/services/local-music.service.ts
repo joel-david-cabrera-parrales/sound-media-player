@@ -2,6 +2,12 @@ import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { TranslationService } from '../../shared/services/translation.service';
 import { formatTrackSize, type Track } from '../models/track.model';
 import { ArtistImageService } from './artist-image.service';
+import {
+  genreLabel,
+  isGenreId,
+  matchGenres,
+  withMatchedGenres,
+} from '../models/genre-taxonomy';
 
 export interface MusicFolder {
   id: string;
@@ -43,6 +49,28 @@ export function normalizeArtistNameForApi(name: string): string {
   return name.trim().toLowerCase().replace(/\s+/g, '_');
 }
 
+/** Un género importado sin repetidos, con su conteo de canciones. */
+export interface LibraryGenre {
+  id: string;
+  label: string;
+  count: number;
+}
+
+/**
+ * Migra tracks persistidos sin match (versiones anteriores): conserva ids
+ * válidos y rematchea desde el texto raw en caso contrario.
+ */
+function migrateTrackGenres(t: Partial<Track>): Pick<Track, 'genreId' | 'genreIds'> {
+  const rawIds = Array.isArray(t.genreIds) ? t.genreIds.filter(isGenreId) : [];
+  const rawId = isGenreId(t.genreId) ? (t.genreId as string) : null;
+  const ids = [...new Set([...rawIds, ...(rawId ? [rawId] : [])])];
+  if (ids.length > 0) {
+    return { genreId: rawId ?? ids[0], genreIds: ids };
+  }
+  const matched = matchGenres(t.genre);
+  return { genreId: matched[0], genreIds: matched };
+}
+
 function newUuid(): string {
   try {
     return crypto.randomUUID();
@@ -65,6 +93,23 @@ export class LocalMusicService {
   readonly scanError = signal<string | null>(null);
   readonly connectedCount = computed(() => this.folders().length);
   readonly recentTracks = computed(() => this.tracks().slice(-8).reverse());
+  /**
+   * Géneros importados sin repetidos, derivados de los tracks.
+   * Fuente única de verdad = sound.tracks, así no se desincroniza ni duplica.
+   */
+  readonly libraryGenres = computed<LibraryGenre[]>(() => {
+    const lang = this.i18n.currentLang();
+    const counts = new Map<string, number>();
+    for (const t of this.tracks()) {
+      const ids = t.genreIds?.length ? t.genreIds : t.genreId ? [t.genreId] : [];
+      for (const id of [...new Set(ids)]) {
+        counts.set(id, (counts.get(id) ?? 0) + 1);
+      }
+    }
+    return [...counts.entries()]
+      .map(([id, count]) => ({ id, label: genreLabel(id, lang), count }))
+      .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  });
   readonly artists = signal<LocalArtist[]>([]);
   readonly follows = signal<string[]>(this.loadFollows());
   private artistsBuilt = false;
@@ -185,7 +230,13 @@ export class LocalMusicService {
         }
       }
       const albums = new Set(tracks.map((t) => t.album.trim().toLowerCase()));
-      const genres = [...new Set(tracks.map((t) => t.genre?.trim()).filter((g): g is string => !!g))];
+      const genres = [
+        ...new Set(
+          tracks.flatMap((t) =>
+            t.genreIds?.length ? t.genreIds : t.genreId ? [t.genreId] : [],
+          ),
+        ),
+      ];
       const totalSec = tracks.reduce((acc, t) => acc + (t.durationSec ?? 0), 0);
       const coverTrack = tracks.find((t) => !!t.coverCacheKey) ?? tracks[0] ?? null;
       const folderIds = new Set(tracks.map((t) => t.folderId));
@@ -265,6 +316,7 @@ export class LocalMusicService {
           artist: typeof t.artist === 'string' && t.artist ? t.artist : 'Artista desconocido',
           album: typeof t.album === 'string' && t.album ? t.album : 'Álbum desconocido',
           genre: typeof t.genre === 'string' ? t.genre : null,
+          ...migrateTrackGenres(t),
           year: typeof t.year === 'number' ? t.year : null,
           trackNo: typeof t.trackNo === 'number' ? t.trackNo : null,
           durationSec: typeof t.durationSec === 'number' ? t.durationSec : null,
@@ -355,7 +407,9 @@ export class LocalMusicService {
         this.scanProgress.set({ folderId: folder.id, done: 0, total: 1 });
         const result = await api.scanFolder({ folderId: folder.id, dirPath: folder.path });
         const others = this.tracks().filter((t) => t.folderId !== folder.id);
-        const merged = [...others, ...result.tracks];
+        // Match de géneros contra la taxonomía canónica (persiste en sound.tracks)
+        const matched = result.tracks.map((t) => withMatchedGenres(t));
+        const merged = [...others, ...matched];
         this.tracks.set(merged);
         this.persistTracks();
         const totalBytes = result.tracks.reduce((acc, t) => acc + (t.sizeBytes || 0), 0);
@@ -406,6 +460,7 @@ export class LocalMusicService {
           artist: 'Artista desconocido',
           album: 'Importación web',
           genre: null,
+          ...migrateTrackGenres({ genre: null }),
           year: null,
           trackNo: null,
           durationSec,

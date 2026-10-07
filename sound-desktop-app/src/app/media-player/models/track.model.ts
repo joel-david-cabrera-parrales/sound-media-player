@@ -6,7 +6,12 @@ export interface Track {
   title: string;
   artist: string;
   album: string;
+  /** Texto raw del tag ID3 (puede no existir en la taxonomía). */
   genre?: string | null;
+  /** Id canónico primario en GENRE_TAXONOMY ('miscellaneous' = Otros). */
+  genreId?: string | null;
+  /** Todos los ids canónicos matcheados (multi-género). */
+  genreIds?: string[] | null;
   year?: number | null;
   trackNo?: number | null;
   durationSec: number | null;
