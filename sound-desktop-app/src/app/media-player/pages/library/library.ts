@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
 import { LocalMusicService } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
@@ -11,7 +12,7 @@ type ViewMode = 'grid' | 'list';
 
 @Component({
   selector: 'media-player-library',
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, FavoriteButton],
   templateUrl: './library.html',
   styleUrl: './library.css',
 })
@@ -96,6 +97,14 @@ export class Library {
 
   protected playTrack(track: Track): void {
     this.player.play(track);
+  }
+
+  protected isLiked(track: Track): boolean {
+    return this.library.isLiked(track.id);
+  }
+
+  protected toggleLike(track: Track): void {
+    this.library.toggleLike(track.id);
   }
 
   protected isCurrentTrack(track: Track): boolean {

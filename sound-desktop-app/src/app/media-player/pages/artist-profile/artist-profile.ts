@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
 import {
   LocalArtist,
   LocalMusicService,
@@ -21,7 +22,7 @@ interface AlbumGroup {
 
 @Component({
   selector: 'media-player-artist-profile',
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, FavoriteButton],
   templateUrl: './artist-profile.html',
   styleUrl: './artist-profile.css',
 })

@@ -265,5 +265,13 @@
     "radarTitle": "Looking for something specific you can't find?",
     "radarDesc": "Set up release alerts based on your imported artists and genres.",
     "radarCta": "Adjust preferences"
+  },
+  "liked": {
+    "title": "Liked songs",
+    "subtitle": "{{count}} saved songs",
+    "emptyTitle": "No favorites yet",
+    "emptyDesc": "Tap the heart on any song and it will show up here.",
+    "goLibrary": "Browse library",
+    "remove": "Remove from favorites"
   }
 }

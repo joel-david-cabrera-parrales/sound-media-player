@@ -264,5 +264,13 @@
     "radarTitle": "¿Buscas algo específico y no lo encuentras?",
     "radarDesc": "Configura alertas de lanzamientos según tus artistas y géneros importados.",
     "radarCta": "Ajustar preferencias"
+  },
+  "liked": {
+    "title": "Canciones que te gustan",
+    "subtitle": "{{count}} canciones guardadas",
+    "emptyTitle": "Aún no tienes favoritas",
+    "emptyDesc": "Marca el corazón en cualquier canción y aparecerá aquí.",
+    "goLibrary": "Explorar biblioteca",
+    "remove": "Quitar de favoritas"
   }
 }

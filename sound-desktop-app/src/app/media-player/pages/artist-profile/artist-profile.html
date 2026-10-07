@@ -85,11 +85,14 @@
                 {{ track.format }}
               </div>
               <div class="flex items-center gap-4 sm:gap-6 pl-2 sm:pl-6 text-slate-500 dark:text-[#b3b3b3] text-[12px] leading-[16px] flex-shrink-0">
-                <button type="button" (click)="toggleLike(track.id); $event.stopPropagation()"
-                  [class]="isLiked(track.id) ? 'opacity-100 text-[#005575] dark:text-[#00d2ff]' : 'opacity-0 group-hover:opacity-100 hover:text-[#005575] dark:hover:text-[#00d2ff]'"
-                  class="transition-opacity" [title]="'artistProfile.like' | translate">
-                  <span class="material-symbols-outlined text-[20px]" [class.fill]="isLiked(track.id)">{{ isLiked(track.id) ? 'favorite' : 'favorite_border' }}</span>
-                </button>
+                <shared-favorite-button
+                  [liked]="isLiked(track.id)"
+                  [label]="'artistProfile.like' | translate"
+                  buttonClass="transition-opacity"
+                  [idleClass]="isLiked(track.id) ? '' : 'opacity-0 group-hover:opacity-100'"
+                  iconClass="text-[20px]"
+                  (toggled)="toggleLike(track.id)"
+                />
                 <span class="font-mono">{{ formatTrackDuration(track.durationSec) }}</span>
               </div>
             </div>

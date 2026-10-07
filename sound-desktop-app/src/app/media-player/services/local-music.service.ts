@@ -26,6 +26,7 @@ export const LOCAL_FOLDERS_KEY = 'sound.folders';
 export const LOCAL_TRACKS_KEY = 'sound.tracks';
 export const ARTIST_IDS_KEY = 'sound.artistIds';
 export const FOLLOWS_KEY = 'sound.follows';
+export const LIKED_TRACKS_KEY = 'sound.likedTracks';
 
 const AUDIO_EXT_RE = /\.(mp3|flac|m4a|mp4|ogg|oga|opus|wav|aiff?|wma|aac|dsf|dff)$/i;
 
@@ -112,6 +113,12 @@ export class LocalMusicService {
   });
   readonly artists = signal<LocalArtist[]>([]);
   readonly follows = signal<string[]>(this.loadFollows());
+  readonly likedTrackIds = signal<string[]>(this.loadLiked());
+  /** Canciones favoritas (solo ids que aún existen en la librería). */
+  readonly likedTracks = computed(() => {
+    const liked = new Set(this.likedTrackIds());
+    return this.tracks().filter((t) => liked.has(t.id));
+  });
   private artistsBuilt = false;
 
   constructor() {
@@ -192,6 +199,49 @@ export class LocalMusicService {
       return Array.isArray(parsed) ? parsed.filter((u) => typeof u === 'string') : [];
     } catch {
       return [];
+    }
+  }
+
+  isLiked(trackId: string): boolean {
+    return this.likedTrackIds().includes(trackId);
+  }
+
+  toggleLike(trackId: string): void {
+    this.likedTrackIds.update((list) =>
+      list.includes(trackId) ? list.filter((id) => id !== trackId) : [...list, trackId],
+    );
+    try {
+      localStorage.setItem(LIKED_TRACKS_KEY, JSON.stringify(this.likedTrackIds()));
+    } catch {
+      // Sin almacenamiento: solo memoria
+    }
+  }
+
+  private loadLiked(): string[] {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(LIKED_TRACKS_KEY) ?? '[]');
+      return Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : [];
+    } catch {
+      return [];
+    }
+  }
+
+  /** Limpia likes huérfanos al eliminar una carpeta. */
+  private pruneLikes(folderId: string): void {
+    const doomed = new Set(
+      this.tracks()
+        .filter((t) => t.folderId === folderId)
+        .map((t) => t.id),
+    );
+    if (doomed.size === 0) return;
+    const next = this.likedTrackIds().filter((id) => !doomed.has(id));
+    if (next.length !== this.likedTrackIds().length) {
+      this.likedTrackIds.set(next);
+      try {
+        localStorage.setItem(LIKED_TRACKS_KEY, JSON.stringify(next));
+      } catch {
+        // Sin almacenamiento: solo memoria
+      }
     }
   }
 
@@ -368,6 +418,7 @@ export class LocalMusicService {
   }
 
   removeFolder(id: string): void {
+    this.pruneLikes(id);
     this.folders.update((list) => list.filter((f) => f.id !== id));
     this.tracks.update((list) => list.filter((t) => t.folderId !== id));
     this.persist();

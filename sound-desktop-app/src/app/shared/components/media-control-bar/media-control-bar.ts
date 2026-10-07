@@ -2,17 +2,20 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { FavoriteButton } from '../favorite-button/favorite-button';
 import { AudioPlayerService } from '../../../media-player/services/audio-player.service';
+import { LocalMusicService } from '../../../media-player/services/local-music.service';
 import { coverUrlFor, formatTrackDuration } from '../../../media-player/models/track.model';
 
 @Component({
   selector: 'shared-media-control-bar',
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, FavoriteButton],
   templateUrl: './media-control-bar.html',
   styleUrl: './media-control-bar.css',
 })
 export class MediaControlBar {
   private readonly player = inject(AudioPlayerService);
+  private readonly library = inject(LocalMusicService);
   private readonly sanitizer = inject(DomSanitizer);
 
   // Estado vivo del servicio (volumen/mute/repeat/shuffle persisten en localStorage)
@@ -143,6 +146,16 @@ export class MediaControlBar {
 
   protected toggleMute(): void {
     this.player.toggleMute();
+  }
+
+  protected readonly isFavorite = computed(() => {
+    const track = this.player.currentTrack();
+    return track ? this.library.isLiked(track.id) : false;
+  });
+
+  protected toggleFavorite(): void {
+    const track = this.player.currentTrack();
+    if (track) this.library.toggleLike(track.id);
   }
 
 }

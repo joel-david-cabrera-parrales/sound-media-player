@@ -3,13 +3,14 @@ import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
+import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
 import { LocalMusicService } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
 
 @Component({
   selector: 'media-player-import-local-files',
-  imports: [RouterLink, TranslatePipe, RelativeTimePipe],
+  imports: [RouterLink, TranslatePipe, RelativeTimePipe, FavoriteButton],
   templateUrl: './import-local-files.html',
   styleUrl: './import-local-files.css',
 })
@@ -46,6 +47,14 @@ export class ImportLocalFiles {
 
   protected isPlayingTrack(track: Track): boolean {
     return this.player.isCurrent(track) && this.player.isPlaying();
+  }
+
+  protected isLiked(track: Track): boolean {
+    return this.library.isLiked(track.id);
+  }
+
+  protected toggleLike(track: Track): void {
+    this.library.toggleLike(track.id);
   }
 
   protected async addFolder(): Promise<void> {

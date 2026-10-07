@@ -285,8 +285,16 @@
             </span>
           </div>
           <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ formatSize(track.sizeBytes) }}</div>
-          <div class="col-span-2 md:col-span-1 text-[14px] md:text-[12px] leading-[20px] md:leading-[16px] text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-2">
+          <div class="col-span-2 md:col-span-1 text-[14px] md:text-[12px] leading-[20px] md:leading-[16px] text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-1">
             <span class="tabular-nums">{{ formatDuration(track.durationSec) }}</span>
+            <shared-favorite-button
+              [liked]="isLiked(track)"
+              [label]="'shell.dock.favorite' | translate"
+              buttonClass="p-1 rounded-full transition-all active:scale-95"
+              [idleClass]="isLiked(track) ? '' : 'opacity-0 group-hover:opacity-100'"
+              iconClass="text-[18px]"
+              (toggled)="toggleLike(track)"
+            />
             <span class="material-symbols-outlined text-[18px]">{{ isPlayingTrack(track) ? 'pause_circle' : 'play_circle' }}</span>
           </div>
         </div>
