@@ -4,8 +4,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { LocalMusicService, type LocalArtist } from '../../services/local-music.service';
+import { PlaylistsService } from '../../../playlist/services/playlists.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
+import { normalizeText as norm } from '../../../shared/utils/text';
 
 export type ResultsFilter = 'all' | 'songs' | 'artists' | 'albums' | 'playlists';
 
@@ -27,8 +29,6 @@ export interface TopResult {
   artistUuid: string | null;
   stats: string[];
 }
-
-const norm = (s: string): string => s.trim().toLowerCase();
 
 /** Distancia Levenshtein (para "quizás quisiste decir"). */
 function levenshtein(a: string, b: string): number {
@@ -77,35 +77,6 @@ function loadSearchHistory(): string[] {
   }
 }
 
-interface MockPlaylist {
-  tag: string;
-  title: string;
-  desc: string;
-  meta: string;
-}
-
-/** Visual temporal: no existe feature de playlists (ver badge MOCK en UI). */
-const MOCK_PLAYLISTS: MockPlaylist[] = [
-  {
-    tag: 'Curaduría Sound',
-    title: 'Synthwave & Retrowave',
-    desc: 'Kavinsky, M83, Gunship, The Midnight. Nostalgia analógica de alta fidelidad.',
-    meta: '1.2M seguidores • 85 canciones',
-  },
-  {
-    tag: 'Club Edition',
-    title: 'Techno Peak Time',
-    desc: 'Bajo rotundo, texturas modulares y drops directos a la pista.',
-    meta: '840K seguidores • 62 canciones',
-  },
-  {
-    tag: 'Focus & Spatial',
-    title: 'Ambient & Spatial',
-    desc: 'Brian Eno, Jon Hopkins, Tycho. Concentración profunda y descanso.',
-    meta: '2.1M seguidores • 110 canciones',
-  },
-];
-
 @Component({
   selector: 'media-player-search-results',
   imports: [RouterLink, TranslatePipe],
@@ -115,6 +86,7 @@ const MOCK_PLAYLISTS: MockPlaylist[] = [
 export class SearchResults {
   protected readonly library = inject(LocalMusicService);
   protected readonly player = inject(AudioPlayerService);
+  protected readonly store = inject(PlaylistsService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -235,7 +207,7 @@ export class SearchResults {
         title: album.name,
         subtitle: album.artist,
         cover: album.cover,
-        track: album.tracks[0] ?? null,
+        track: album.tracks[0],
         artistUuid: null,
         stats: [`${album.tracks.length}`],
       };
@@ -269,7 +241,49 @@ export class SearchResults {
   });
   protected readonly showPlaylists = computed(() => this.filter() === 'all' || this.filter() === 'playlists');
 
-  protected readonly mockPlaylists: MockPlaylist[] = MOCK_PLAYLISTS;
+  /** Playlists reales del usuario que coinciden (nombre o descripción). */
+  protected readonly matchedPlaylists = computed(() => {
+    const q = norm(this.q());
+    if (!q) return [];
+    return this.store
+      .playlists()
+      .filter(
+        (p) => norm(p.name).includes(q) || norm(p.description).includes(q),
+      )
+      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  });
+
+  protected playlistCover(playlistId: string): string | SafeUrl {
+    const playlist = this.store.getById(playlistId);
+    if (!playlist) return '/images/track-cover.svg';
+    if (playlist.coverUrl) {
+      const url = playlist.coverUrl;
+      if (url.startsWith('sound-photo:') || url.startsWith('data:')) {
+        return this.sanitizer.bypassSecurityTrustUrl(url);
+      }
+      return url;
+    }
+    const first = this.store
+      .resolveTracks(playlist, this.library.tracks())
+      .find((t) => !!t.coverCacheKey);
+    if (!first) return '/images/track-cover.svg';
+    return this.coverFor(first);
+  }
+
+  protected playlistTrackCount(playlistId: string): number {
+    const playlist = this.store.getById(playlistId);
+    if (!playlist) return 0;
+    return this.store.resolveTracks(playlist, this.library.tracks()).length;
+  }
+
+  protected playPlaylist(playlistId: string, event: Event): void {
+    event.stopPropagation();
+    const playlist = this.store.getById(playlistId);
+    const first = playlist
+      ? this.store.resolveTracks(playlist, this.library.tracks())[0]
+      : undefined;
+    if (first) this.player.play(first);
+  }
 
   /** "Quizás quisiste decir": top-3 reales por parecido (Levenshtein ≤ 0.45). */
   protected readonly suggestions = computed<string[]>(() => {

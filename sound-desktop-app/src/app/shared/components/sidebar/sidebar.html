@@ -13,7 +13,7 @@
       </div>
       <div class="drawer-label flex flex-col">
         <span
-          class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white tracking-tight leading-none">Soundwave</span>
+          class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white tracking-tight leading-none">Sound</span>
         <span
           class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold tracking-wider uppercase mt-1">{{
           'common.brandTagline' | translate }}</span>
@@ -80,9 +80,9 @@
     <div class="h-px w-full bg-slate-200 dark:bg-white/[0.08]"></div>
     <!-- Secondary Section -->
     <div class="flex flex-col gap-1">
-      <!-- Crear lista -->
-      <a routerLink="/not-found" (click)="closeDrawer()" [title]="'shell.sidebar.createList' | translate"
-        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
+      <!-- Lista de reproducción -->
+      <a routerLink="/playlist" routerLinkActive="nav-active" (click)="closeDrawer()" [title]="'shell.sidebar.createList' | translate"
+        class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group">
         <span
           class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">add_box</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.createList' | translate

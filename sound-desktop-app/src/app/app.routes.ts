@@ -15,6 +15,10 @@ export const routes: Routes = [
     loadChildren: () => import('./media-player/media-player.routes'),
   },
   {
+    path: 'playlist',
+    loadChildren: () => import('./playlist/playlist.routes'),
+  },
+  {
     path: 'not-found',
     loadChildren: () => import('./shared/shared.routes'),
   },

@@ -1,0 +1,193 @@
+@if (playlist(); as playlist) {
+  <div class="pb-8">
+    <!-- Hero -->
+    <section class="relative px-4 sm:px-8 pt-8 pb-8 overflow-hidden bg-gradient-to-b from-[#00d2ff]/10 via-transparent to-transparent dark:from-cyan-950/40 dark:via-transparent dark:to-transparent">
+      <div class="absolute -top-24 -left-20 w-96 h-96 bg-[#00d2ff]/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 flex flex-col md:flex-row items-start md:items-end gap-7 max-w-7xl mx-auto">
+        <div class="relative group flex-shrink-0 mx-auto md:mx-0">
+          <div class="w-60 h-60 rounded-xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/80 border border-slate-200 dark:border-[#00d2ff]/30 relative bg-slate-100 dark:bg-[#242424] flex items-center justify-center">
+            <img class="w-full h-full object-cover" [src]="heroCover()" [alt]="playlist.name" (error)="onImgError($event, '/images/track-cover.svg')" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+          </div>
+          @if (rows().some((r) => r.track.hiRes)) {
+            <div class="absolute bottom-3 right-3 bg-black/70 dark:bg-[#0e0e0e]/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#00d2ff] animate-pulse"></span>
+              <span class="text-[10px] text-[#00d2ff] font-bold">LOSSLESS 24-BIT</span>
+            </div>
+          }
+        </div>
+        <div class="flex flex-col justify-end space-y-3 min-w-0 text-center md:text-left w-full">
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-[#00d2ff]/20 text-[#005575] dark:text-[#00d2ff] text-[11px] font-bold tracking-wider uppercase border border-[#00d2ff]/30">
+              {{ 'playlists.detail.publicBadge' | translate }}
+            </span>
+          </div>
+          <h1 class="text-[32px] leading-[38px] md:text-[56px] md:leading-[60px] text-slate-900 dark:text-white tracking-tight font-extrabold drop-shadow-md break-words">
+            {{ playlist.name }}
+          </h1>
+          @if (playlist.description) {
+            <p class="text-[16px] leading-[24px] text-slate-600 dark:text-[#b3b3b3] max-w-3xl leading-relaxed">
+              {{ playlist.description }}
+            </p>
+          }
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3] pt-1">
+            <span class="font-bold text-slate-900 dark:text-white">{{ 'playlists.detail.curatedBy' | translate }}</span>
+            <span>•</span>
+            <span>{{ 'playlists.detail.meta' | translate: { count: rows().length, duration: formatTotal(totalSec()) } }}</span>
+          </div>
+          <div class="flex items-center justify-center md:justify-start gap-3 pt-1">
+            <a [routerLink]="['/playlist', playlist.id, 'edit']"
+              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[#00d2ff]/50 transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[18px]">edit</span>
+              {{ 'playlists.detail.edit' | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action bar -->
+    <section class="px-4 sm:px-8 py-5 max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/[0.08]">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <button type="button" (click)="playAll()" [disabled]="rows().length === 0" [title]="'playlists.detail.playAll' | translate"
+          class="w-14 h-14 rounded-full bg-[#00d2ff] text-[#001f28] flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 dark:shadow-[0_0_24px_rgba(0,210,255,0.45)] disabled:opacity-40">
+          <span class="material-symbols-outlined text-3xl fill">play_arrow</span>
+        </button>
+        <button type="button" (click)="togglePlaylistLike()" [title]="'playlists.detail.like' | translate"
+          [class]="isPlaylistLiked() ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
+          class="w-10 h-10 rounded-full hidden sm:flex items-center justify-center hover:scale-110 active:scale-90 transition-transform">
+          <span class="material-symbols-outlined text-2xl" [class.fill]="isPlaylistLiked()">{{ isPlaylistLiked() ? 'favorite' : 'favorite_border' }}</span>
+        </button>
+        <button type="button" [title]="'playlists.detail.more' | translate"
+          class="w-10 h-10 rounded-full hidden sm:flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors">
+          <span class="material-symbols-outlined text-2xl">more_horiz</span>
+        </button>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="relative flex-1 sm:flex-none">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] text-[18px]">search</span>
+          <input
+            #sq
+            [value]="search()"
+            (input)="setSearch(sq.value)"
+            type="text"
+            [placeholder]="'playlists.detail.searchPlaceholder' | translate"
+            class="w-full sm:w-52 h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] rounded-full text-[13px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#00d2ff] transition-all"
+          />
+        </div>
+        <label class="flex items-center gap-1.5 text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white text-[12px] font-semibold cursor-pointer px-3 py-1.5 rounded-full bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex-shrink-0">
+          <span class="text-slate-400 dark:text-[#6a6a6a]">{{ 'playlists.detail.sortLabel' | translate }}</span>
+          <span class="relative">
+            <select
+              #sortSel
+              (change)="setSort(sortSel.value === 'title' || sortSel.value === 'artist' || sortSel.value === 'duration' ? sortSel.value : 'added')"
+              class="appearance-none bg-transparent font-bold text-slate-900 dark:text-white focus:outline-none cursor-pointer pr-4"
+            >
+              <option value="added" [selected]="sort() === 'added'">{{ 'playlists.detail.sortAdded' | translate }}</option>
+              <option value="title" [selected]="sort() === 'title'">{{ 'playlists.detail.sortTitle' | translate }}</option>
+              <option value="artist" [selected]="sort() === 'artist'">{{ 'playlists.detail.sortArtist' | translate }}</option>
+              <option value="duration" [selected]="sort() === 'duration'">{{ 'playlists.detail.sortDuration' | translate }}</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-[16px]">arrow_drop_down</span>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Tabla -->
+    <section class="px-4 sm:px-8 py-4 max-w-7xl mx-auto">
+      @if (rows().length === 0) {
+        <div class="p-10 rounded-2xl bg-white dark:bg-[#181818] border border-dashed border-slate-300 dark:border-white/16 text-center shadow-sm dark:shadow-none">
+          <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">queue_music</span>
+          <p class="mt-3 text-[16px] font-semibold text-slate-900 dark:text-white">
+            {{ search() ? ('playlists.detail.noResults' | translate) : ('playlists.detail.empty' | translate) }}
+          </p>
+          <a [routerLink]="['/playlist', playlist.id, 'edit']" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+            {{ 'playlists.detail.addSongs' | translate }}
+          </a>
+        </div>
+      } @else {
+        <div class="hidden md:grid grid-cols-12 gap-4 px-4 py-2.5 text-[11px] leading-[14px] font-semibold text-slate-500 dark:text-[#6a6a6a] uppercase tracking-wider">
+          <div class="col-span-1 text-center">#</div>
+          <div class="col-span-5">{{ 'playlists.detail.colTitle' | translate }}</div>
+          <div class="col-span-3">{{ 'playlists.detail.colAlbum' | translate }}</div>
+          <div class="col-span-2">{{ 'playlists.detail.colAdded' | translate }}</div>
+          <div class="col-span-1 text-right">
+            <span class="material-symbols-outlined text-base inline-block align-middle">schedule</span>
+          </div>
+        </div>
+        @for (row of rows(); track row.track.id; let i = $index) {
+          <div
+            (click)="playTrack(row.track)" (keydown.enter)="playTrack(row.track)" tabindex="0" role="button"
+            class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center rounded-lg transition-colors group cursor-pointer border border-transparent"
+            [class]="isCurrentTrack(row.track)
+              ? 'bg-slate-100 dark:bg-[#242424]/70 border-[#00d2ff]/30'
+              : 'hover:bg-slate-100 dark:hover:bg-[#242424] hover:border-slate-200 dark:hover:border-white/[0.08]'"
+          >
+            <div class="hidden md:flex md:col-span-1 text-center items-center justify-center">
+              @if (isCurrentTrack(row.track)) {
+                <span class="flex items-end gap-0.5 h-3.5">
+                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-1"></span>
+                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-2"></span>
+                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-3"></span>
+                </span>
+              } @else {
+                <span class="text-[14px] text-slate-400 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
+                <span class="material-symbols-outlined text-[20px] text-slate-900 dark:text-white hidden group-hover:inline fill">play_arrow</span>
+              }
+            </div>
+            <div class="col-span-3 md:col-span-5 flex items-center gap-3 min-w-0">
+              <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(row.track)" [alt]="row.track.title" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
+              <div class="truncate min-w-0">
+                <div class="text-[14px] leading-[20px] font-semibold truncate"
+                  [class]="isCurrentTrack(row.track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-900 dark:text-white'">{{ row.track.title }}</div>
+                <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ row.track.artist }}</div>
+              </div>
+            </div>
+            <div class="hidden md:block md:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ row.track.album }}</div>
+            <div class="hidden md:block md:col-span-2 text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a]">{{ row.addedAt | relativeTime }}</div>
+            <div class="col-span-2 md:col-span-1 text-[12px] text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-1 font-mono">
+              <span class="hidden sm:inline">{{ formatDuration(row.track.durationSec) }}</span>
+              <button type="button" (click)="toggleLike(row.track, $event)" [title]="'shell.dock.favorite' | translate"
+                [class]="isLiked(row.track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white sm:opacity-0 sm:group-hover:opacity-100'"
+                class="transition-all">
+                <span class="material-symbols-outlined text-[18px]" [class.fill]="isLiked(row.track)">{{ isLiked(row.track) ? 'favorite' : 'favorite_border' }}</span>
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </section>
+
+    <!-- Relacionadas -->
+    @if (related().length > 0) {
+      <section class="px-4 sm:px-8 pb-10 max-w-7xl mx-auto">
+        <h2 class="text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white mb-4">
+          {{ 'playlists.detail.related' | translate }}
+        </h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          @for (rel of related(); track rel.id) {
+            <a [routerLink]="['/playlist', rel.id]"
+              class="group bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] transition-all shadow-sm dark:shadow-none">
+              <div class="relative aspect-square w-full rounded-lg overflow-hidden mb-3 bg-slate-100 dark:bg-[#242424]">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" [src]="relatedCover(rel)" [alt]="rel.name" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
+              </div>
+              <h3 class="text-slate-900 dark:text-white font-bold text-[15px] leading-[20px] truncate">{{ rel.name }}</h3>
+              <p class="text-slate-500 dark:text-[#b3b3b3] text-[12px] leading-[16px] mt-0.5">
+                {{ 'playlists.detail.relatedCount' | translate: { count: relatedCount(rel) } }}
+              </p>
+            </a>
+          }
+        </div>
+      </section>
+    }
+  </div>
+} @else {
+  <div class="px-4 sm:px-8 py-16 text-center">
+    <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">queue_music</span>
+    <p class="mt-4 text-[16px] font-semibold text-slate-900 dark:text-white">{{ 'playlists.detail.notFound' | translate }}</p>
+    <a routerLink="/playlist" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+      {{ 'playlists.list.title' | translate }}
+    </a>
+  </div>
+}

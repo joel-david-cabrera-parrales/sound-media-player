@@ -1,0 +1,156 @@
+@if (playlist(); as playlist) {
+  <div class="px-4 sm:px-8 py-6 space-y-8 max-w-7xl mx-auto">
+    <!-- Breadcrumb + estado -->
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 text-[12px] leading-[16px] text-slate-500 dark:text-[#6a6a6a] min-w-0">
+        <a routerLink="/playlist" class="hover:text-slate-900 dark:hover:text-white transition-colors truncate">{{ 'playlists.list.title' | translate }}</a>
+        <span>/</span>
+        <span class="text-[#005575] dark:text-[#00d2ff] font-medium truncate">{{ playlist.name }}</span>
+      </div>
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] flex-shrink-0">
+        <span class="w-2 h-2 rounded-full bg-[#00d2ff]"></span>
+        {{ draftCount() === 0 ? ('playlists.builder.draftEmpty' | translate) : ('playlists.builder.draft' | translate: { count: draftCount() }) }}
+      </span>
+    </div>
+
+    <!-- Hero editable -->
+    <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-white via-slate-100 to-white dark:from-[#181818] dark:via-[#201f1f] dark:to-[#242424] border border-slate-200 dark:border-white/[0.08] p-6 lg:p-8 shadow-sm dark:shadow-none">
+      <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[#00d2ff]/10 blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 flex flex-col md:flex-row gap-6">
+        <button type="button" (click)="openEdit()" [title]="'playlists.builder.editCover' | translate"
+          class="relative w-44 h-44 md:w-56 md:h-56 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[#00d2ff]/60 bg-slate-100 dark:bg-[#242424] flex-shrink-0 group mx-auto md:mx-0">
+          <img class="absolute inset-0 w-full h-full object-cover" [src]="heroCover()" alt="" (error)="onImgError($event, '/images/track-cover.svg')" />
+          <span class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[32px] text-white">add_a_photo</span>
+          </span>
+        </button>
+        <div class="flex-1 min-w-0 flex flex-col justify-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border border-[#00d2ff]/30">
+              {{ 'playlists.builder.publicBadge' | translate }}
+            </span>
+            <span class="text-[12px] text-slate-500 dark:text-[#6a6a6a]">
+              • {{ 'playlists.builder.addedCount' | translate: { count: draftCount() } }}
+            </span>
+          </div>
+          <button type="button" (click)="openEdit()" class="text-left group">
+            <span class="block text-[13px] font-medium text-slate-500 dark:text-[#6a6a6a]">{{ 'playlists.builder.nameLabel' | translate }}</span>
+            <span class="block text-[26px] leading-[32px] md:text-[32px] md:leading-[38px] font-extrabold text-slate-900 dark:text-white tracking-tight truncate group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">
+              {{ playlist.name }}
+            </span>
+          </button>
+          <button type="button" (click)="openEdit()" class="text-left group">
+            <span class="block text-[13px] font-medium text-slate-500 dark:text-[#6a6a6a]">{{ 'playlists.builder.descLabel' | translate }}</span>
+            <span class="block text-[14px] text-slate-600 dark:text-[#b3b3b3] truncate group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+              {{ playlist.description || ('playlists.builder.noDesc' | translate) }}
+            </span>
+          </button>
+          <div class="pt-1">
+            <button type="button" (click)="saveAndExit()"
+              class="px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[13px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+              {{ 'playlists.builder.save' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buscador de canciones -->
+    <section class="space-y-4">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div class="max-w-2xl">
+          <h2 class="text-[22px] leading-[28px] md:text-[26px] md:leading-[32px] font-extrabold text-slate-900 dark:text-white tracking-tight">
+            {{ 'playlists.builder.findTitle' | translate }}
+          </h2>
+          <p class="mt-1 text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3]">
+            {{ 'playlists.builder.findDesc' | translate }}
+          </p>
+        </div>
+        <div class="relative w-full lg:max-w-xs flex-shrink-0">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] text-[18px]">manage_search</span>
+          <input
+            #sq
+            [value]="search()"
+            (input)="setSearch(sq.value)"
+            type="text"
+            [placeholder]="'playlists.builder.searchPlaceholder' | translate"
+            class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 rounded-full text-[13px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#00d2ff] transition-all"
+          />
+        </div>
+      </div>
+
+      <div class="w-full bg-white dark:bg-[#181818] rounded-xl border border-slate-200 dark:border-white/[0.08] overflow-hidden shadow-sm dark:shadow-none">
+        <div class="hidden md:grid grid-cols-12 gap-4 px-4 py-2.5 text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] border-b border-slate-200 dark:border-white/[0.08] uppercase tracking-wider">
+          <div class="col-span-1 text-center">#</div>
+          <div class="col-span-4">{{ 'playlists.builder.colTitle' | translate }}</div>
+          <div class="col-span-3">{{ 'playlists.builder.colAlbum' | translate }}</div>
+          <div class="col-span-2">{{ 'playlists.builder.colFormat' | translate }}</div>
+          <div class="col-span-2 text-right">{{ 'playlists.builder.colDuration' | translate }}</div>
+        </div>
+        @if (visibleSuggestions().length === 0) {
+          <p class="px-4 py-10 text-center text-[14px] text-slate-500 dark:text-[#b3b3b3]">
+            {{ search() ? ('playlists.builder.noResults' | translate) : ('playlists.builder.emptyLibrary' | translate) }}
+          </p>
+        } @else {
+          @for (track of visibleSuggestions(); track track.id; let i = $index) {
+            <div class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center border-b border-slate-100 dark:border-white/5 last:border-b-0 hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors">
+              <div class="hidden md:flex md:col-span-1 text-center items-center justify-center text-[14px] text-slate-400 dark:text-[#6a6a6a]">{{ i + 1 }}</div>
+              <div class="col-span-3 md:col-span-4 flex items-center gap-3 min-w-0">
+                <img class="w-10 h-10 rounded object-cover shrink-0 cursor-pointer" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" (click)="playTrack(track)" />
+                <div class="truncate min-w-0">
+                  <div class="text-[14px] leading-[20px] font-bold text-slate-900 dark:text-white truncate">{{ track.title }}</div>
+                  <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
+                </div>
+              </div>
+              <div class="hidden md:block md:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.album }}</div>
+              <div class="hidden md:block md:col-span-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border border-[#00d2ff]/30">{{ track.format.split(' ')[0] }}</span>
+              </div>
+              <div class="col-span-2 text-right flex items-center justify-end gap-2">
+                <span class="text-[12px] font-mono text-slate-500 dark:text-[#b3b3b3]">{{ formatDuration(track.durationSec) }}</span>
+                <button type="button" (click)="toggleTrack(track)"
+                  [title]="isAdded(track) ? ('playlists.builder.added' | translate) : ('playlists.builder.add' | translate)"
+                  [class]="isAdded(track)
+                    ? 'inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#00d2ff]/15 border border-[#00d2ff]/40 text-[#005575] dark:text-[#00d2ff] text-[12px] font-bold'
+                    : 'inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-slate-700 dark:text-white text-[12px] font-semibold hover:border-[#00d2ff]/50 transition-all'"
+                  class="active:scale-95">
+                  <span class="material-symbols-outlined text-[16px]">{{ isAdded(track) ? 'check' : 'add' }}</span>
+                  <span class="hidden sm:inline">{{ isAdded(track) ? ('playlists.builder.added' | translate) : ('playlists.builder.add' | translate) }}</span>
+                </button>
+              </div>
+            </div>
+          }
+        }
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span class="text-[12px] text-slate-500 dark:text-[#6a6a6a]">
+          {{ 'playlists.builder.showing' | translate: { shown: visibleSuggestions().length, total: suggestions().length } }}
+        </span>
+        @if (visibleSuggestions().length < suggestions().length) {
+          <button type="button" (click)="loadMore()"
+            class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#005575] dark:text-[#00d2ff] hover:underline">
+            <span class="material-symbols-outlined text-[18px]">refresh</span>
+            {{ 'playlists.builder.loadMore' | translate }}
+          </button>
+        }
+      </div>
+    </section>
+  </div>
+} @else {
+  <div class="px-4 sm:px-8 py-16 text-center">
+    <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">queue_music</span>
+    <p class="mt-4 text-[16px] font-semibold text-slate-900 dark:text-white">{{ 'playlists.builder.notFound' | translate }}</p>
+    <a routerLink="/playlist" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+      {{ 'playlists.list.title' | translate }}
+    </a>
+  </div>
+}
+
+@if (editModalOpen()) {
+  <shared-playlist-form-modal
+    [initial]="editInitial()"
+    (saved)="onEditSaved($event)"
+    (closed)="onEditClosed()"
+  />
+}

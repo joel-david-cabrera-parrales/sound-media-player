@@ -6,6 +6,7 @@ import { FavoriteButton } from '../../../shared/components/favorite-button/favor
 import { LocalMusicService } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
+import { normalizeText } from '../../../shared/utils/text';
 
 type SortMode = 'title' | 'artist' | 'album' | 'duration';
 type ViewMode = 'grid' | 'list';
@@ -26,14 +27,14 @@ export class Library {
   protected readonly view = signal<ViewMode>('grid');
 
   protected readonly filtered = computed<Track[]>(() => {
-    const q = this.search().trim().toLowerCase();
+    const q = normalizeText(this.search());
     let list = this.library.tracks();
     if (q) {
       list = list.filter(
         (t) =>
-          t.title.toLowerCase().includes(q) ||
-          t.artist.toLowerCase().includes(q) ||
-          t.album.toLowerCase().includes(q),
+          normalizeText(t.title).includes(q) ||
+          normalizeText(t.artist).includes(q) ||
+          normalizeText(t.album).includes(q),
       );
     }
     const sorted = [...list];

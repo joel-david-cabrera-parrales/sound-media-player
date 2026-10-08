@@ -8,6 +8,7 @@ import {
 } from '../../services/local-music.service';
 import { coverUrlFor } from '../../models/track.model';
 import { AudioPlayerService } from '../../services/audio-player.service';
+import { normalizeText } from '../../../shared/utils/text';
 
 type SortMode = 'name' | 'tracks' | 'recent';
 type ViewMode = 'grid' | 'list';
@@ -32,15 +33,16 @@ export class Artist {
   protected readonly letters = LETTERS;
 
   protected readonly filtered = computed<LocalArtist[]>(() => {
-    const q = this.search().trim().toLowerCase();
+    const q = normalizeText(this.search());
     const letter = this.letter();
     let list = this.library.artists();
-    if (q) list = list.filter((a) => a.name.toLowerCase().includes(q));
+    if (q) list = list.filter((a) => normalizeText(a.name).includes(q));
     if (letter !== 'all') {
+      const normLetter = normalizeText(letter);
       list = list.filter((a) =>
         letter === '#'
-          ? !/^[a-zñáéíóúü]/i.test(a.name.trim())
-          : a.name.trim().toLowerCase().startsWith(letter.toLowerCase()),
+          ? !/^[a-z]/i.test(normalizeText(a.name))
+          : normalizeText(a.name).startsWith(normLetter),
       );
     }
     const sorted = [...list];
