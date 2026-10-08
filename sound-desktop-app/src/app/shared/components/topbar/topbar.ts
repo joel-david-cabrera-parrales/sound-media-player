@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { DEFAULT_AVATAR, getStoredPhotoUrl } from '../../utils/profile-photo';
@@ -17,6 +18,7 @@ type FilterPill = 'todo' | 'carpetas';
 export class Topbar implements OnInit, OnDestroy {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly shellUi = inject(ShellUiService);
+  private readonly router = inject(Router);
   private readonly themeService = inject(ThemeService);
   protected readonly theme = this.themeService.theme;
 
@@ -51,6 +53,12 @@ export class Topbar implements OnInit, OnDestroy {
 
   protected setPill(pill: FilterPill): void {
     this.activePill = pill;
+  }
+
+  protected submitSearch(): void {
+    const q = this.search.trim();
+    if (!q) return;
+    void this.router.navigate(['/library/search/results'], { queryParams: { q } });
   }
 
   protected toggleSidebar(): void {

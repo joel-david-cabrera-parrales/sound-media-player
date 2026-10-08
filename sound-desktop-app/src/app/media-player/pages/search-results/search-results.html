@@ -1,0 +1,380 @@
+<div class="px-4 sm:px-8 py-6 space-y-10 max-w-7xl mx-auto">
+  @if (!q()) {
+    <div class="p-10 rounded-2xl bg-white dark:bg-[#181818] border border-dashed border-slate-300 dark:border-white/16 text-center shadow-sm dark:shadow-none">
+      <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">search</span>
+      <p class="mt-3 text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white">{{ 'searchResults.emptyTitle' | translate }}</p>
+      <p class="mt-1 text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3]">{{ 'searchResults.emptyDesc' | translate }}</p>
+    </div>
+  } @else {
+    <!-- Pills -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1">
+      <a [routerLink]="[]" [queryParams]="{ q: q() }"
+        [class]="filter() === 'all' ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_14px_rgba(0,210,255,0.4)] whitespace-nowrap'
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors whitespace-nowrap'">
+        {{ 'searchResults.pillAll' | translate }}
+      </a>
+      <a [routerLink]="[]" [queryParams]="{ q: q(), filter: 'songs' }"
+        [class]="filter() === 'songs' ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_14px_rgba(0,210,255,0.4)] whitespace-nowrap'
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors whitespace-nowrap'">
+        {{ 'searchResults.pillSongs' | translate }}
+      </a>
+      <a [routerLink]="[]" [queryParams]="{ q: q(), filter: 'artists' }"
+        [class]="filter() === 'artists' ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_14px_rgba(0,210,255,0.4)] whitespace-nowrap'
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors whitespace-nowrap'">
+        {{ 'searchResults.pillArtists' | translate }}
+      </a>
+      <a [routerLink]="[]" [queryParams]="{ q: q(), filter: 'albums' }"
+        [class]="filter() === 'albums' ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_14px_rgba(0,210,255,0.4)] whitespace-nowrap'
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors whitespace-nowrap'">
+        {{ 'searchResults.pillAlbums' | translate }}
+      </a>
+      <a [routerLink]="[]" [queryParams]="{ q: q(), filter: 'playlists' }"
+        [class]="filter() === 'playlists' ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_14px_rgba(0,210,255,0.4)] whitespace-nowrap'
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors whitespace-nowrap'">
+        {{ 'searchResults.pillPlaylists' | translate }}
+      </a>
+    </div>
+
+    @if (!topResult() && matchedTracks().length === 0 && matchedArtists().length === 0 && matchedAlbums().length === 0) {
+      <!-- Hero sin coincidencias -->
+      <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] p-8 md:p-12 text-center shadow-sm dark:shadow-none">
+        <div class="absolute left-1/2 -translate-x-1/2 -top-20 w-96 h-64 rounded-full bg-[#00d2ff]/10 blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col items-center">
+          <div class="relative w-20 h-20 mb-5">
+            <div class="absolute inset-0 rounded-full border border-[#00d2ff]/30"></div>
+            <div class="absolute inset-2 rounded-full bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center">
+              <span class="material-symbols-outlined text-[32px] text-[#005575] dark:text-[#00d2ff]">graphic_eq</span>
+            </div>
+          </div>
+          <h2 class="text-[22px] leading-[28px] md:text-[28px] md:leading-[34px] font-extrabold text-slate-900 dark:text-white tracking-tight">
+            {{ 'searchResults.noExact' | translate }} <span class="text-[#005575] dark:text-[#00d2ff]">"{{ q() }}"</span>
+          </h2>
+          <p class="mt-2 text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3] max-w-xl">
+            {{ 'searchResults.noExactDesc' | translate }}
+          </p>
+          @if (suggestions().length > 0) {
+            <div class="mt-5 flex flex-wrap items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 dark:bg-[#242424]/60 border border-slate-200 dark:border-white/[0.08]">
+              <span class="inline-flex items-center gap-1.5 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">
+                <span class="material-symbols-outlined text-[16px] text-[#005575] dark:text-[#00d2ff]">auto_awesome</span>
+                {{ 'searchResults.didYouMean' | translate }}
+              </span>
+              @for (s of suggestions(); track s) {
+                <a [routerLink]="[]" [queryParams]="{ q: s }"
+                  class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[#00d2ff]/50 transition-colors">
+                  {{ s }}
+                  <span class="material-symbols-outlined text-[14px] text-slate-400 dark:text-[#6a6a6a]">north_east</span>
+                </a>
+              }
+            </div>
+          }
+          <div class="mt-6 pt-5 border-t border-slate-200 dark:border-white/[0.08] w-full max-w-md flex flex-col sm:flex-row items-center justify-center gap-3">
+            <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'searchResults.physicalHint' | translate }}</span>
+            <button type="button" (click)="rescanAndGoImport()"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 hover:border-[#00d2ff]/50 text-[13px] font-semibold text-slate-900 dark:text-white transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[18px] text-[#005575] dark:text-[#00d2ff]">hard_drive</span>
+              {{ 'searchResults.scanLocal' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tendencias reales -->
+      @if (trendingAlbums().length > 0) {
+        <section class="mt-10">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <h2 class="text-[24px] leading-[30px] text-slate-900 dark:text-white font-bold tracking-tight">
+                {{ 'searchResults.trendingTitle' | translate }}
+              </h2>
+              <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'searchResults.trendingSubtitle' | translate }}</p>
+            </div>
+            <a routerLink="/library" class="text-[12px] leading-[16px] text-[#005575] dark:text-[#00d2ff] hover:underline font-semibold flex items-center gap-1 flex-shrink-0">
+              {{ 'searchResults.seeAll' | translate }} <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </a>
+          </div>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            @for (album of trendingAlbums(); track album.name) {
+              <div (click)="playTrack(album.tracks[0] ?? null)" (keydown.enter)="playTrack(album.tracks[0] ?? null)" tabindex="0" role="button"
+                class="group bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] transition-all duration-200 cursor-pointer shadow-sm dark:shadow-none">
+                <div class="relative aspect-square w-full rounded-lg overflow-hidden mb-3 bg-slate-100 dark:bg-[#242424]">
+                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" [src]="album.cover" [alt]="album.name" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
+                </div>
+                <h3 class="text-[16px] leading-[22px] text-slate-900 dark:text-white font-bold truncate">{{ album.name }}</h3>
+                <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate mt-0.5">{{ album.artist }}</p>
+                <p class="text-[11px] leading-[14px] text-slate-400 dark:text-[#6a6a6a] mt-1">{{ album.year ?? '—' }} • {{ 'searchResults.albumTracks' | translate: { count: album.tracks.length } }}</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Búsquedas frecuentes reales -->
+      @if (frequentSearches().length > 0) {
+        <section class="mt-10">
+          <h2 class="text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff]">trending_up</span>
+            {{ 'searchResults.frequentTitle' | translate }}
+          </h2>
+          <div class="flex flex-wrap gap-2.5 mt-4">
+            @for (term of frequentSearches(); track term) {
+              <a [routerLink]="[]" [queryParams]="{ q: term }"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[#00d2ff]/50 text-[13px] font-semibold text-slate-700 dark:text-[#e5e2e1] transition-colors">
+                <span class="material-symbols-outlined text-[16px] text-slate-400 dark:text-[#6a6a6a]">history</span>
+                {{ term }}
+              </a>
+            }
+          </div>
+        </section>
+      }
+    } @else {
+      <!-- SECTION 1: Top Result + Top Songs -->
+      @if ((filter() === 'all' || filter() === 'songs' || filter() === 'artists' || filter() === 'albums') && (topResult() || matchedTracks().length > 0)) {
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Top Result -->
+          @if (topResult(); as top) {
+            <div class="lg:col-span-5 flex flex-col">
+              <h2 class="text-[24px] leading-[30px] text-slate-900 dark:text-white mb-4 font-bold tracking-tight">
+                {{ 'searchResults.topResult' | translate }}
+              </h2>
+              <div class="group relative flex-1 bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] hover:border-[#00d2ff]/40 rounded-xl p-6 transition-all duration-300 flex flex-col justify-between hover:shadow-xl dark:hover:shadow-[0_12px_28px_-6px_rgba(0,0,0,0.75)] shadow-sm dark:shadow-none">
+                <div class="flex flex-col gap-5">
+                  <div class="relative w-36 h-36 rounded-xl overflow-hidden shadow-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#242424] flex items-center justify-center">
+                    @if (top.kind === 'genre') {
+                      <span class="material-symbols-outlined text-[56px] text-[#005575] dark:text-[#00d2ff]">category</span>
+                    } @else {
+                      <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" [src]="top.cover" [alt]="top.title" (error)="onImgError($event, top.kind === 'artist' ? '/images/avatar-default.svg' : '/images/track-cover.svg')" />
+                    }
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  </div>
+                  <div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] leading-[14px] bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-[#005575] dark:text-[#00d2ff] font-semibold tracking-wider uppercase mb-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#00d2ff] animate-pulse"></span>
+                      {{ top.kind === 'artist' ? ('searchResults.badgeArtist' | translate) : top.kind === 'track' ? ('searchResults.badgeSong' | translate) : top.kind === 'album' ? ('searchResults.badgeAlbum' | translate) : ('searchResults.badgeGenre' | translate) }}
+                    </span>
+                    <h3 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[40px] text-slate-900 dark:text-white font-extrabold tracking-tight group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors truncate">
+                      {{ top.title }}
+                    </h3>
+                    <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] mt-1 flex items-center gap-2 flex-wrap">
+                      @if (top.kind === 'artist') {
+                        <span>{{ top.stats[0] }} {{ 'searchResults.heroSongs' | translate }}</span>
+                        <span>•</span>
+                        <span>{{ top.stats[1] }} {{ 'searchResults.heroAlbums' | translate }}</span>
+                      } @else if (top.kind === 'track') {
+                        <span class="text-[#005575] dark:text-[#00d2ff] font-medium">{{ top.stats[0] }}</span>
+                        <span>•</span>
+                        <span>{{ top.stats[1] }}</span>
+                      } @else {
+                        <span>{{ top.stats[0] }} {{ 'searchResults.heroSongs' | translate }}</span>
+                      }
+                      @if (top.subtitle) {
+                        <span>•</span>
+                        <span class="truncate">{{ top.subtitle }}</span>
+                      }
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-200 dark:border-white/[0.08]">
+                  @if (top.artistUuid) {
+                    <a [routerLink]="['/library/artist', top.artistUuid]" class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] font-medium tracking-wide hover:text-[#005575] dark:hover:text-[#00d2ff] transition-colors">
+                      {{ 'searchResults.viewArtist' | translate }}
+                    </a>
+                  } @else {
+                    <span></span>
+                  }
+                  <button type="button" (click)="playTrack(top.track)" [disabled]="!top.track"
+                    [title]="'shell.dock.play' | translate"
+                    class="w-12 h-12 rounded-full bg-[#00d2ff] text-black flex items-center justify-center dark:shadow-[0_0_24px_-2px_rgba(0,210,255,0.7)] group-hover:scale-110 active:scale-95 transition-all duration-200 disabled:opacity-40">
+                    <span class="material-symbols-outlined text-3xl font-bold fill ml-0.5">play_arrow</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+          <!-- Top Songs -->
+          @if (showSongs() && matchedTracks().length > 0) {
+            <div class="lg:col-span-7 flex flex-col" [class.lg:col-span-12]="!topResult()">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-[24px] leading-[30px] text-slate-900 dark:text-white font-bold tracking-tight">
+                  {{ 'searchResults.songsTitle' | translate }}
+                </h2>
+                <a routerLink="/library" class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] hover:text-[#005575] dark:hover:text-[#00d2ff] transition-colors">
+                  {{ 'searchResults.showAll' | translate }}
+                </a>
+              </div>
+              <div class="flex flex-col gap-1.5">
+                @for (track of matchedTracks().slice(0, 4); track track.id) {
+                  <div
+                    (click)="playTrack(track)" (keydown.enter)="playTrack(track)" tabindex="0" role="button"
+                    class="group flex items-center justify-between gap-3 p-2.5 rounded-lg transition-all duration-150 border cursor-pointer"
+                    [class]="isCurrentTrack(track)
+                      ? 'bg-slate-100 dark:bg-[#242424]/70 border-[#00d2ff]/30'
+                      : 'border-transparent hover:bg-slate-100 dark:hover:bg-[#242424] hover:border-slate-200 dark:hover:border-white/[0.08]'"
+                  >
+                    <div class="flex items-center gap-4 flex-1 min-w-0">
+                      <div class="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-[#242424]">
+                        <img class="w-full h-full object-cover" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                          <span class="material-symbols-outlined text-white text-2xl fill">{{ isCurrentTrack(track) ? 'pause' : 'play_arrow' }}</span>
+                        </div>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <h4 class="text-[16px] leading-[22px] font-bold truncate"
+                          [class]="isCurrentTrack(track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff]'">
+                          {{ track.title }}
+                        </h4>
+                        <div class="flex items-center gap-2 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">
+                          <span class="truncate">{{ track.artist }}</span>
+                          <span class="text-[10px] px-1 py-px border border-slate-300 dark:border-white/[0.08] text-[#005575] dark:text-[#00d2ff] rounded font-bold uppercase tracking-wider flex-shrink-0">{{ track.format.split(' ')[0] }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 sm:gap-4 text-slate-500 dark:text-[#b3b3b3] text-[12px] leading-[16px] flex-shrink-0">
+                      <span class="hidden sm:inline truncate max-w-[140px]">{{ track.album }}</span>
+                      <button type="button" (click)="toggleLike(track, $event)" [title]="'shell.dock.favorite' | translate"
+                        [class]="isLiked(track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'hover:text-[#005575] dark:hover:text-[#00d2ff]'"
+                        class="p-1 transition-colors">
+                        <span class="material-symbols-outlined text-lg" [class.fill]="isLiked(track)">{{ isLiked(track) ? 'favorite' : 'favorite_border' }}</span>
+                      </button>
+                      <span class="w-10 text-right font-mono">{{ formatDuration(track.durationSec) }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- SECTION 2: Artistas destacados -->
+      @if (showArtists() && matchedArtists().length > 0) {
+        <section>
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <h2 class="text-[24px] leading-[30px] text-slate-900 dark:text-white font-bold tracking-tight">
+                {{ 'searchResults.artistsTitle' | translate }}
+              </h2>
+              <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'searchResults.artistsSubtitle' | translate }}</p>
+            </div>
+            @if (matchedArtists().length > 4) {
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button type="button" (click)="scrollRail(-1)" [attr.aria-label]="'searchResults.prev' | translate"
+                  class="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#242424] hover:bg-slate-200 dark:hover:bg-[#2a2a2a] flex items-center justify-center text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors border border-slate-200 dark:border-white/[0.08]">
+                  <span class="material-symbols-outlined text-sm">arrow_back_ios_new</span>
+                </button>
+                <button type="button" (click)="scrollRail(1)" [attr.aria-label]="'searchResults.next' | translate"
+                  class="w-8 h-8 rounded-full bg-slate-100 dark:bg-[#242424] hover:bg-slate-200 dark:hover:bg-[#2a2a2a] flex items-center justify-center text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors border border-slate-200 dark:border-white/[0.08]">
+                  <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+                </button>
+              </div>
+            }
+          </div>
+          <div #rail class="flex gap-5 overflow-x-auto pb-2 snap-x">
+            @for (artist of matchedArtists(); track artist.uuid) {
+              <a [routerLink]="['/library/artist', artist.uuid]"
+                class="group bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] hover:border-[#00d2ff]/30 transition-all duration-200 flex flex-col items-center text-center cursor-pointer w-40 flex-shrink-0 snap-start shadow-sm dark:shadow-none">
+                <div class="relative w-28 h-28 mb-3">
+                  @if (hasArtistCover(artist)) {
+                    <img class="w-full h-full rounded-full object-cover shadow-lg border border-slate-200 dark:border-white/16 group-hover:scale-105 transition-transform" [src]="artistCover(artist)" [alt]="artist.name" loading="lazy" (error)="onImgError($event, '/images/avatar-default.svg')" />
+                  } @else {
+                    <span class="w-full h-full rounded-full bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/16 text-[#005575] dark:text-[#00d2ff] text-[40px] font-extrabold flex items-center justify-center shadow-lg">{{ artist.name.charAt(0).toUpperCase() }}</span>
+                  }
+                  <span class="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-[#00d2ff] text-black hidden items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:flex transition-all duration-200">
+                    <span class="material-symbols-outlined fill text-xl ml-0.5">play_arrow</span>
+                  </span>
+                </div>
+                <span class="text-[16px] leading-[22px] text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors truncate w-full font-bold">{{ artist.name }}</span>
+                <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] uppercase tracking-wider mt-0.5">{{ 'searchResults.badgeArtist' | translate }}</span>
+              </a>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- SECTION 3: Álbumes -->
+      @if (showAlbums() && matchedAlbums().length > 0) {
+        <section>
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <h2 class="text-[24px] leading-[30px] text-slate-900 dark:text-white font-bold tracking-tight">
+                {{ 'searchResults.albumsTitle' | translate }}
+              </h2>
+              <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'searchResults.albumsSubtitle' | translate }}</p>
+            </div>
+            <a routerLink="/library" class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] hover:text-[#005575] dark:hover:text-[#00d2ff] transition-colors flex-shrink-0">
+              {{ 'searchResults.exploreCatalog' | translate }}
+            </a>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @for (album of matchedAlbums().slice(0, 4); track album.name) {
+              <div (click)="playTrack(album.tracks[0] ?? null)" (keydown.enter)="playTrack(album.tracks[0] ?? null)" tabindex="0" role="button"
+                class="group bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] hover:border-white/16 transition-all duration-200 flex flex-col justify-between cursor-pointer shadow-sm dark:shadow-none">
+                <div>
+                  <div class="relative aspect-square w-full rounded-lg overflow-hidden mb-3 bg-slate-100 dark:bg-[#242424]">
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" [src]="album.cover" [alt]="album.name" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
+                    <span class="absolute bottom-3 right-3 w-11 h-11 rounded-full bg-[#00d2ff] text-black hidden items-center justify-center dark:shadow-[0_0_20px_rgba(0,210,255,0.45)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:flex transition-all duration-200">
+                      <span class="material-symbols-outlined fill text-2xl ml-0.5">play_arrow</span>
+                    </span>
+                  </div>
+                  <h3 class="text-[16px] leading-[22px] text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors truncate font-bold">
+                    {{ album.name }}
+                  </h3>
+                  <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate mt-0.5">{{ album.artist }}</p>
+                </div>
+                <div class="flex items-center justify-between mt-3 pt-2 border-t border-slate-200 dark:border-white/[0.08] text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a]">
+                  <span>{{ album.year ?? '—' }} • {{ 'searchResults.albumTracks' | translate: { count: album.tracks.length } }}</span>
+                  @if (album.hiRes) {
+                    <span class="text-[#005575] dark:text-[#00d2ff] font-semibold">Hi-Res</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- SECTION 4: Playlists (mock visual) -->
+      @if (showPlaylists()) {
+        <section>
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <h2 class="text-[24px] leading-[30px] text-slate-900 dark:text-white font-bold tracking-tight flex items-center gap-3">
+                {{ 'searchResults.playlistsTitle' | translate }}
+                <span class="px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase tracking-wider">{{ 'searchResults.mockBadge' | translate }}</span>
+              </h2>
+              <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'searchResults.playlistsSubtitle' | translate }}</p>
+            </div>
+            <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] flex-shrink-0">
+              {{ 'searchResults.morePlaylists' | translate }}
+            </span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @for (pl of mockPlaylists; track pl.title) {
+              <div class="bg-white dark:bg-[#181818] p-5 rounded-2xl border border-dashed border-slate-300 dark:border-white/16 flex flex-col opacity-80">
+                <div class="flex gap-4 items-start">
+                  <div class="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-[#242424] dark:to-[#0e0e0e] flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[40px] text-slate-400 dark:text-[#6a6a6a]">queue_music</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold uppercase tracking-wider">{{ pl.tag }}</span>
+                    <h3 class="text-[20px] leading-[26px] text-slate-900 dark:text-white truncate mt-1 font-bold">
+                      {{ pl.title }}
+                    </h3>
+                    <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] line-clamp-2 mt-1">
+                      {{ pl.desc }}
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-200 dark:border-white/[0.08]">
+                  <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a]">{{ pl.meta }}</span>
+                  <span class="w-9 h-9 rounded-full bg-slate-100 dark:bg-[#242424] text-slate-400 dark:text-white flex items-center justify-center">
+                    <span class="material-symbols-outlined fill text-xl ml-0.5">play_arrow</span>
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
+    }
+  }
+</div>
