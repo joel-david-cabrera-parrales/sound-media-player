@@ -6,6 +6,8 @@ import { PROFILE_STORAGE_KEY } from '../../../shared/utils/profile-photo';
 import { LocalMusicService, type LocalArtist } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
+import { genreImage } from '../../models/genre-images';
+import { DEFAULT_GENRE_COVER } from '../../models/genre-taxonomy';
 
 function getProfileFirstName(): string {
   try {
@@ -22,12 +24,11 @@ function getProfileFirstName(): string {
 }
 
 interface GenreStat {
+  id: string;
   name: string;
   count: number;
-  accent: 'primary' | 'secondary' | 'bright';
+  cover: string;
 }
-
-const ACCENTS: GenreStat['accent'][] = ['primary', 'secondary', 'bright'];
 
 @Component({
   selector: 'media-player-home',
@@ -71,22 +72,20 @@ export class Home {
     return Math.min(100, Math.max(0, (this.player.currentTimeSec() / dur) * 100));
   });
 
-  /** Géneros reales con conteos. */
-  protected readonly genreStats = computed<GenreStat[]>(() => {
-    const counts = new Map<string, { name: string; count: number }>();
-    for (const t of this.library.tracks()) {
-      const raw = t.genre?.trim();
-      if (!raw) continue;
-      const key = raw.toLowerCase();
-      const entry = counts.get(key);
-      if (entry) entry.count += 1;
-      else counts.set(key, { name: raw, count: 1 });
-    }
-    return [...counts.values()]
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
-      .map((g, i) => ({ ...g, accent: ACCENTS[i % ACCENTS.length] }));
-  });
+  /** Géneros canónicos con conteos y portada (linkean a la página de género). */
+  protected readonly genreStats = computed<GenreStat[]>(() =>
+    this.library.libraryGenres().slice(0, 5).map((g) => ({
+      id: g.id,
+      name: g.label,
+      count: g.count,
+      cover: genreImage(g.id),
+    })),
+  );
+
+  protected onGenreImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.src.endsWith(DEFAULT_GENRE_COVER)) img.src = DEFAULT_GENRE_COVER;
+  }
 
   protected coverFor(track: Track): string | SafeUrl {
     const url = coverUrlFor(track, '/images/track-cover.svg');

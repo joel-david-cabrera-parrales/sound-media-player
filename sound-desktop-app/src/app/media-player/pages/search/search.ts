@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { TranslationService } from '../../../shared/services/translation.service';
@@ -95,6 +95,7 @@ export class Search {
   protected readonly player = inject(AudioPlayerService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly i18n = inject(TranslationService);
+  private readonly router = inject(Router);
 
   protected readonly query = signal('');
   protected readonly activeFilter = signal<SearchFilter>('all');
@@ -273,9 +274,8 @@ export class Search {
   }
 
   protected openGenre(genreId: string, label: string): void {
-    this.selectedGenreId.set(this.selectedGenreId() === genreId ? null : genreId);
     this.remember({ text: label, kind: 'genre', refId: genreId });
-    // TODO fase 2 (redirección): router.navigate(['/media-player/library'], { queryParams: { genre: genreId } })
+    void this.router.navigate(['/library/genre', genreId]);
   }
 
   protected clearGenreFilter(): void {

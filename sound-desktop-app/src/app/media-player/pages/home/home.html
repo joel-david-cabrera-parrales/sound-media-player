@@ -126,17 +126,16 @@
           <h2 class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white">{{ 'home.genres.title' | translate }}</h2>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          @for (genre of genreStats(); track genre.name) {
-            <div class="h-28 rounded-xl p-4 relative overflow-hidden bg-gradient-to-br from-white to-slate-100 dark:from-[#181818] dark:to-[#242424] border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between shadow-sm dark:shadow-none">
-              <span class="text-[20px] leading-[26px] text-slate-900 dark:text-white font-bold z-10 truncate">{{ genre.name }}</span>
-              <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold z-10">
+          @for (genre of genreStats(); track genre.id) {
+            <a [routerLink]="['/library/genre', genre.id]"
+              class="h-28 rounded-xl p-4 relative overflow-hidden bg-gradient-to-br from-white to-slate-100 dark:from-[#181818] dark:to-[#242424] border border-slate-200 dark:border-white/[0.08] hover:border-[#00d2ff]/40 flex flex-col justify-between shadow-sm dark:shadow-none transition-all cursor-pointer group">
+              <span class="text-[20px] leading-[26px] text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] font-bold z-10 truncate transition-colors">{{ genre.name }}</span>
+              <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold z-10 flex items-center gap-1">
                 {{ 'home.genres.songs' | translate: { count: genre.count } }}
+                <span class="material-symbols-outlined text-xs">arrow_forward</span>
               </span>
-              <div
-                class="absolute -right-3 -bottom-3 w-16 h-16 rounded-full blur-sm"
-                [class]="genre.accent === 'primary' ? 'bg-[#00d2ff]/20' : genre.accent === 'secondary' ? 'bg-[#00a2e6]/20' : 'bg-slate-400/30 dark:bg-[#393939]/30'"
-              ></div>
-            </div>
+              <img class="absolute -right-3 -bottom-3 w-16 h-16 rounded-full object-cover opacity-60 group-hover:scale-110 transition-transform" [src]="genre.cover" [alt]="genre.name" loading="lazy" (error)="onGenreImgError($event)" />
+            </a>
           }
         </div>
       </section>

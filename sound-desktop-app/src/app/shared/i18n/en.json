@@ -420,5 +420,18 @@
     "copied": "Copied to clipboard",
     "shareFailed": "Could not share",
     "toastAdded": "“{{track}}” added to “{{list}}”"
+  },
+  "genre": {
+    "songsOf": "Songs by",
+    "heroDesc": "{{count}} songs in your library",
+    "playAll": "Play all",
+    "shuffle": "Shuffle",
+    "emptyTitle": "No songs in this genre",
+    "emptyDesc": "Import music tagged with this genre to see it here.",
+    "colTitle": "Title",
+    "colArtist": "Artist",
+    "colAlbum": "Album",
+    "colDuration": "Duration",
+    "notFound": "Genre not found"
   }
 }

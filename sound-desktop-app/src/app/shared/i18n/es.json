@@ -419,5 +419,18 @@
     "copied": "Copiado al portapapeles",
     "shareFailed": "No se pudo compartir",
     "toastAdded": "“{{track}}” añadida a “{{list}}”"
+  },
+  "genre": {
+    "songsOf": "Canciones de",
+    "heroDesc": "{{count}} canciones en tu biblioteca",
+    "playAll": "Reproducir todo",
+    "shuffle": "Aleatorio",
+    "emptyTitle": "Sin canciones de este género",
+    "emptyDesc": "Importa música con esta etiqueta para verla aquí.",
+    "colTitle": "Título",
+    "colArtist": "Artista",
+    "colAlbum": "Álbum",
+    "colDuration": "Duración",
+    "notFound": "Género no encontrado"
   }
 }
