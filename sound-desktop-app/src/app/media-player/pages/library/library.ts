@@ -1,8 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
+import { TrackContextMenu } from '../../../shared/components/track-context-menu/track-context-menu';
+import { AddToPlayListModal } from '../../../shared/components/add-to-playlist-modal/add-to-playlist-modal';
+import {
+  PlaylistFormModal,
+  type PlaylistFormValue,
+} from '../../../shared/components/playlist-form-modal/playlist-form-modal';
+import { TrackMenuService } from '../../../shared/services/track-menu.service';
+import { PlaylistsService } from '../../../playlist/services/playlists.service';
 import { LocalMusicService } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
@@ -13,18 +21,22 @@ type ViewMode = 'grid' | 'list';
 
 @Component({
   selector: 'media-player-library',
-  imports: [RouterLink, TranslatePipe, FavoriteButton],
+  imports: [RouterLink, TranslatePipe, FavoriteButton, TrackContextMenu, AddToPlayListModal, PlaylistFormModal],
   templateUrl: './library.html',
   styleUrl: './library.css',
 })
 export class Library {
   protected readonly library = inject(LocalMusicService);
   protected readonly player = inject(AudioPlayerService);
+  protected readonly menu = inject(TrackMenuService);
+  protected readonly store = inject(PlaylistsService);
+  private readonly router = inject(Router);
   private readonly sanitizer = inject(DomSanitizer);
 
   protected readonly search = signal('');
   protected readonly sort = signal<SortMode>('title');
   protected readonly view = signal<ViewMode>('grid');
+  protected readonly showCreate = signal(false);
 
   protected readonly filtered = computed<Track[]>(() => {
     const q = normalizeText(this.search());
@@ -122,5 +134,11 @@ export class Library {
 
   protected setView(view: ViewMode): void {
     this.view.set(view);
+  }
+
+  protected async onCreateSaved(value: PlaylistFormValue): Promise<void> {
+    const created = this.store.create(value);
+    this.showCreate.set(false);
+    await this.router.navigate(['/playlist', created.id, 'edit']);
   }
 }

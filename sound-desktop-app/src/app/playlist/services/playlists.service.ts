@@ -97,14 +97,18 @@ export class PlaylistsService {
     return this.playlists().find((p) => p.id === id) ?? null;
   }
 
-  create(input: { name: string; description: string; coverUrl: string | null }): Playlist {
+  create(
+    input: { name: string; description: string; coverUrl: string | null; trackIds?: string[] },
+  ): Playlist {
     const now = new Date().toISOString();
+    const ids =
+      input.trackIds ?? this.draft().entries.map((e) => e.trackId);
     const playlist: Playlist = {
       id: newPlaylistId(),
       name: input.name.trim(),
       description: input.description.trim(),
       coverUrl: input.coverUrl,
-      entries: [...this.draft().entries],
+      entries: [...new Set(ids)].map((trackId) => newEntry(trackId)),
       createdAt: now,
       updatedAt: now,
     };

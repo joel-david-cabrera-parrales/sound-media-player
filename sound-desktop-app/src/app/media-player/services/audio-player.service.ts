@@ -71,6 +71,9 @@ export class AudioPlayerService {
 
   readonly hasTrack = computed(() => this.currentTrack() !== null);
 
+  /** Cola manual ("Añadir a la cola"): se consume antes que el orden de librería. */
+  readonly upNext = signal<Track[]>([]);
+
   constructor() {
     this.restore();
   }
@@ -170,8 +173,22 @@ export class AudioPlayerService {
     this.play(track);
   }
 
-  /** Siguiente de la cola (toda la librería), con vuelta a la primera. */
+  /** Añade al final de la cola manual (sin duplicados). */
+  queueNext(track: Track): void {
+    this.upNext.update((q) => (q.some((t) => t.id === track.id) ? q : [...q, track]));
+  }
+
+  /** Siguiente: primero la cola manual (resolviendo huérfanos), luego la librería. */
   next(): void {
+    const queued = this.upNext()[0];
+    if (queued) {
+      this.upNext.update((q) => q.slice(1));
+      const real = this.library.tracks().find((t) => t.id === queued.id);
+      if (real) {
+        this.play(real);
+        return;
+      }
+    }
     const queue = this.library.tracks();
     if (queue.length === 0) return;
     const cur = this.currentTrack();

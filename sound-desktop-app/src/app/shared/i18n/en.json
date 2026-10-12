@@ -322,6 +322,7 @@
       "count": "{{count}} created lists",
       "subtitle": "High-fidelity collections organized by you.",
       "new": "+ New list",
+      "newShort": "+ New playlist",
       "filter": "Filter by name...",
       "emptyTitle": "No playlists yet",
       "emptyDesc": "Create your first list to organize your music.",
@@ -397,5 +398,27 @@
       "relatedCount": "{{count}} songs",
       "notFound": "List not found"
     }
+  },
+  "trackMenu": {
+    "open": "More options",
+    "addToPlaylist": "Add to playlist",
+    "addToQueue": "Add to queue",
+    "share": "Share",
+    "assignTitle": "Add to a playlist",
+    "assignSubtitle": "Choose where to save",
+    "yourPlaylists": "Your created playlists",
+    "createNew": "Create new playlist",
+    "searchPh": "Search your playlists...",
+    "noResults": "No lists with that name.",
+    "empty": "No playlists yet. Create one to start.",
+    "added": "Added",
+    "add": "Add",
+    "done": "Done",
+    "close": "Close",
+    "queued": "“{{title}}” added to queue",
+    "shared": "Song shared",
+    "copied": "Copied to clipboard",
+    "shareFailed": "Could not share",
+    "toastAdded": "“{{track}}” added to “{{list}}”"
   }
 }

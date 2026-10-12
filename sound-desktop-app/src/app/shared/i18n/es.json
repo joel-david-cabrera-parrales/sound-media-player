@@ -321,6 +321,7 @@
       "count": "{{count}} listas creadas",
       "subtitle": "Colecciones de alta fidelidad organizadas por ti.",
       "new": "+ Nueva lista",
+      "newShort": "+ Crear playlist",
       "filter": "Filtrar por nombre...",
       "emptyTitle": "Aún no tienes playlists",
       "emptyDesc": "Crea tu primera lista para organizar tu música.",
@@ -396,5 +397,27 @@
       "relatedCount": "{{count}} canciones",
       "notFound": "Lista no encontrada"
     }
+  },
+  "trackMenu": {
+    "open": "Más opciones",
+    "addToPlaylist": "Añadir a playlist",
+    "addToQueue": "Añadir a la cola",
+    "share": "Compartir",
+    "assignTitle": "Añadir a una playlist",
+    "assignSubtitle": "Selecciona dónde guardar",
+    "yourPlaylists": "Tus playlists creadas",
+    "createNew": "Crear nueva playlist",
+    "searchPh": "Buscar en tus playlists...",
+    "noResults": "Sin listas con ese nombre.",
+    "empty": "Aún no tienes playlists. Crea una para empezar.",
+    "added": "Añadida",
+    "add": "Añadir",
+    "done": "Listo",
+    "close": "Cerrar",
+    "queued": "“{{title}}” añadida a la cola",
+    "shared": "Canción compartida",
+    "copied": "Copiado al portapapeles",
+    "shareFailed": "No se pudo compartir",
+    "toastAdded": "“{{track}}” añadida a “{{list}}”"
   }
 }
