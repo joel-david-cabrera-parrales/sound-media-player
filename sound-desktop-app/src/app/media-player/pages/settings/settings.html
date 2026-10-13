@@ -1,0 +1,260 @@
+<div class="px-4 sm:px-8 py-6 max-w-4xl mx-auto space-y-10 pb-16">
+  <!-- Header + breadcrumb -->
+  <div class="space-y-1">
+    <div class="flex items-center gap-2 text-[12px] leading-[16px] font-medium text-slate-500 dark:text-[#6a6a6a]">
+      <span>{{ 'settings.crumbAccount' | translate }}</span>
+      <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+      <span class="text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ 'settings.crumbPrefs' | translate }}</span>
+    </div>
+    <h1 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-bold text-slate-900 dark:text-white tracking-tight">{{ 'settings.title' | translate }}</h1>
+    <p class="text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3]">{{ 'settings.subtitle' | translate }}</p>
+  </div>
+
+  <!-- SECTION 1: Información Personal -->
+  <section class="bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] rounded-xl p-6 sm:p-8 transition-colors">
+    <div class="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-white/[0.08]">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)]">account_circle</span>
+        <h2 class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white">{{ 'settings.personal.title' | translate }}</h2>
+      </div>
+      <span class="text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] uppercase tracking-wider">{{ 'settings.personal.tag' | translate }}</span>
+    </div>
+    <div class="mt-8 flex flex-col md:flex-row items-start gap-8">
+      <div class="flex flex-col items-center gap-3 self-center md:self-start">
+        <div class="relative group">
+          <div class="w-28 h-28 rounded-full overflow-hidden border-2 border-slate-200 dark:border-white/16 p-0.5 bg-slate-100 dark:bg-[#242424]">
+            <img class="w-full h-full rounded-full object-cover group-hover:opacity-75 transition-opacity" [src]="safePhotoUrl" [alt]="'common.photoAlt' | translate" (error)="onPhotoError()" />
+          </div>
+          <button type="button" (click)="pickPhoto()" [title]="'common.changePhoto' | translate"
+            class="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-[var(--accent)] text-black flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform">
+            <span class="material-symbols-outlined text-[18px] font-bold">photo_camera</span>
+          </button>
+        </div>
+        <input #photoInput type="file" accept="image/*" class="hidden" (change)="onPhotoPicked($event)" />
+        <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a]">JPG o PNG ({{ 'settings.personal.maxSize' | translate }})</span>
+        @if (photoError) {
+          <span class="text-xs text-red-600 dark:text-red-400">{{ 'welcome.profile.errors.' + (photoError === 'size' ? 'photoSize' : 'photoType') | translate }}</span>
+        }
+      </div>
+      <form class="flex-1 w-full space-y-5" [formGroup]="form" (ngSubmit)="onSave()">
+        <div class="space-y-2">
+          <label for="settings-name" class="block text-[14px] leading-[18px] font-semibold text-slate-600 dark:text-[#b3b3b3]">
+            {{ 'welcome.profile.nameLabel' | translate }}
+          </label>
+          <div class="relative">
+            <input id="settings-name" formControlName="fullName" type="text" autocomplete="name"
+              class="w-full bg-slate-50 dark:bg-[#0e0e0e] border border-slate-300 dark:border-white/10 rounded-lg px-4 py-3 text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all font-medium" />
+            <span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] text-[18px]">edit</span>
+          </div>
+          @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+            <p class="text-xs text-red-600 dark:text-red-400">
+              @if (form.controls.fullName.errors?.['required']) {
+                <span>{{ 'welcome.profile.errors.nameRequired' | translate }}</span>
+              } @else if (form.controls.fullName.errors?.['fullName']) {
+                <span>{{ 'welcome.profile.errors.' + form.controls.fullName.errors?.['fullName'] | translate }}</span>
+              } @else {
+                <span>{{ 'welcome.profile.errors.nameMin' | translate }}</span>
+              }
+            </p>
+          }
+        </div>
+        <div class="space-y-2">
+          <label for="settings-birth" class="block text-[14px] leading-[18px] font-semibold text-slate-600 dark:text-[#b3b3b3]">
+            {{ 'welcome.profile.birthLabel' | translate }}
+          </label>
+          <div class="relative">
+            <input id="settings-birth" formControlName="birthdate" type="date" [max]="maxDate"
+              class="w-full bg-slate-50 dark:bg-[#0e0e0e] border border-slate-300 dark:border-white/10 rounded-lg px-4 py-3 text-[14px] text-slate-900 dark:text-white focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all font-medium" />
+            <span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] text-[18px] pointer-events-none">calendar_today</span>
+          </div>
+          @if (form.controls.birthdate.touched && form.controls.birthdate.invalid) {
+            <p class="text-xs text-red-600 dark:text-red-400">
+              @if (form.controls.birthdate.errors?.['required']) {
+                <span>{{ 'welcome.profile.errors.birthRequired' | translate }}</span>
+              } @else {
+                <span>{{ 'welcome.profile.errors.' + form.controls.birthdate.errors?.['birthdate'] | translate }}</span>
+              }
+            </p>
+          }
+        </div>
+        <div class="pt-3 flex items-center justify-end gap-3">
+          @if (saved()) {
+            <span class="text-[13px] font-medium text-emerald-600 dark:text-emerald-400">{{ 'settings.personal.saved' | translate }}</span>
+          }
+          <button type="submit" [disabled]="form.invalid"
+            class="bg-[var(--accent)] text-black font-bold rounded-full px-6 py-2.5 text-[14px] leading-[18px] hover:brightness-110 active:scale-95 transition-all duration-150 dark:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_25%,transparent)] flex items-center gap-2 disabled:opacity-50">
+            <span class="material-symbols-outlined text-[18px]">check</span>
+            <span>{{ 'settings.personal.save' | translate }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Tema -->
+  <section class="bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] rounded-xl p-6 sm:p-8 transition-colors">
+    <div class="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-white/[0.08]">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)]">palette</span>
+        <h2 class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white">{{ 'settings.theme.title' | translate }}</h2>
+      </div>
+      <span class="text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] uppercase tracking-wider">{{ 'settings.theme.tag' | translate }}</span>
+    </div>
+    <p class="text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3] mt-4">{{ 'settings.theme.desc' | translate }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+      <button type="button" (click)="setTheme('dark')"
+        [class]="theme() === 'dark'
+          ? 'rounded-xl border-2 border-[var(--accent)] bg-slate-100 dark:bg-[#242424] p-5 transition-all dark:shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_15%,transparent)] flex flex-col justify-between h-36'
+          : 'rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#0e0e0e] hover:bg-slate-100 dark:hover:bg-[#242424] p-5 transition-all flex flex-col justify-between h-36 opacity-75 hover:opacity-100'">
+        <div class="flex items-center justify-between">
+          <span class="w-10 h-10 rounded-lg bg-slate-900 dark:bg-black border border-white/10 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[var(--accent)] fill">dark_mode</span>
+          </span>
+          @if (theme() === 'dark') {
+            <span class="w-5 h-5 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
+              <span class="material-symbols-outlined text-[14px] font-bold">check</span>
+            </span>
+          } @else {
+            <span class="w-5 h-5 rounded-full border border-slate-300 dark:border-white/16"></span>
+          }
+        </div>
+        <div class="text-left">
+          <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ 'settings.theme.dark' | translate }}</h3>
+          <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ 'settings.theme.darkDesc' | translate }}</p>
+        </div>
+      </button>
+      <button type="button" (click)="setTheme('light')"
+        [class]="theme() === 'light'
+          ? 'rounded-xl border-2 border-[var(--accent)] bg-slate-100 dark:bg-[#242424] p-5 transition-all dark:shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_15%,transparent)] flex flex-col justify-between h-36'
+          : 'rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#0e0e0e] hover:bg-slate-100 dark:hover:bg-[#242424] p-5 transition-all flex flex-col justify-between h-36 opacity-75 hover:opacity-100'">
+        <div class="flex items-center justify-between">
+          <span class="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
+            <span class="material-symbols-outlined text-slate-600">light_mode</span>
+          </span>
+          @if (theme() === 'light') {
+            <span class="w-5 h-5 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
+              <span class="material-symbols-outlined text-[14px] font-bold">check</span>
+            </span>
+          } @else {
+            <span class="w-5 h-5 rounded-full border border-slate-300 dark:border-white/16"></span>
+          }
+        </div>
+        <div class="text-left">
+          <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ 'settings.theme.light' | translate }}</h3>
+          <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ 'settings.theme.lightDesc' | translate }}</p>
+        </div>
+      </button>
+      <button type="button" (click)="setTheme('system')"
+        [class]="theme() === 'system'
+          ? 'rounded-xl border-2 border-[var(--accent)] bg-slate-100 dark:bg-[#242424] p-5 transition-all dark:shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_15%,transparent)] flex flex-col justify-between h-36'
+          : 'rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#0e0e0e] hover:bg-slate-100 dark:hover:bg-[#242424] p-5 transition-all flex flex-col justify-between h-36 opacity-75 hover:opacity-100'">
+        <div class="flex items-center justify-between">
+          <span class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center">
+            <span class="material-symbols-outlined text-slate-600 dark:text-[#b3b3b3]">settings_brightness</span>
+          </span>
+          @if (theme() === 'system') {
+            <span class="w-5 h-5 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
+              <span class="material-symbols-outlined text-[14px] font-bold">check</span>
+            </span>
+          } @else {
+            <span class="w-5 h-5 rounded-full border border-slate-300 dark:border-white/16"></span>
+          }
+        </div>
+        <div class="text-left">
+          <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ 'settings.theme.system' | translate }}</h3>
+          <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ 'settings.theme.systemDesc' | translate }}</p>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Acento -->
+  <section class="bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] rounded-xl p-6 sm:p-8 transition-colors">
+    <div class="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-white/[0.08]">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)]">brush</span>
+        <h2 class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white">{{ 'settings.accent.title' | translate }}</h2>
+      </div>
+      <span class="text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] uppercase tracking-wider">{{ 'settings.accent.tag' | translate }}</span>
+    </div>
+    <p class="text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3] mt-4">{{ 'settings.accent.desc' | translate }}</p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-6">
+      @for (a of accents; track a.id) {
+        <button type="button" (click)="setAccent(a.id)"
+          [class]="accent() === a.id
+            ? 'flex flex-col items-center gap-2 p-3 rounded-lg bg-slate-100 dark:bg-[#242424]/70 border border-[var(--accent)] transition-all'
+            : 'flex flex-col items-center gap-2 p-3 rounded-lg bg-slate-50 dark:bg-[#0e0e0e] hover:bg-slate-100 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] transition-all'">
+          <span class="relative w-12 h-12 rounded-full flex items-center justify-center dark:shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_50%,transparent)]"
+            [style.background-color]="a.base">
+            @if (accent() === a.id) {
+              <span class="material-symbols-outlined text-black font-bold text-[20px]">check</span>
+            }
+          </span>
+          <span class="text-[12px] leading-[16px] font-semibold text-center mt-1"
+            [class]="accent() === a.id ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-[#b3b3b3]'">
+            {{ ('settings.accent.' + a.id) | translate }}
+          </span>
+          <span class="text-[11px] leading-[14px] font-mono" style="color: var(--accent-ink)">{{ a.base }}</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- SECTION 4: Idioma -->
+  <section class="bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] rounded-xl p-6 sm:p-8 transition-colors">
+    <div class="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-white/[0.08]">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)]">language</span>
+        <h2 class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white">{{ 'settings.language.title' | translate }}</h2>
+      </div>
+      <span class="text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] uppercase tracking-wider">{{ 'settings.language.tag' | translate }}</span>
+    </div>
+    <p class="text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3] mt-4">{{ 'settings.language.desc' | translate }}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-6">
+      <button type="button" (click)="setLanguage('es')"
+        [class]="lang() === 'es'
+          ? 'flex items-center justify-between p-4 rounded-xl border border-[var(--accent)] bg-slate-100 dark:bg-[#242424] transition-all dark:shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_10%,transparent)]'
+          : 'flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#0e0e0e] hover:bg-slate-100 dark:hover:bg-[#242424] transition-all'">
+        <span class="flex items-center gap-3">
+          <span class="text-lg">🇪🇸</span>
+          <span class="text-left">
+            <span class="block text-[14px] leading-[18px] font-semibold text-slate-900 dark:text-white">Español</span>
+            <span class="block text-[11px] leading-[14px]"
+              [class]="lang() === 'es' ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-500 dark:text-[#6a6a6a]'">
+              {{ 'settings.language.esDesc' | translate }}
+            </span>
+          </span>
+        </span>
+        @if (lang() === 'es') {
+          <span class="w-5 h-5 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
+            <span class="material-symbols-outlined text-[13px] font-bold">check</span>
+          </span>
+        } @else {
+          <span class="w-5 h-5 rounded-full border border-slate-300 dark:border-white/16"></span>
+        }
+      </button>
+      <button type="button" (click)="setLanguage('en')"
+        [class]="lang() === 'en'
+          ? 'flex items-center justify-between p-4 rounded-xl border border-[var(--accent)] bg-slate-100 dark:bg-[#242424] transition-all dark:shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_10%,transparent)]'
+          : 'flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#0e0e0e] hover:bg-slate-100 dark:hover:bg-[#242424] transition-all'">
+        <span class="flex items-center gap-3">
+          <span class="text-lg">🇬🇧</span>
+          <span class="text-left">
+            <span class="block text-[14px] leading-[18px] font-semibold text-slate-900 dark:text-white">English</span>
+            <span class="block text-[11px] leading-[14px]"
+              [class]="lang() === 'en' ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-500 dark:text-[#6a6a6a]'">
+              {{ 'settings.language.enDesc' | translate }}
+            </span>
+          </span>
+        </span>
+        @if (lang() === 'en') {
+          <span class="w-5 h-5 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
+            <span class="material-symbols-outlined text-[13px] font-bold">check</span>
+          </span>
+        } @else {
+          <span class="w-5 h-5 rounded-full border border-slate-300 dark:border-white/16"></span>
+        }
+      </button>
+    </div>
+  </section>
+</div>

@@ -41,7 +41,7 @@
       <button
         type="button"
         (click)="toggleShuffle()"
-        [class]="isShuffled() ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
+        [class]="isShuffled() ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
         class="hidden sm:block transition-colors"
         [title]="'shell.dock.shuffle' | translate"
       >
@@ -55,7 +55,7 @@
         type="button"
         (click)="togglePlay()"
         [disabled]="!hasTrack()"
-        class="w-10 h-10 rounded-full bg-[#00d2ff] text-[#0e0e0e] flex items-center justify-center hover:scale-105 dark:shadow-[0_0_18px_rgba(0,210,255,0.45)] transition-all disabled:opacity-30 disabled:pointer-events-none"
+        class="w-10 h-10 rounded-full bg-[var(--accent)] text-[#0e0e0e] flex items-center justify-center hover:scale-105 dark:shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_45%,transparent)] transition-all disabled:opacity-30 disabled:pointer-events-none"
         [title]="(isPlaying() ? 'shell.dock.pause' : 'shell.dock.play') | translate"
       >
         <span class="material-symbols-outlined text-[24px] fill pl-0.5">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
@@ -66,7 +66,7 @@
       <button
         type="button"
         (click)="cycleRepeat()"
-        [class]="repeatMode() === 0 ? 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white' : 'text-[#005575] dark:text-[#00d2ff]'"
+        [class]="repeatMode() === 0 ? 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white' : 'text-[var(--accent-ink)] dark:text-[var(--accent)]'"
         class="hidden sm:block transition-colors relative"
         [title]="'shell.dock.repeat' | translate"
       >
@@ -83,7 +83,7 @@
         (pointerup)="onSeekPointerUp($event)"
         (pointercancel)="onSeekPointerCancel()"
       >
-        <div class="h-full bg-[#00d2ff] group-hover:bg-[#00a2e6] dark:group-hover:bg-[#b6ebff] transition-all rounded-full" [style.width.%]="displayProgress()"></div>
+        <div class="h-full bg-[var(--accent)] group-hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:group-hover:bg-[#b6ebff] transition-all rounded-full" [style.width.%]="displayProgress()"></div>
       </div>
       <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-left tabular-nums">{{ durationLabel() }}</span>
     </div>
@@ -112,7 +112,7 @@
         (pointercancel)="onVolumePointerCancel()"
       >
         <div
-          class="h-full bg-slate-400 dark:bg-[#b3b3b3] group-hover:bg-[#00d2ff] rounded-full transition-colors"
+          class="h-full bg-slate-400 dark:bg-[#b3b3b3] group-hover:bg-[var(--accent)] rounded-full transition-colors"
           [style.width.%]="isMuted() ? 0 : volume()"
         ></div>
       </div>

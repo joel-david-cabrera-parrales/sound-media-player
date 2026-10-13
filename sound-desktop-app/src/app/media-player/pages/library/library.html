@@ -4,17 +4,17 @@
       <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">library_music</span>
       <p class="mt-3 text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white">{{ 'library.emptyTitle' | translate }}</p>
       <p class="mt-1 text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3]">{{ 'library.emptyDesc' | translate }}</p>
-      <a routerLink="/library/import-local-files" class="inline-block mt-5 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+      <a routerLink="/library/import-local-files" class="inline-block mt-5 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
         {{ 'library.goImport' | translate }}
       </a>
     </div>
   } @else {
     <!-- Hero: colección real -->
     <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-white via-slate-100 to-white dark:from-[#181818] dark:via-[#201f1f] dark:to-[#242424] border border-slate-200 dark:border-white/[0.08] p-6 lg:p-8 shadow-sm dark:shadow-none">
-      <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[#00d2ff]/10 blur-3xl pointer-events-none"></div>
+      <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl pointer-events-none"></div>
       <div class="relative z-10 flex flex-col md:flex-row items-start md:items-end gap-6">
         <!-- Mosaico de portadas reales -->
-        <div class="grid grid-cols-2 w-44 h-44 md:w-60 md:h-60 rounded-xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/80 border border-slate-200 dark:border-[#00d2ff]/30 flex-shrink-0 bg-slate-100 dark:bg-[#242424]">
+        <div class="grid grid-cols-2 w-44 h-44 md:w-60 md:h-60 rounded-xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/80 border border-slate-200 dark:border-[color-mix(in_srgb,var(--accent)_30%,transparent)] flex-shrink-0 bg-slate-100 dark:bg-[#242424]">
           @for (cover of mosaic(); track $index) {
             <img class="w-full h-full object-cover" [src]="cover" alt="" loading="lazy" (error)="onCoverError($event)" />
           } @empty {
@@ -22,7 +22,7 @@
           }
         </div>
         <div class="flex flex-col justify-end space-y-2 min-w-0">
-          <span class="text-[11px] leading-[14px] font-semibold uppercase tracking-widest text-[#005575] dark:text-[#00d2ff]">{{ 'library.heroKicker' | translate }}</span>
+          <span class="text-[11px] leading-[14px] font-semibold uppercase tracking-widest text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ 'library.heroKicker' | translate }}</span>
           <h1 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-extrabold text-slate-900 dark:text-white tracking-tight">
             {{ 'library.heroTitle' | translate }}
           </h1>
@@ -32,7 +32,7 @@
           </p>
           <div class="flex items-center gap-3 pt-1">
             <button type="button" (click)="filtered().length && playTrack(filtered()[0])" [title]="'library.playAll' | translate"
-              class="w-12 h-12 rounded-full bg-[#00d2ff] text-[#001f28] flex items-center justify-center hover:scale-105 active:scale-95 transition-all dark:shadow-[0_0_20px_rgba(0,210,255,0.45)]">
+              class="w-12 h-12 rounded-full bg-[var(--accent)] text-[#001f28] flex items-center justify-center hover:scale-105 active:scale-95 transition-all dark:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_45%,transparent)]">
               <span class="material-symbols-outlined text-[28px] fill">play_arrow</span>
             </button>
           </div>
@@ -52,12 +52,12 @@
           (input)="setSearch(q.value)"
           type="text"
           [placeholder]="'library.searchPlaceholder' | translate"
-          class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[#00d2ff] focus:outline-none focus:ring-1 focus:ring-[#00d2ff] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all"
+          class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all"
         />
       </div>
       <div class="flex items-center gap-3 self-end sm:self-auto">
         <button type="button" (click)="showCreate.set(true)"
-          class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#00d2ff]/40 bg-white dark:bg-[#181818] hover:bg-[#00d2ff]/15 text-[12px] font-semibold text-[#005575] dark:text-[#00d2ff] transition-all active:scale-95">
+          class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] bg-white dark:bg-[#181818] hover:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[12px] font-semibold text-[var(--accent-ink)] dark:text-[var(--accent)] transition-all active:scale-95">
           <span class="material-symbols-outlined text-[18px]">add</span>
           <span>{{ 'playlists.list.newShort' | translate }}</span>
         </button>
@@ -67,7 +67,7 @@
             <select
               #sortSel
               (change)="setSort(sortSel.value === 'artist' || sortSel.value === 'album' || sortSel.value === 'duration' ? sortSel.value : 'title')"
-              class="appearance-none bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white rounded-lg pl-3 pr-8 py-1.5 text-[12px] leading-[16px] focus:outline-none focus:border-[#00d2ff] cursor-pointer"
+              class="appearance-none bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white rounded-lg pl-3 pr-8 py-1.5 text-[12px] leading-[16px] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
             >
               <option value="title" [selected]="sort() === 'title'">{{ 'library.sortTitle' | translate }}</option>
               <option value="artist" [selected]="sort() === 'artist'">{{ 'library.sortArtist' | translate }}</option>
@@ -79,11 +79,11 @@
         </label>
         <div class="flex items-center bg-white dark:bg-[#181818] rounded-full p-1 border border-slate-200 dark:border-white/[0.08] gap-1">
           <button type="button" (click)="setView('list')" [title]="'library.viewList' | translate"
-            [class]="view() === 'list' ? 'w-7 h-7 rounded-full flex items-center justify-center bg-[#00d2ff]/20 text-[#005575] dark:text-[#00d2ff]' : 'w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors'">
+            [class]="view() === 'list' ? 'w-7 h-7 rounded-full flex items-center justify-center bg-[color-mix(in_srgb,var(--accent)_20%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors'">
             <span class="material-symbols-outlined text-base">view_list</span>
           </button>
           <button type="button" (click)="setView('grid')" [title]="'library.viewGrid' | translate"
-            [class]="view() === 'grid' ? 'w-7 h-7 rounded-full flex items-center justify-center bg-[#00d2ff]/20 text-[#005575] dark:text-[#00d2ff]' : 'w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors'">
+            [class]="view() === 'grid' ? 'w-7 h-7 rounded-full flex items-center justify-center bg-[color-mix(in_srgb,var(--accent)_20%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors'">
             <span class="material-symbols-outlined text-base">grid_view</span>
           </button>
         </div>
@@ -98,30 +98,30 @@
           <div
             (click)="playTrack(track)" (keydown.enter)="playTrack(track)" tabindex="0" role="button"
             class="group relative p-3.5 rounded-xl bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424]/90 transition-all duration-200 border flex flex-col gap-3 cursor-pointer shadow-sm dark:shadow-none"
-            [class]="isCurrentTrack(track) ? 'border-[#00d2ff]/40' : 'border-slate-200 dark:border-white/[0.08]'"
+            [class]="isCurrentTrack(track) ? 'border-[color-mix(in_srgb,var(--accent)_40%,transparent)]' : 'border-slate-200 dark:border-white/[0.08]'"
           >
             <div class="relative aspect-square w-full rounded-lg overflow-hidden bg-slate-100 dark:bg-[#242424] shadow-md">
               <img class="w-full h-full object-cover" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onCoverError($event)" />
               <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span class="w-12 h-12 rounded-full bg-[#00d2ff] text-[#001f28] flex items-center justify-center shadow-lg active:scale-95">
+                <span class="w-12 h-12 rounded-full bg-[var(--accent)] text-[#001f28] flex items-center justify-center shadow-lg active:scale-95">
                   <span class="material-symbols-outlined text-2xl fill">{{ isCurrentTrack(track) ? 'pause' : 'play_arrow' }}</span>
                 </span>
               </div>
               @if (isCurrentTrack(track)) {
-                <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#0e0e0e]/90 backdrop-blur-md border border-[#00d2ff]/40 flex items-center gap-1.5 shadow">
+                <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#0e0e0e]/90 backdrop-blur-md border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] flex items-center gap-1.5 shadow">
                   <span class="flex items-end gap-0.5 h-3">
-                    <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-1"></span>
-                    <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-2"></span>
-                    <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-3"></span>
+                    <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-1"></span>
+                    <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-2"></span>
+                    <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-3"></span>
                   </span>
-                  <span class="text-[10px] font-bold text-[#00d2ff] uppercase tracking-wider">{{ 'library.playing' | translate }}</span>
+                  <span class="text-[10px] font-bold text-[var(--accent)] uppercase tracking-wider">{{ 'library.playing' | translate }}</span>
                 </div>
               }
               <shared-favorite-button
                 [liked]="isLiked(track)"
                 [label]="'shell.dock.favorite' | translate"
                 buttonClass="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center transition-all active:scale-95"
-                [idleClass]="isLiked(track) ? '' : 'opacity-0 group-hover:opacity-100 text-white/80 hover:text-[#00d2ff]'"
+                [idleClass]="isLiked(track) ? '' : 'opacity-0 group-hover:opacity-100 text-white/80 hover:text-[var(--accent)]'"
                 iconClass="text-[18px]"
                 (toggled)="toggleLike(track)"
               />
@@ -129,14 +129,14 @@
             <div class="flex flex-col gap-1 min-w-0">
               <div class="flex items-center gap-1 min-w-0">
                 <span class="font-bold text-[16px] leading-[22px] truncate cursor-pointer hover:underline flex-1 min-w-0"
-                  [class]="isCurrentTrack(track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-900 dark:text-white'">{{ track.title }}</span>
+                  [class]="isCurrentTrack(track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'">{{ track.title }}</span>
                 <button type="button" (click)="menu.openMenu(track, $event)" [title]="'trackMenu.open' | translate"
                   class="p-0.5 rounded text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-all flex-shrink-0">
                   <span class="material-symbols-outlined text-[18px]">more_vert</span>
                 </button>
               </div>
               <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</span>
-              <span class="text-[11px] leading-[14px] font-mono text-[#005575] dark:text-[#00d2ff]">{{ formatDuration(track.durationSec) }}</span>
+              <span class="text-[11px] leading-[14px] font-mono text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ formatDuration(track.durationSec) }}</span>
             </div>
           </div>
         }
@@ -159,26 +159,26 @@
             <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
               @if (isCurrentTrack(track)) {
                 <span class="flex items-end gap-0.5 h-3.5">
-                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-1"></span>
-                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-2"></span>
-                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-3"></span>
+                  <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-1"></span>
+                  <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-2"></span>
+                  <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-3"></span>
                 </span>
               } @else {
                 <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
-                <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] hidden group-hover:inline fill">play_arrow</span>
+                <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] hidden group-hover:inline fill">play_arrow</span>
               }
             </div>
             <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
               <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onCoverError($event)" />
               <div class="truncate min-w-0">
                 <div class="text-[14px] leading-[20px] font-semibold truncate"
-                  [class]="isCurrentTrack(track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-900 dark:text-white'">{{ track.title }}</div>
+                  [class]="isCurrentTrack(track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'">{{ track.title }}</div>
                 <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
               </div>
             </div>
             <div class="hidden md:block md:col-span-4 lg:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.album }}</div>
             <div class="hidden lg:block lg:col-span-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border border-[#00d2ff]/30">{{ track.format }}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)]">{{ track.format }}</span>
             </div>
             <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ formatSize(track.sizeBytes) }}</div>
             <div class="col-span-2 md:col-span-1 text-[14px] md:text-[12px] leading-[20px] md:leading-[16px] text-slate-500 dark:text-[#b3b3b3] text-right font-mono flex items-center justify-end gap-1">

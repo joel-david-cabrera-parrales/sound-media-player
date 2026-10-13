@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
-import { DEFAULT_AVATAR, getStoredPhotoUrl } from '../../utils/profile-photo';
+import { DEFAULT_AVATAR, PROFILE_STORAGE_KEY, getStoredPhotoUrl } from '../../utils/profile-photo';
 import { ShellUiService } from '../../services/shell-ui.service';
 import { ThemeService } from '../../services/theme.service';
 
@@ -11,7 +11,7 @@ type FilterPill = 'todo' | 'carpetas';
 
 @Component({
   selector: 'shared-topbar',
-  imports: [FormsModule, TranslatePipe],
+  imports: [FormsModule, RouterLink, TranslatePipe],
   templateUrl: './topbar.html',
   styleUrl: './topbar.css',
 })
@@ -20,12 +20,12 @@ export class Topbar implements OnInit, OnDestroy {
   private readonly shellUi = inject(ShellUiService);
   private readonly router = inject(Router);
   private readonly themeService = inject(ThemeService);
-  protected readonly theme = this.themeService.theme;
 
   protected search = '';
   protected activePill: FilterPill = 'todo';
 
   protected avatarUrl: SafeUrl = DEFAULT_AVATAR;
+  protected readonly accountMenuOpen = signal(false);
 
   private readonly onStorage = (): void => this.loadAvatar();
 
@@ -67,5 +67,43 @@ export class Topbar implements OnInit, OnDestroy {
 
   protected toggleTheme(): void {
     this.themeService.toggleTheme();
+  }
+
+  protected isDarkTheme(): boolean {
+    return this.themeService.isDark();
+  }
+
+  protected userName(): string {
+    try {
+      const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
+      const profile = raw ? (JSON.parse(raw) as { name?: unknown }) : {};
+      if (typeof profile.name === 'string' && profile.name.trim()) return profile.name.trim();
+    } catch {
+      // Sin perfil: fallback
+    }
+    return 'Sound';
+  }
+
+  protected toggleAccountMenu(): void {
+    this.accountMenuOpen.update((v) => !v);
+  }
+
+  protected closeAccountMenu(): void {
+    this.accountMenuOpen.set(false);
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void {
+    this.closeAccountMenu();
+  }
+
+  protected quitApp(): void {
+    this.closeAccountMenu();
+    const api = window.electronAPI as unknown as { quitApp?: () => void } | undefined;
+    if (api?.quitApp) {
+      api.quitApp();
+    } else {
+      window.close();
+    }
   }
 }

@@ -1,17 +1,17 @@
 <section class="bg-slate-50 dark:bg-[#0a0a0c] text-slate-900 dark:text-white min-h-screen overflow-x-hidden relative select-none antialiased flex flex-col justify-between m-0 p-0">
   <!-- Subtle ambient glow background -->
   <div class="absolute inset-0 bg-grid-pattern pointer-events-none"></div>
-  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-[#00d2ff]/15 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-[color-mix(in_srgb,var(--accent)_15%,transparent)] to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
   <!-- Header with progress -->
   <header class="relative z-10 w-full px-12 py-8 flex justify-between items-center max-w-7xl mx-auto">
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-xl bg-white dark:bg-[#131316] border border-slate-200 dark:border-white/10 flex items-center justify-center text-[#005575] dark:text-[#00d2ff]">
+      <div class="w-8 h-8 rounded-xl bg-white dark:bg-[#131316] border border-slate-200 dark:border-white/10 flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)]">
         <span class="material-symbols-outlined text-lg">graphic_eq</span>
       </div>
       <div>
         <span class="text-sm font-bold tracking-tight text-slate-900 dark:text-white block">Sound</span>
-        <span class="text-[9px] uppercase font-bold tracking-wider text-[#005575] dark:text-[#00d2ff] block">{{ 'common.brandTagline' | translate }}</span>
+        <span class="text-[9px] uppercase font-bold tracking-wider text-[var(--accent-ink)] dark:text-[var(--accent)] block">{{ 'common.brandTagline' | translate }}</span>
       </div>
     </div>
     <div class="flex items-center gap-4">
@@ -20,7 +20,7 @@
         <span class="text-[11px] text-slate-500 dark:text-neutral-400">{{ 'welcome.profile.stepDesc' | translate }}</span>
       </div>
       <div class="w-24 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-        <div class="w-2/3 h-full bg-[#00d2ff] rounded-full dark:shadow-[0_0_8px_#00d2ff]"></div>
+        <div class="w-2/3 h-full bg-[var(--accent)] rounded-full dark:shadow-[0_0_8px_var(--accent)]"></div>
       </div>
     </div>
   </header>
@@ -29,11 +29,11 @@
   <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-6 max-w-2xl mx-auto w-full">
     <div class="w-full bg-white/85 dark:bg-[#131316]/85 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
       <!-- Top subtle cyan accent border highlight -->
-      <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00d2ff] to-transparent"></div>
+      <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"></div>
 
       <!-- Heading -->
       <div class="mb-8 text-center sm:text-left">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00d2ff]/10 border border-[#00d2ff]/20 text-[#005575] dark:text-[#00d2ff] text-xs font-semibold mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] border border-[color-mix(in_srgb,var(--accent)_20%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] text-xs font-semibold mb-3">
           <span class="material-symbols-outlined text-sm">person_outline</span>
           <span>{{ 'welcome.profile.badge' | translate }}</span>
         </div>
@@ -43,11 +43,11 @@
 
       <!-- Avatar Picker Preview -->
       <div class="flex items-center gap-5 p-4 rounded-2xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 mb-8">
-        <div class="relative w-16 h-16 rounded-full bg-gradient-to-tr from-[#0088cc] to-[#00d2ff] p-0.5 dark:shadow-[0_0_15px_rgba(0,210,255,0.3)]">
+        <div class="relative w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--accent-deep)] to-[var(--accent)] p-0.5 dark:shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_30%,transparent)]">
           <div class="w-full h-full rounded-full bg-slate-200 dark:bg-[#131316] flex items-center justify-center overflow-hidden">
             <img [alt]="'common.photoAlt' | translate" class="w-full h-full object-cover" [src]="safePhotoUrl" (error)="onPhotoError()" />
           </div>
-          <button type="button" [attr.aria-label]="'common.changePhoto' | translate" (click)="onEditPhoto()" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#00d2ff] text-black flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+          <button type="button" [attr.aria-label]="'common.changePhoto' | translate" (click)="onEditPhoto()" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[var(--accent)] text-black flex items-center justify-center shadow-md hover:scale-110 transition-transform">
             <span class="material-symbols-outlined text-xs font-bold">edit</span>
           </button>
           <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)" />
@@ -74,7 +74,7 @@
             <input
               id="fullName"
               formControlName="fullName"
-              class="w-full bg-slate-50 dark:bg-[#0d0d10] border border-slate-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-[#00d2ff] focus:ring-2 focus:ring-[#00d2ff]/20 transition-all font-medium"
+              class="w-full bg-slate-50 dark:bg-[#0d0d10] border border-slate-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--accent)_20%,transparent)] transition-all font-medium"
               [placeholder]="'welcome.profile.namePlaceholder' | translate"
               type="text"
               autocomplete="name" />
@@ -96,7 +96,7 @@
         <div>
           <label for="birthdate" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-300 mb-2 flex items-center justify-between">
             <span>{{ 'welcome.profile.birthLabel' | translate }}</span>
-            <span class="text-[#005575] dark:text-[#00d2ff] text-[11px] font-medium flex items-center gap-1">
+            <span class="text-[var(--accent-ink)] dark:text-[var(--accent)] text-[11px] font-medium flex items-center gap-1">
               <span class="material-symbols-outlined text-xs">cake</span> {{ 'welcome.profile.birthHint' | translate }}
             </span>
           </label>
@@ -106,7 +106,7 @@
               id="birthdate"
               formControlName="birthdate"
               [max]="maxDate"
-              class="w-full bg-slate-50 dark:bg-[#0d0d10] border border-slate-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-[#00d2ff] focus:ring-2 focus:ring-[#00d2ff]/20 transition-all font-medium"
+              class="w-full bg-slate-50 dark:bg-[#0d0d10] border border-slate-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--accent)_20%,transparent)] transition-all font-medium"
               type="date" />
           </div>
           @if (form.controls.birthdate.touched && form.controls.birthdate.invalid) {
@@ -123,7 +123,7 @@
         <!-- Action Buttons -->
         <div class="pt-4 flex flex-col sm:flex-row items-center gap-3">
           <button
-            class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#00d2ff] to-[#0088cc] text-black font-bold text-sm tracking-wide shadow-lg dark:shadow-[0_0_20px_rgba(0,210,255,0.45)] hover:shadow-xl dark:hover:shadow-[0_0_30px_rgba(0,210,255,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
+            class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] text-black font-bold text-sm tracking-wide shadow-lg dark:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_45%,transparent)] hover:shadow-xl dark:hover:shadow-[0_0_30px_color-mix(in_srgb,var(--accent)_60%,transparent)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
             type="submit"
             [disabled]="form.invalid">
             <span>{{ 'welcome.profile.save' | translate }}</span>
@@ -143,7 +143,7 @@
   <!-- Footer Info -->
   <footer class="relative z-10 w-full px-12 py-5 border-t border-slate-200 dark:border-white/5 flex justify-between items-center text-xs text-slate-500 dark:text-neutral-500 max-w-7xl mx-auto">
     <span>{{ 'welcome.profile.footer' | translate }}</span>
-    <div class="flex items-center gap-2 text-[#005575] dark:text-[#00d2ff]">
+    <div class="flex items-center gap-2 text-[var(--accent-ink)] dark:text-[var(--accent)]">
       <span class="material-symbols-outlined text-sm">verified_user</span>
       <span class="text-[11px] font-semibold">Sound Privacy Shield</span>
     </div>

@@ -1,29 +1,15 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { PROFILE_STORAGE_KEY } from '../../guards/profile-setup.guard';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-
-function fullNameValidator(control: AbstractControl): ValidationErrors | null {
-  const value = (control.value ?? '').trim();
-  if (!value) return null;
-  const parts = value.split(/\s+/);
-  if (parts.length < 2) {
-    return { fullName: 'nameTwoWords' };
-  }
-  if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ'\- ]+$/.test(value)) {
-    return { fullName: 'nameLetters' };
-  }
-  return null;
-}
+import { fullNameValidator, pastDateValidator } from '../../../shared/validators/profile.validators';
 
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 const DEFAULT_AVATAR = '/images/avatar-default.svg';
@@ -50,21 +36,6 @@ function readStoredProfile(): Record<string, unknown> {
   } catch {
     return {};
   }
-}
-
-function pastDateValidator(control: AbstractControl): ValidationErrors | null {
-  const value = control.value;
-  if (!value) return null;
-  const date = new Date(`${value}T00:00:00`);
-  if (Number.isNaN(date.getTime())) {
-    return { birthdate: 'birthInvalid' };
-  }
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  if (date > today) {
-    return { birthdate: 'birthFuture' };
-  }
-  return null;
 }
 
 @Component({

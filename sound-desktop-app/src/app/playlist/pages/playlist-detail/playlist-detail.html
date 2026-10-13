@@ -1,24 +1,24 @@
 @if (playlist(); as playlist) {
   <div class="pb-8">
     <!-- Hero -->
-    <section class="relative px-4 sm:px-8 pt-8 pb-8 overflow-hidden bg-gradient-to-b from-[#00d2ff]/10 via-transparent to-transparent dark:from-cyan-950/40 dark:via-transparent dark:to-transparent">
-      <div class="absolute -top-24 -left-20 w-96 h-96 bg-[#00d2ff]/15 rounded-full blur-3xl pointer-events-none"></div>
+    <section class="relative px-4 sm:px-8 pt-8 pb-8 overflow-hidden bg-gradient-to-b from-[color-mix(in_srgb,var(--accent)_10%,transparent)] via-transparent to-transparent dark:from-cyan-950/40 dark:via-transparent dark:to-transparent">
+      <div class="absolute -top-24 -left-20 w-96 h-96 bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] rounded-full blur-3xl pointer-events-none"></div>
       <div class="relative z-10 flex flex-col md:flex-row items-start md:items-end gap-7 max-w-7xl mx-auto">
         <div class="relative group flex-shrink-0 mx-auto md:mx-0">
-          <div class="w-60 h-60 rounded-xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/80 border border-slate-200 dark:border-[#00d2ff]/30 relative bg-slate-100 dark:bg-[#242424] flex items-center justify-center">
+          <div class="w-60 h-60 rounded-xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/80 border border-slate-200 dark:border-[color-mix(in_srgb,var(--accent)_30%,transparent)] relative bg-slate-100 dark:bg-[#242424] flex items-center justify-center">
             <img class="w-full h-full object-cover" [src]="heroCover()" [alt]="playlist.name" (error)="onImgError($event, '/images/track-cover.svg')" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 pointer-events-none"></div>
           </div>
           @if (rows().some((r) => r.track.hiRes)) {
             <div class="absolute bottom-3 right-3 bg-black/70 dark:bg-[#0e0e0e]/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-[#00d2ff] animate-pulse"></span>
-              <span class="text-[10px] text-[#00d2ff] font-bold">LOSSLESS 24-BIT</span>
+              <span class="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>
+              <span class="text-[10px] text-[var(--accent)] font-bold">LOSSLESS 24-BIT</span>
             </div>
           }
         </div>
         <div class="flex flex-col justify-end space-y-3 min-w-0 text-center md:text-left w-full">
           <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-[#00d2ff]/20 text-[#005575] dark:text-[#00d2ff] text-[11px] font-bold tracking-wider uppercase border border-[#00d2ff]/30">
+            <span class="px-2.5 py-0.5 rounded-full bg-[color-mix(in_srgb,var(--accent)_20%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] text-[11px] font-bold tracking-wider uppercase border border-[color-mix(in_srgb,var(--accent)_30%,transparent)]">
               {{ 'playlists.detail.publicBadge' | translate }}
             </span>
           </div>
@@ -37,7 +37,7 @@
           </div>
           <div class="flex items-center justify-center md:justify-start gap-3 pt-1">
             <a [routerLink]="['/playlist', playlist.id, 'edit']"
-              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[#00d2ff]/50 transition-all active:scale-95">
+              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[color-mix(in_srgb,var(--accent)_50%,transparent)] transition-all active:scale-95">
               <span class="material-symbols-outlined text-[18px]">edit</span>
               {{ 'playlists.detail.edit' | translate }}
             </a>
@@ -50,11 +50,11 @@
     <section class="px-4 sm:px-8 py-5 max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/[0.08]">
       <div class="flex items-center gap-4 sm:gap-6">
         <button type="button" (click)="playAll()" [disabled]="rows().length === 0" [title]="'playlists.detail.playAll' | translate"
-          class="w-14 h-14 rounded-full bg-[#00d2ff] text-[#001f28] flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 dark:shadow-[0_0_24px_rgba(0,210,255,0.45)] disabled:opacity-40">
+          class="w-14 h-14 rounded-full bg-[var(--accent)] text-[#001f28] flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 dark:shadow-[0_0_24px_color-mix(in_srgb,var(--accent)_45%,transparent)] disabled:opacity-40">
           <span class="material-symbols-outlined text-3xl fill">play_arrow</span>
         </button>
         <button type="button" (click)="togglePlaylistLike()" [title]="'playlists.detail.like' | translate"
-          [class]="isPlaylistLiked() ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
+          [class]="isPlaylistLiked() ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
           class="w-10 h-10 rounded-full hidden sm:flex items-center justify-center hover:scale-110 active:scale-90 transition-transform">
           <span class="material-symbols-outlined text-2xl" [class.fill]="isPlaylistLiked()">{{ isPlaylistLiked() ? 'favorite' : 'favorite_border' }}</span>
         </button>
@@ -72,7 +72,7 @@
             (input)="setSearch(sq.value)"
             type="text"
             [placeholder]="'playlists.detail.searchPlaceholder' | translate"
-            class="w-full sm:w-52 h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] rounded-full text-[13px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#00d2ff] transition-all"
+            class="w-full sm:w-52 h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] rounded-full text-[13px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[var(--accent)] transition-all"
           />
         </div>
         <label class="flex items-center gap-1.5 text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white text-[12px] font-semibold cursor-pointer px-3 py-1.5 rounded-full bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex-shrink-0">
@@ -102,7 +102,7 @@
           <p class="mt-3 text-[16px] font-semibold text-slate-900 dark:text-white">
             {{ search() ? ('playlists.detail.noResults' | translate) : ('playlists.detail.empty' | translate) }}
           </p>
-          <a [routerLink]="['/playlist', playlist.id, 'edit']" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+          <a [routerLink]="['/playlist', playlist.id, 'edit']" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
             {{ 'playlists.detail.addSongs' | translate }}
           </a>
         </div>
@@ -121,15 +121,15 @@
             (click)="playTrack(row.track)" (keydown.enter)="playTrack(row.track)" tabindex="0" role="button"
             class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center rounded-lg transition-colors group cursor-pointer border border-transparent"
             [class]="isCurrentTrack(row.track)
-              ? 'bg-slate-100 dark:bg-[#242424]/70 border-[#00d2ff]/30'
+              ? 'bg-slate-100 dark:bg-[#242424]/70 border-[color-mix(in_srgb,var(--accent)_30%,transparent)]'
               : 'hover:bg-slate-100 dark:hover:bg-[#242424] hover:border-slate-200 dark:hover:border-white/[0.08]'"
           >
             <div class="hidden md:flex md:col-span-1 text-center items-center justify-center">
               @if (isCurrentTrack(row.track)) {
                 <span class="flex items-end gap-0.5 h-3.5">
-                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-1"></span>
-                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-2"></span>
-                  <span class="w-0.5 bg-[#00d2ff] rounded-full eq-bar-3"></span>
+                  <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-1"></span>
+                  <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-2"></span>
+                  <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-3"></span>
                 </span>
               } @else {
                 <span class="text-[14px] text-slate-400 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
@@ -140,7 +140,7 @@
               <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(row.track)" [alt]="row.track.title" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
               <div class="truncate min-w-0">
                 <div class="text-[14px] leading-[20px] font-semibold truncate"
-                  [class]="isCurrentTrack(row.track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-900 dark:text-white'">{{ row.track.title }}</div>
+                  [class]="isCurrentTrack(row.track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'">{{ row.track.title }}</div>
                 <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ row.track.artist }}</div>
               </div>
             </div>
@@ -149,7 +149,7 @@
             <div class="col-span-2 md:col-span-1 text-[12px] text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-1 font-mono">
               <span class="hidden sm:inline">{{ formatDuration(row.track.durationSec) }}</span>
               <button type="button" (click)="toggleLike(row.track, $event)" [title]="'shell.dock.favorite' | translate"
-                [class]="isLiked(row.track) ? 'text-[#005575] dark:text-[#00d2ff]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white sm:opacity-0 sm:group-hover:opacity-100'"
+                [class]="isLiked(row.track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white sm:opacity-0 sm:group-hover:opacity-100'"
                 class="transition-all">
                 <span class="material-symbols-outlined text-[18px]" [class.fill]="isLiked(row.track)">{{ isLiked(row.track) ? 'favorite' : 'favorite_border' }}</span>
               </button>
@@ -186,7 +186,7 @@
   <div class="px-4 sm:px-8 py-16 text-center">
     <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">queue_music</span>
     <p class="mt-4 text-[16px] font-semibold text-slate-900 dark:text-white">{{ 'playlists.detail.notFound' | translate }}</p>
-    <a routerLink="/playlist" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+    <a routerLink="/playlist" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
       {{ 'playlists.list.title' | translate }}
     </a>
   </div>

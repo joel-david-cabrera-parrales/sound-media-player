@@ -20,6 +20,7 @@ function toMediaUrl(scheme, value) {
 contextBridge.exposeInMainWorld('electronAPI', {
   openFileDialogue: () => ipcRenderer.invoke('dialog:openFile'),
   openDirectoryDialogue: () => ipcRenderer.invoke('dialog:openDirectory'),
+  quitApp: () => ipcRenderer.invoke('app:quit'),
   scanFolder: (input) => ipcRenderer.invoke('library:scanFolder', input),
   onScanProgress: (cb) => {
     const listener = (_event, payload) => cb(payload);

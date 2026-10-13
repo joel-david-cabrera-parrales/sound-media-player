@@ -11,15 +11,34 @@ const { Readable } = require('node:stream');
 protocol.registerSchemesAsPrivileged([
   {
     scheme: 'sound-photo',
-    privileges: { standard: true, secure: true, supportFetchAPI: true, bypassCSP: true, corsEnabled: true },
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      bypassCSP: true,
+      corsEnabled: true,
+    },
   },
   {
     scheme: 'sound-audio',
-    privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true, bypassCSP: true, corsEnabled: true },
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      stream: true,
+      bypassCSP: true,
+      corsEnabled: true,
+    },
   },
   {
     scheme: 'sound-cover',
-    privileges: { standard: true, secure: true, supportFetchAPI: true, bypassCSP: true, corsEnabled: true },
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      bypassCSP: true,
+      corsEnabled: true,
+    },
   },
 ]);
 
@@ -153,7 +172,8 @@ function parseRange(header, size) {
   } else {
     start = parseInt(m[1], 10);
     end = m[2] === '' ? size - 1 : parseInt(m[2], 10);
-    if (!Number.isFinite(start) || !Number.isFinite(end) || start >= size || end < start) return null;
+    if (!Number.isFinite(start) || !Number.isFinite(end) || start >= size || end < start)
+      return null;
     end = Math.min(end, size - 1);
   }
   return { start, end };
@@ -244,6 +264,11 @@ ipcMain.handle('dialog:openFile', async () => {
   return { canceled: false, filePath: filePaths[0] };
 });
 
+// Cierra la aplicación (lo invoca el preload: app:quit)
+ipcMain.handle('app:quit', () => {
+  app.quit();
+});
+
 // Diálogo nativo para elegir carpeta de música (preload: dialog:openDirectory)
 ipcMain.handle('dialog:openDirectory', async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -293,7 +318,10 @@ function coversDir() {
 }
 
 function baseNameTitle(filePath) {
-  return path.basename(filePath, path.extname(filePath)).replace(/[_-]+/g, ' ').trim() || 'Pista desconocida';
+  return (
+    path.basename(filePath, path.extname(filePath)).replace(/[_-]+/g, ' ').trim() ||
+    'Pista desconocida'
+  );
 }
 
 function formatQuality(bitsPerSample, sampleRate) {
@@ -327,7 +355,12 @@ ipcMain.handle('library:scanFolder', async (event, { folderId, dirPath }) => {
 
           let coverCacheKey = null;
           const picture = common.picture && common.picture[0];
-          if (picture && picture.data && picture.data.length > 0 && picture.data.length < 8 * 1024 * 1024) {
+          if (
+            picture &&
+            picture.data &&
+            picture.data.length > 0 &&
+            picture.data.length < 8 * 1024 * 1024
+          ) {
             try {
               const hash = crypto.createHash('md5').update(filePath).digest('hex');
               const coverExt = (picture.format || '').includes('png') ? 'png' : 'jpg';
@@ -347,7 +380,11 @@ ipcMain.handle('library:scanFolder', async (event, { folderId, dirPath }) => {
           const quality = formatQuality(bits, sampleRate);
           const label = quality ? `${ext} ${quality}` : ext;
           const hiRes =
-            (bits != null && bits > 16) || (sampleRate != null && sampleRate > 48000) || ext === 'FLAC' || ext === 'DSF' || ext === 'DFF';
+            (bits != null && bits > 16) ||
+            (sampleRate != null && sampleRate > 48000) ||
+            ext === 'FLAC' ||
+            ext === 'DSF' ||
+            ext === 'DFF';
 
           return {
             id: `${folderId}::${crypto.createHash('md5').update(filePath).digest('hex')}`,
@@ -390,15 +427,22 @@ ipcMain.handle('library:scanFolder', async (event, { folderId, dirPath }) => {
   }
 
   // Orden estable por artista/album/pista para verificar fácil
-  tracks.sort((a, b) => `${a.artist}${a.album}${a.trackNo ?? ''}${a.title}`.localeCompare(`${b.artist}${b.album}${b.trackNo ?? ''}${b.title}`));
+  tracks.sort((a, b) =>
+    `${a.artist}${a.album}${a.trackNo ?? ''}${a.title}`.localeCompare(
+      `${b.artist}${b.album}${b.trackNo ?? ''}${b.title}`,
+    ),
+  );
 
-return { tracks, total, errors, scannedMs: Date.now() - startedAt };
-  });
+  return { tracks, total, errors, scannedMs: Date.now() - startedAt };
+});
 
 // Obtiene imagen de artista desde Deezer API (sin CORS en main process)
 ipcMain.handle('artist:fetchDeezerImage', async (_event, artistName) => {
   try {
-    const normalized = String(artistName || '').trim().toLowerCase().replace(/\s+/g, '_');
+    const normalized = String(artistName || '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_');
     if (!normalized) return null;
     const url = `https://api.deezer.com/search?q=${encodeURIComponent(normalized)}&limit=1`;
     const controller = new AbortController();
@@ -415,7 +459,9 @@ ipcMain.handle('artist:fetchDeezerImage', async (_event, artistName) => {
 
 // Convierte sound-photo://<encodeURIComponent(C:/ruta/foto.png)> -> archivo local (acepta legacy ///C:/...)
 function registerPhotoProtocol() {
-  protocol.handle('sound-photo', (request) => serveLocalFile(request, 'Foto no encontrada', 'sound-photo'));
+  protocol.handle('sound-photo', (request) =>
+    serveLocalFile(request, 'Foto no encontrada', 'sound-photo'),
+  );
 }
 
 function registerMediaProtocols() {
@@ -457,7 +503,7 @@ function createWindow() {
   win.webContents.openDevTools();
 
   // En desarrollo, cargamos el servidor de Angular
-  win.loadURL('http://localhost:4200');
+  win.loadURL('http://localhost:4205');
 }
 
 app.whenReady().then(() => {

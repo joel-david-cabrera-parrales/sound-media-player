@@ -432,5 +432,51 @@
     "colAlbum": "Álbum",
     "colDuration": "Duración",
     "notFound": "Género no encontrado"
+  },
+  "settings": {
+    "crumbAccount": "Cuenta",
+    "crumbPrefs": "Preferencias generales",
+    "title": "Configuración de Cuenta",
+    "subtitle": "Gestiona tu identidad de audio, el ambiente visual y la personalización de tu experiencia.",
+    "personal": {
+      "title": "Información Personal",
+      "tag": "Identidad",
+      "maxSize": "máx. 4MB",
+      "save": "Guardar cambios",
+      "saved": "Guardado"
+    },
+    "theme": {
+      "title": "Preferencias de Tema",
+      "tag": "Visual",
+      "desc": "Selecciona el modo de contraste adecuado para tus sesiones de escucha y trabajo en estudio.",
+      "dark": "Oscuro (Dark)",
+      "darkDesc": "Inmersión profunda, negros studio",
+      "light": "Claro (Light)",
+      "lightDesc": "Alto contraste en ambientes diurnos",
+      "system": "Sistema (Automático)",
+      "systemDesc": "Sincroniza con el SO del dispositivo"
+    },
+    "accent": {
+      "title": "Acento de Color",
+      "tag": "Identidad de interfaz",
+      "desc": "Personaliza el color principal de los controles de reproducción, ondas dinámicas y selecciones activas.",
+      "cyan": "Celeste Cyan",
+      "violet": "Violeta Eléctrico",
+      "emerald": "Esmeralda",
+      "fuchsia": "Fucsia",
+      "amber": "Ámbar"
+    },
+    "language": {
+      "title": "Idioma",
+      "tag": "Localización",
+      "desc": "Configura el idioma predeterminado de la navegación, metadatos y avisos del reproductor.",
+      "esDesc": "Idioma predeterminado",
+      "enDesc": "Idioma secundario"
+    }
+  },
+  "account": {
+    "menuLabel": "Menú de cuenta",
+    "profile": "Configuración del perfil",
+    "quit": "Salir de la app"
   }
 }

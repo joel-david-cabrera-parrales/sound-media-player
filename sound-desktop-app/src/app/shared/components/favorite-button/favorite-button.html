@@ -4,7 +4,7 @@
   [disabled]="disabled()"
   [title]="label()"
   [attr.aria-pressed]="liked()"
-  [class]="(liked() ? 'text-[#00d2ff] ' : idleClass() + ' ') + buttonClass()"
+  [class]="(liked() ? 'text-[var(--accent)] ' : idleClass() + ' ') + buttonClass()"
 >
   @if (liked()) {
     <svg [class]="iconClass() + ' w-[1em] h-[1em]'" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

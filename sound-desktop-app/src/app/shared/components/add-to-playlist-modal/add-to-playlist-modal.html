@@ -17,7 +17,7 @@
             {{ 'trackMenu.assignTitle' | translate }}
           </h3>
           <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] mt-0.5 truncate">
-            {{ 'trackMenu.assignSubtitle' | translate }} <span class="text-[#005575] dark:text-[#00d2ff] font-medium">"{{ target.title }}"</span>
+            {{ 'trackMenu.assignSubtitle' | translate }} <span class="text-[var(--accent-ink)] dark:text-[var(--accent)] font-medium">"{{ target.title }}"</span>
           </p>
         </div>
         <button type="button" (click)="menu.closeAssign()" [title]="'trackMenu.close' | translate"
@@ -29,7 +29,7 @@
       <div class="px-6 py-3 border-b border-slate-200/60 dark:border-white/5 bg-slate-50 dark:bg-[#0e0e0e]/50 flex items-center justify-between gap-3">
         <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-[#6a6a6a]">{{ 'trackMenu.yourPlaylists' | translate }}</span>
         <button type="button" (click)="showCreate.set(true)"
-          class="flex items-center gap-1.5 text-[12px] text-[#005575] dark:text-[#00d2ff] hover:underline font-semibold">
+          class="flex items-center gap-1.5 text-[12px] text-[var(--accent-ink)] dark:text-[var(--accent)] hover:underline font-semibold">
           <span class="material-symbols-outlined text-base">add</span>
           <span>{{ 'trackMenu.createNew' | translate }}</span>
         </button>
@@ -44,7 +44,7 @@
             (input)="setSearch(sq.value)"
             type="text"
             [placeholder]="'trackMenu.searchPh' | translate"
-            class="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-50 dark:bg-[#0e0e0e] border border-slate-200 dark:border-white/[0.08] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[13px] focus:outline-none focus:border-[#00d2ff] transition-all"
+            class="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-50 dark:bg-[#0e0e0e] border border-slate-200 dark:border-white/[0.08] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[13px] focus:outline-none focus:border-[var(--accent)] transition-all"
           />
         </div>
       </div>
@@ -60,15 +60,15 @@
               <div class="flex items-center gap-3 min-w-0">
                 <img class="w-12 h-12 rounded-lg object-cover flex-shrink-0 shadow-sm border border-slate-200 dark:border-white/[0.08]" [src]="playlistCover(pl.id)" [alt]="pl.name" loading="lazy" (error)="onImgError($event)" />
                 <div class="truncate min-w-0">
-                  <h4 class="text-[14px] leading-[18px] font-semibold text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors truncate">{{ pl.name }}</h4>
+                  <h4 class="text-[14px] leading-[18px] font-semibold text-slate-900 dark:text-white group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors truncate">{{ pl.name }}</h4>
                   <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ 'playlists.list.songs' | translate: { count: playlistTrackCount(pl.id) } }}</p>
                 </div>
               </div>
               <button type="button" (click)="toggleIn(pl.id)"
                 [title]="isIn(pl.id) ? ('trackMenu.added' | translate) : ('trackMenu.add' | translate)"
                 [class]="isIn(pl.id)
-                  ? 'ml-3 flex-shrink-0 px-3 py-1.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[12px] transition-all duration-150 active:scale-95 flex items-center gap-1.5'
-                  : 'ml-3 flex-shrink-0 px-3 py-1.5 rounded-full border border-slate-300 dark:border-white/16 text-slate-700 dark:text-white font-semibold text-[12px] hover:border-[#00d2ff]/50 transition-all duration-150 active:scale-95 flex items-center gap-1.5'">
+                  ? 'ml-3 flex-shrink-0 px-3 py-1.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[12px] transition-all duration-150 active:scale-95 flex items-center gap-1.5'
+                  : 'ml-3 flex-shrink-0 px-3 py-1.5 rounded-full border border-slate-300 dark:border-white/16 text-slate-700 dark:text-white font-semibold text-[12px] hover:border-[color-mix(in_srgb,var(--accent)_50%,transparent)] transition-all duration-150 active:scale-95 flex items-center gap-1.5'">
                 <span class="material-symbols-outlined text-base fill">{{ isIn(pl.id) ? 'check' : 'add' }}</span>
                 <span>{{ isIn(pl.id) ? ('trackMenu.added' | translate) : ('trackMenu.add' | translate) }}</span>
               </button>
@@ -96,8 +96,8 @@
 }
 
 @if (menu.toast(); as toast) {
-  <div class="fixed bottom-28 right-4 sm:right-8 z-[80] flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-[#181818] border border-[#00d2ff]/40 shadow-2xl dark:shadow-cyan-950/40 text-slate-900 dark:text-white max-w-[calc(100vw-2rem)]">
-    <div class="w-7 h-7 rounded-full bg-[#00d2ff] flex items-center justify-center text-[#001f28] flex-shrink-0">
+  <div class="fixed bottom-28 right-4 sm:right-8 z-[80] flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-[#181818] border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] shadow-2xl dark:shadow-cyan-950/40 text-slate-900 dark:text-white max-w-[calc(100vw-2rem)]">
+    <div class="w-7 h-7 rounded-full bg-[var(--accent)] flex items-center justify-center text-[#001f28] flex-shrink-0">
       <span class="material-symbols-outlined text-base font-bold">check</span>
     </div>
     <p class="text-[13px] font-medium truncate">{{ toast }}</p>

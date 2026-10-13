@@ -1,7 +1,7 @@
 <div class="px-4 sm:px-8 py-6 space-y-6 max-w-7xl mx-auto">
   <!-- Hero -->
   <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-white via-slate-100 to-white dark:from-[#181818] dark:via-[#201f1f] dark:to-[#242424] border border-slate-200 dark:border-white/[0.08] p-6 lg:p-8 shadow-sm dark:shadow-none">
-    <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[#00d2ff]/10 blur-3xl pointer-events-none"></div>
+    <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl pointer-events-none"></div>
     <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div class="max-w-2xl">
         <h1 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-bold text-slate-900 dark:text-white tracking-tight">{{ 'artists.title' | translate }}</h1>
@@ -10,7 +10,7 @@
       <div class="flex items-center gap-4 bg-white/60 dark:bg-[#0e0e0e]/60 backdrop-blur-md px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] self-start md:self-auto">
         <div class="text-left">
           <div class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'artists.followed' | translate }}</div>
-          <div class="text-[16px] leading-[22px] text-[#005575] dark:text-[#00d2ff] font-bold">{{ 'artists.creators' | translate: { count: library.artists().length } }}</div>
+          <div class="text-[16px] leading-[22px] text-[var(--accent-ink)] dark:text-[var(--accent)] font-bold">{{ 'artists.creators' | translate: { count: library.artists().length } }}</div>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@
           (input)="setSearch(q.value)"
           type="text"
           [placeholder]="'artists.searchPlaceholder' | translate"
-          class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[#00d2ff] focus:outline-none focus:ring-1 focus:ring-[#00d2ff] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all"
+          class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all"
         />
       </div>
       <div class="letter-nav flex items-center gap-1 overflow-x-auto py-1 text-[11px] leading-[14px] font-medium">
@@ -37,7 +37,7 @@
           type="button"
           (click)="setLetter('all')"
           [class]="letter() === 'all'
-            ? 'px-2.5 py-1 rounded bg-[#00d2ff] text-[#001f28] font-bold shadow-sm flex-shrink-0'
+            ? 'px-2.5 py-1 rounded bg-[var(--accent)] text-[#001f28] font-bold shadow-sm flex-shrink-0'
             : 'px-2 py-1 rounded text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors flex-shrink-0'"
         >{{ 'artists.all' | translate }}</button>
         @for (l of letters; track l) {
@@ -45,7 +45,7 @@
             type="button"
             (click)="setLetter(l)"
             [class]="letter() === l
-              ? 'px-2.5 py-1 rounded bg-[#00d2ff] text-[#001f28] font-bold shadow-sm flex-shrink-0'
+              ? 'px-2.5 py-1 rounded bg-[var(--accent)] text-[#001f28] font-bold shadow-sm flex-shrink-0'
               : 'px-2 py-1 rounded text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors flex-shrink-0'"
           >{{ l }}</button>
         }
@@ -58,7 +58,7 @@
           <select
             #sortSel
             (change)="setSort(sortSel.value === 'tracks' || sortSel.value === 'recent' ? sortSel.value : 'name')"
-            class="appearance-none bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white rounded-lg pl-3 pr-8 py-1.5 text-[12px] leading-[16px] focus:outline-none focus:border-[#00d2ff] cursor-pointer"
+            class="appearance-none bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white rounded-lg pl-3 pr-8 py-1.5 text-[12px] leading-[16px] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
           >
             <option value="name" [selected]="sort() === 'name'">{{ 'artists.sortName' | translate }}</option>
             <option value="tracks" [selected]="sort() === 'tracks'">{{ 'artists.sortTracks' | translate }}</option>
@@ -69,11 +69,11 @@
       </label>
       <div class="flex items-center bg-white dark:bg-[#181818] rounded-lg p-0.5 border border-slate-200 dark:border-white/[0.08]">
         <button type="button" (click)="setView('grid')" [title]="'artists.viewGrid' | translate"
-          [class]="view() === 'grid' ? 'p-1 rounded bg-slate-200 dark:bg-[#242424] text-[#005575] dark:text-[#00d2ff]' : 'p-1 rounded text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors'">
+          [class]="view() === 'grid' ? 'p-1 rounded bg-slate-200 dark:bg-[#242424] text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'p-1 rounded text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors'">
           <span class="material-symbols-outlined text-[18px]">grid_view</span>
         </button>
         <button type="button" (click)="setView('list')" [title]="'artists.viewList' | translate"
-          [class]="view() === 'list' ? 'p-1 rounded bg-slate-200 dark:bg-[#242424] text-[#005575] dark:text-[#00d2ff]' : 'p-1 rounded text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors'">
+          [class]="view() === 'list' ? 'p-1 rounded bg-slate-200 dark:bg-[#242424] text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'p-1 rounded text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors'">
           <span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
         </button>
       </div>
@@ -86,7 +86,7 @@
       <p class="mt-3 text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ library.tracks().length === 0 ? ('artists.emptyTitle' | translate) : ('artists.noResults' | translate) }}</p>
       <p class="mt-1 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ library.tracks().length === 0 ? ('artists.emptyDesc' | translate) : ('artists.noResultsDesc' | translate) }}</p>
       @if (library.tracks().length === 0) {
-        <a routerLink="/library/import-local-files" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+        <a routerLink="/library/import-local-files" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
           {{ 'artists.goImport' | translate }}
         </a>
       }
@@ -100,28 +100,28 @@
         >
           <div class="relative w-32 h-32 xl:w-40 xl:h-40 mb-4">
             <div
-              [class]="isPlaying(artist) ? 'border-[#00d2ff] ring-4 ring-[#00d2ff]/20' : 'border-slate-200 dark:border-white/16 group-hover:border-[#00d2ff]'"
+              [class]="isPlaying(artist) ? 'border-[var(--accent)] ring-4 ring-[color-mix(in_srgb,var(--accent)_20%,transparent)]' : 'border-slate-200 dark:border-white/16 group-hover:border-[var(--accent)]'"
               class="w-full h-full rounded-full overflow-hidden border-2 shadow-md transition-all duration-300 bg-slate-100 dark:bg-[#242424] flex items-center justify-center"
             >
               @if (artist.coverTrack?.coverCacheKey) {
                 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" [src]="artistPhoto(artist)" [alt]="artist.name" loading="lazy" (error)="onPhotoError($event)" />
               } @else {
-                <span class="text-[48px] leading-none font-extrabold text-[#005575] dark:text-[#00d2ff]">{{ artist.name.charAt(0).toUpperCase() }}</span>
+                <span class="text-[48px] leading-none font-extrabold text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ artist.name.charAt(0).toUpperCase() }}</span>
               }
             </div>
             <button type="button" (click)="playArtist(artist, $event)" [title]="'artists.playArtist' | translate: { name: artist.name }"
-              class="absolute bottom-1 right-1 w-12 h-12 rounded-full bg-[#00d2ff] text-[#001f28] flex items-center justify-center shadow-xl opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 dark:shadow-[0_0_24px_-2px_rgba(0,210,255,0.55)] active:scale-95">
+              class="absolute bottom-1 right-1 w-12 h-12 rounded-full bg-[var(--accent)] text-[#001f28] flex items-center justify-center shadow-xl opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 dark:shadow-[0_0_24px_-2px_color-mix(in_srgb,var(--accent)_55%,transparent)] active:scale-95">
               <span class="material-symbols-outlined fill text-2xl">{{ isPlaying(artist) ? 'pause' : 'play_arrow' }}</span>
             </button>
             @if (isPlaying(artist)) {
-              <div class="absolute -top-1 right-2 px-2 py-0.5 rounded-full bg-[#00d2ff] text-[#001f28] text-[10px] font-extrabold flex items-center gap-1 shadow-md">
+              <div class="absolute -top-1 right-2 px-2 py-0.5 rounded-full bg-[var(--accent)] text-[#001f28] text-[10px] font-extrabold flex items-center gap-1 shadow-md">
                 <span class="material-symbols-outlined text-[12px] fill">volume_up</span>
                 {{ 'artists.nowPlaying' | translate }}
               </div>
             }
           </div>
           <div class="w-full">
-            <h3 class="text-[16px] leading-[22px] text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors truncate font-bold">{{ artist.name }}</h3>
+            <h3 class="text-[16px] leading-[22px] text-slate-900 dark:text-white group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors truncate font-bold">{{ artist.name }}</h3>
             <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] mt-1 truncate">{{ 'artists.artistLine' | translate: { count: artist.trackCount } }}</p>
           </div>
         </a>
@@ -138,7 +138,7 @@
             @if (artist.coverTrack?.coverCacheKey) {
               <img class="w-full h-full object-cover" [src]="artistPhoto(artist)" [alt]="artist.name" loading="lazy" (error)="onPhotoError($event)" />
             } @else {
-              <span class="text-[22px] font-extrabold text-[#005575] dark:text-[#00d2ff]">{{ artist.name.charAt(0).toUpperCase() }}</span>
+              <span class="text-[22px] font-extrabold text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ artist.name.charAt(0).toUpperCase() }}</span>
             }
           </div>
           <div class="flex-1 min-w-0">
@@ -146,7 +146,7 @@
             <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ 'artists.artistLineAlbums' | translate: { tracks: artist.trackCount, albums: artist.albumCount } }}</p>
           </div>
           <button type="button" (click)="playArtist(artist, $event)" [title]="'artists.playArtist' | translate: { name: artist.name }"
-            class="w-10 h-10 rounded-full bg-[#00d2ff] text-[#001f28] items-center justify-center hidden group-hover:flex shadow-md active:scale-95 flex-shrink-0">
+            class="w-10 h-10 rounded-full bg-[var(--accent)] text-[#001f28] items-center justify-center hidden group-hover:flex shadow-md active:scale-95 flex-shrink-0">
             <span class="material-symbols-outlined fill text-xl">{{ isPlaying(artist) ? 'pause' : 'play_arrow' }}</span>
           </button>
           <span class="material-symbols-outlined text-slate-400 dark:text-[#6a6a6a] flex-shrink-0">chevron_right</span>

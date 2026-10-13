@@ -13,7 +13,7 @@
     <div class="flex items-start justify-between gap-4">
       <div class="flex flex-col gap-1">
         <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-[#005575] dark:text-[#00d2ff] text-[24px] fill">queue_music</span>
+          <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)] text-[24px] fill">queue_music</span>
           <h2 class="text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white tracking-tight">
             {{ isEdit ? ('playlists.modal.editTitle' | translate) : ('playlists.modal.createTitle' | translate) }}
           </h2>
@@ -30,7 +30,7 @@
 
     <div class="flex gap-4 items-start">
       <button type="button" (click)="pickCover()"
-        class="relative w-24 h-24 rounded-xl bg-slate-100 dark:bg-[#242424] border border-dashed border-slate-300 dark:border-white/16 hover:border-[#00d2ff]/60 overflow-hidden flex flex-col items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-[#005575] dark:hover:text-[#00d2ff] transition-all flex-shrink-0 group">
+        class="relative w-24 h-24 rounded-xl bg-slate-100 dark:bg-[#242424] border border-dashed border-slate-300 dark:border-white/16 hover:border-[color-mix(in_srgb,var(--accent)_60%,transparent)] overflow-hidden flex flex-col items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-[var(--accent-ink)] dark:hover:text-[var(--accent)] transition-all flex-shrink-0 group">
         <img class="absolute inset-0 w-full h-full object-cover" [src]="coverPreview()" alt="" (error)="onCoverError($event)" />
         <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
           <span class="material-symbols-outlined text-[24px] text-white">add_photo_alternate</span>
@@ -50,7 +50,7 @@
             type="text"
             maxlength="80"
             [placeholder]="'playlists.modal.namePlaceholder' | translate"
-            class="w-full h-11 px-4 bg-slate-50 dark:bg-[#0e0e0e] border border-slate-300 dark:border-white/16 rounded-xl text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#00d2ff] focus:ring-1 focus:ring-[#00d2ff] transition-all"
+            class="w-full h-11 px-4 bg-slate-50 dark:bg-[#0e0e0e] border border-slate-300 dark:border-white/16 rounded-xl text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
           />
           @if (touched() && !valid) {
             <p class="mt-1.5 text-[12px] text-red-600 dark:text-red-400">{{ 'playlists.modal.nameError' | translate }}</p>
@@ -67,7 +67,7 @@
             rows="2"
             maxlength="280"
             [placeholder]="'playlists.modal.descPlaceholder' | translate"
-            class="w-full px-4 py-2.5 bg-slate-50 dark:bg-[#0e0e0e] border border-slate-300 dark:border-white/16 rounded-xl text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#00d2ff] focus:ring-1 focus:ring-[#00d2ff] transition-all resize-none"
+            class="w-full px-4 py-2.5 bg-slate-50 dark:bg-[#0e0e0e] border border-slate-300 dark:border-white/16 rounded-xl text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all resize-none"
           ></textarea>
         </div>
       </div>
@@ -79,7 +79,7 @@
         {{ 'playlists.modal.cancel' | translate }}
       </button>
       <button type="button" (click)="save()" [disabled]="!valid"
-        class="px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] text-[13px] font-bold hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95 disabled:opacity-50">
+        class="px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] text-[13px] font-bold hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95 disabled:opacity-50">
         {{ isEdit ? ('playlists.modal.save' | translate) : ('playlists.modal.create' | translate) }}
       </button>
     </div>

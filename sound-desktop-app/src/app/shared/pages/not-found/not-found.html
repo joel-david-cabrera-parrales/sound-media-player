@@ -3,7 +3,7 @@
     <!-- Hero 404 Section with Vinyl & Waveform Disruption -->
     <section class="w-full flex flex-col items-center justify-center text-center py-6 md:py-10 relative">
       <!-- Ambient Glow Behind Graphic -->
-      <div class="absolute -top-10 w-96 h-96 bg-[#00d2ff]/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
+      <div class="absolute -top-10 w-96 h-96 bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] rounded-full blur-3xl pointer-events-none -z-0"></div>
 
       <!-- Hi-Fi Glitch Art: Broken Vinyl & Glitched Oscilloscope Graphic -->
       <div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center mb-6">
@@ -19,16 +19,16 @@
           <!-- Gloss Reflection Sweep -->
           <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-slate-400/10 dark:via-white/5 to-transparent transform -rotate-45 pointer-events-none"></div>
           <!-- Vinyl Center Label in Electric Cyan Tone -->
-          <div class="w-24 h-24 rounded-full bg-slate-100 dark:bg-[#242424] border-2 border-[#00d2ff]/40 flex flex-col items-center justify-center p-2 z-10">
-            <span class="material-symbols-outlined text-[#005575] dark:text-[#00d2ff] text-2xl">music_off</span>
-            <span class="text-[#005575] dark:text-[#00d2ff] font-bold tracking-widest text-[9px] mt-0.5">LOSSLESS 404</span>
-            <div class="w-3 h-3 rounded-full bg-slate-200 dark:bg-[#131313] border border-[#00d2ff]/60 mt-1"></div>
+          <div class="w-24 h-24 rounded-full bg-slate-100 dark:bg-[#242424] border-2 border-[color-mix(in_srgb,var(--accent)_40%,transparent)] flex flex-col items-center justify-center p-2 z-10">
+            <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)] text-2xl">music_off</span>
+            <span class="text-[var(--accent-ink)] dark:text-[var(--accent)] font-bold tracking-widest text-[9px] mt-0.5">LOSSLESS 404</span>
+            <div class="w-3 h-3 rounded-full bg-slate-200 dark:bg-[#131313] border border-[color-mix(in_srgb,var(--accent)_60%,transparent)] mt-1"></div>
           </div>
           <!-- Audio Distortion Crack Effect -->
           <div class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <svg class="w-full h-full text-[#00d2ff]/90 filter dark:drop-shadow-[0_0_8px_rgba(0,210,255,0.8)]" fill="none" viewBox="0 0 200 200">
-              <path d="M 20 100 Q 60 85 90 105 T 140 95 L 180 100" stroke="#00d2ff" stroke-dasharray="6 3" stroke-linecap="round" stroke-width="2.5"></path>
-              <path d="M 100 20 L 98 75 L 108 120 L 102 180" stroke="#00d2ff" stroke-opacity="0.6" stroke-width="1.5"></path>
+            <svg class="w-full h-full text-[color-mix(in_srgb,var(--accent)_90%,transparent)] filter dark:drop-shadow-[0_0_8px_color-mix(in_srgb,var(--accent)_80%,transparent)]" fill="none" viewBox="0 0 200 200">
+              <path d="M 20 100 Q 60 85 90 105 T 140 95 L 180 100" stroke="var(--accent)" stroke-dasharray="6 3" stroke-linecap="round" stroke-width="2.5"></path>
+              <path d="M 100 20 L 98 75 L 108 120 L 102 180" stroke="var(--accent)" stroke-opacity="0.6" stroke-width="1.5"></path>
             </svg>
           </div>
         </div>
@@ -37,28 +37,28 @@
         <div class="absolute -right-4 -top-3 w-28 h-40 pointer-events-none z-30 transform rotate-12">
           <!-- Stylus Base Anchor -->
           <div class="w-7 h-7 rounded-full bg-slate-300 dark:bg-[#393939] border border-slate-400 dark:border-white/16 flex items-center justify-center">
-            <div class="w-2.5 h-2.5 rounded-full bg-[#00d2ff]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[var(--accent)]"></div>
           </div>
           <!-- Tonearm Rod -->
-          <div class="w-1.5 h-24 bg-gradient-to-b from-slate-300 dark:from-[#393939] via-slate-500 dark:via-[#b3b3b3] to-[#00d2ff] ml-2.5 rounded-full shadow-lg"></div>
+          <div class="w-1.5 h-24 bg-gradient-to-b from-slate-300 dark:from-[#393939] via-slate-500 dark:via-[#b3b3b3] to-[var(--accent)] ml-2.5 rounded-full shadow-lg"></div>
           <!-- Cartridge Head with Cyan Laser Spark -->
-          <div class="w-4 h-6 bg-slate-200 dark:bg-[#333333] border border-[#00d2ff] rounded-sm ml-1.5 flex flex-col items-center justify-end pb-0.5 dark:shadow-[0_0_12px_#00d2ff]">
-            <div class="w-1 h-1.5 bg-[#00d2ff] rounded-full animate-ping"></div>
+          <div class="w-4 h-6 bg-slate-200 dark:bg-[#333333] border border-[var(--accent)] rounded-sm ml-1.5 flex flex-col items-center justify-end pb-0.5 dark:shadow-[0_0_12px_var(--accent)]">
+            <div class="w-1 h-1.5 bg-[var(--accent)] rounded-full animate-ping"></div>
           </div>
         </div>
 
         <!-- Frequency Loss Equalizer Waves (Broken) -->
         <div class="absolute -bottom-2 w-48 h-8 flex items-end justify-between px-4 z-20">
-          <div class="w-1 bg-[#00d2ff]/40 rounded-full h-3"></div>
-          <div class="w-1 bg-[#00d2ff]/60 rounded-full h-6"></div>
-          <div class="w-1 bg-[#00d2ff] rounded-full h-2"></div>
+          <div class="w-1 bg-[color-mix(in_srgb,var(--accent)_40%,transparent)] rounded-full h-3"></div>
+          <div class="w-1 bg-[color-mix(in_srgb,var(--accent)_60%,transparent)] rounded-full h-6"></div>
+          <div class="w-1 bg-[var(--accent)] rounded-full h-2"></div>
           <div class="w-1 bg-slate-400 dark:bg-[#6a6a6a] rounded-full h-1"></div>
-          <div class="w-1 bg-[#00d2ff] rounded-full h-4 waveform-bar" style="animation-delay: 0.1s;"></div>
-          <div class="w-1 bg-[#00d2ff] rounded-full h-4 waveform-bar" style="animation-delay: 0.4s;"></div>
-          <div class="w-1 bg-[#00d2ff]/30 rounded-full h-1"></div>
+          <div class="w-1 bg-[var(--accent)] rounded-full h-4 waveform-bar" style="animation-delay: 0.1s;"></div>
+          <div class="w-1 bg-[var(--accent)] rounded-full h-4 waveform-bar" style="animation-delay: 0.4s;"></div>
+          <div class="w-1 bg-[color-mix(in_srgb,var(--accent)_30%,transparent)] rounded-full h-1"></div>
           <div class="w-1 bg-slate-400 dark:bg-[#6a6a6a] rounded-full h-2"></div>
-          <div class="w-1 bg-[#00d2ff] rounded-full h-5 waveform-bar" style="animation-delay: 0.2s;"></div>
-          <div class="w-1 bg-[#00d2ff]/50 rounded-full h-3"></div>
+          <div class="w-1 bg-[var(--accent)] rounded-full h-5 waveform-bar" style="animation-delay: 0.2s;"></div>
+          <div class="w-1 bg-[color-mix(in_srgb,var(--accent)_50%,transparent)] rounded-full h-3"></div>
         </div>
       </div>
 
@@ -66,12 +66,12 @@
       <div class="max-w-2xl px-4 flex flex-col items-center">
         <!-- Error Pill Badge -->
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200 dark:bg-[#242424] border border-slate-300 dark:border-white/[0.08] mb-3">
-          <span class="w-2 h-2 rounded-full bg-[#00d2ff] animate-pulse"></span>
-          <span class="text-[11px] font-medium tracking-[0.04em] text-[#005575] dark:text-[#00d2ff] font-semibold uppercase">{{ 'notFound.badge' | translate }}</span>
+          <span class="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>
+          <span class="text-[11px] font-medium tracking-[0.04em] text-[var(--accent-ink)] dark:text-[var(--accent)] font-semibold uppercase">{{ 'notFound.badge' | translate }}</span>
         </div>
         <!-- Gigantic Display Error -->
         <h1 class="text-[32px] leading-[38px] md:text-[56px] md:leading-[64px] font-extrabold text-slate-900 dark:text-white tracking-tighter mb-2">
-          4<span class="text-[#00a2e6] dark:text-[#00d2ff] cyan-text-glow">0</span>4
+          4<span class="text-[color-mix(in_srgb,var(--accent)_85%,black)] dark:text-[var(--accent)] cyan-text-glow">0</span>4
         </h1>
         <!-- Subtitle -->
         <h2 class="text-2xl leading-[30px] font-bold text-slate-900 dark:text-white mb-3">
@@ -84,13 +84,13 @@
         <!-- Action Cluster -->
         <div class="flex flex-wrap items-center justify-center gap-4 w-full">
           <!-- Primary CTA Button -->
-          <a class="h-12 px-7 rounded-full bg-[#00d2ff] text-[#001f28] text-sm font-semibold font-bold flex items-center justify-center gap-2.5 hover:brightness-110 active:scale-95 transition-all cyan-glow" routerLink="/">
+          <a class="h-12 px-7 rounded-full bg-[var(--accent)] text-[#001f28] text-sm font-semibold font-bold flex items-center justify-center gap-2.5 hover:brightness-110 active:scale-95 transition-all cyan-glow" routerLink="/">
             <span class="material-symbols-outlined text-xl">home</span>
             <span>{{ 'notFound.backHome' | translate }}</span>
           </a>
           <!-- Secondary CTA Button: Explorar secciones / biblioteca -->
           <a class="h-12 px-6 rounded-full bg-slate-200 dark:bg-[#242424] hover:bg-slate-300 dark:hover:bg-[#2a2a2a] text-slate-900 dark:text-white border border-slate-300 dark:border-white/16 text-sm font-semibold flex items-center justify-center gap-2.5 active:scale-95 transition-all" routerLink="/library">
-            <span class="material-symbols-outlined text-xl text-[#005575] dark:text-[#00d2ff]">library_music</span>
+            <span class="material-symbols-outlined text-xl text-[var(--accent-ink)] dark:text-[var(--accent)]">library_music</span>
             <span>{{ 'notFound.goLibrary' | translate }}</span>
           </a>
           <!-- Search Link -->

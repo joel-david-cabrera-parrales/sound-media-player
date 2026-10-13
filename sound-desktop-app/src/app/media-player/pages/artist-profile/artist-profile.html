@@ -9,14 +9,14 @@
       <div class="absolute inset-0 bg-gradient-to-r from-slate-50/80 via-transparent to-slate-50/40 dark:from-[#121212]/80 dark:via-transparent dark:to-[#121212]/40"></div>
       <div class="relative z-10 flex flex-col gap-3 max-w-4xl">
         <div class="flex items-center gap-2 bg-white/60 dark:bg-[#121212]/60 backdrop-blur-md border border-slate-200 dark:border-white/[0.08] px-3 py-1 rounded-full w-max">
-          <span class="material-symbols-outlined text-[#005575] dark:text-[#00d2ff] text-[16px] fill">verified</span>
+          <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)] text-[16px] fill">verified</span>
           <span class="text-[12px] leading-[16px] text-slate-900 dark:text-white font-medium tracking-wide">{{ 'artistProfile.verified' | translate }}</span>
         </div>
         <h1 class="text-[32px] leading-[38px] md:text-[56px] md:leading-[64px] text-slate-900 dark:text-white font-extrabold tracking-tight drop-shadow-lg">
           {{ a.name }}
         </h1>
         <div class="flex flex-wrap items-center gap-3 text-slate-600 dark:text-[#b3b3b3] text-[14px] leading-[20px]">
-          <span class="material-symbols-outlined text-[#005575] dark:text-[#00d2ff]">headphones</span>
+          <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)]">headphones</span>
           <p class="font-medium"><strong class="text-slate-900 dark:text-white font-bold">{{ a.trackCount }}</strong> {{ 'artistProfile.songs' | translate }}</p>
           <span class="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-[#6a6a6a]"></span>
           <span>{{ 'artistProfile.albumsCount' | translate: { count: a.albumCount } }}</span>
@@ -29,13 +29,13 @@
     <!-- Action Bar -->
     <section class="px-6 md:px-12 py-6 flex items-center gap-4 md:gap-6">
       <button type="button" (click)="playAll()" [title]="'artistProfile.play' | translate"
-        class="w-14 h-14 rounded-full bg-[#00d2ff] text-[#0e0e0e] flex items-center justify-center hover:scale-105 active:scale-95 transition-all dark:shadow-[0_0_24px_rgba(0,210,255,0.45)] cursor-pointer group flex-shrink-0">
+        class="w-14 h-14 rounded-full bg-[var(--accent)] text-[#0e0e0e] flex items-center justify-center hover:scale-105 active:scale-95 transition-all dark:shadow-[0_0_24px_color-mix(in_srgb,var(--accent)_45%,transparent)] cursor-pointer group flex-shrink-0">
         <span class="material-symbols-outlined text-[32px] fill group-hover:scale-110 transition-transform">play_arrow</span>
       </button>
       <button type="button" (click)="toggleFollow()"
         [class]="isFollowing()
-          ? 'px-5 py-2.5 rounded-full bg-[#00d2ff]/15 border border-[#00d2ff]/40 text-[#005575] dark:text-[#00d2ff] text-[14px] leading-[18px] font-bold hover:bg-[#00d2ff]/25 transition-all active:scale-95'
-          : 'px-5 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white text-[14px] leading-[18px] font-semibold hover:border-[#00d2ff] transition-all active:scale-95'">
+          ? 'px-5 py-2.5 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] text-[14px] leading-[18px] font-bold hover:bg-[color-mix(in_srgb,var(--accent)_25%,transparent)] transition-all active:scale-95'
+          : 'px-5 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white text-[14px] leading-[18px] font-semibold hover:border-[var(--accent)] transition-all active:scale-95'">
         {{ isFollowing() ? ('artistProfile.following' | translate) : ('artistProfile.follow' | translate) }}
       </button>
       <button type="button" [title]="'artistProfile.more' | translate"
@@ -64,7 +64,7 @@
               <div class="flex items-center gap-4 flex-1 min-w-0">
                 <span class="w-6 text-center flex-shrink-0">
                   @if (isCurrentTrack(track)) {
-                    <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] animate-pulse fill">equalizer</span>
+                    <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] animate-pulse fill">equalizer</span>
                   } @else {
                     <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] font-semibold group-hover:hidden">{{ i + 1 }}</span>
                     <span class="hidden group-hover:flex items-center justify-center text-slate-900 dark:text-white">
@@ -76,8 +76,8 @@
                   <img class="w-full h-full object-cover" [src]="trackPhoto(track)" [alt]="track.title" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
                 </div>
                 <div class="flex flex-col min-w-0 pr-4">
-                  <span class="text-slate-900 dark:text-white font-semibold truncate group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors text-[16px] leading-[22px]"
-                    [class]="isCurrentTrack(track) ? 'text-[#005575] dark:text-[#00d2ff]' : ''">{{ track.title }}</span>
+                  <span class="text-slate-900 dark:text-white font-semibold truncate group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors text-[16px] leading-[22px]"
+                    [class]="isCurrentTrack(track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : ''">{{ track.title }}</span>
                   <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.album }}</span>
                 </div>
               </div>
@@ -107,19 +107,19 @@
           <div class="flex items-center gap-2">
             <button type="button" (click)="albumFilter.set('all')"
               [class]="albumFilter() === 'all'
-                ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_rgba(0,210,255,0.35)]'
+                ? 'bg-[var(--accent)] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_35%,transparent)]'
                 : 'bg-slate-100 dark:bg-[#242424] text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white rounded-full px-4 py-1.5 text-[12px] leading-[16px] border border-slate-200 dark:border-white/[0.08] transition-colors'">
               {{ 'artistProfile.filterAll' | translate }}
             </button>
             <button type="button" (click)="albumFilter.set('album')"
               [class]="albumFilter() === 'album'
-                ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_rgba(0,210,255,0.35)]'
+                ? 'bg-[var(--accent)] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_35%,transparent)]'
                 : 'bg-slate-100 dark:bg-[#242424] text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white rounded-full px-4 py-1.5 text-[12px] leading-[16px] border border-slate-200 dark:border-white/[0.08] transition-colors'">
               {{ 'artistProfile.filterAlbums' | translate }}
             </button>
             <button type="button" (click)="albumFilter.set('single')"
               [class]="albumFilter() === 'single'
-                ? 'bg-[#00d2ff] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_rgba(0,210,255,0.35)]'
+                ? 'bg-[var(--accent)] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_35%,transparent)]'
                 : 'bg-slate-100 dark:bg-[#242424] text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white rounded-full px-4 py-1.5 text-[12px] leading-[16px] border border-slate-200 dark:border-white/[0.08] transition-colors'">
               {{ 'artistProfile.filterSingles' | translate }}
             </button>
@@ -134,7 +134,7 @@
                 <div class="relative w-full aspect-square rounded-lg overflow-hidden mb-4 shadow-md bg-slate-100 dark:bg-[#242424]">
                   <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" [src]="album.cover" [alt]="album.name" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
                 </div>
-                <h3 class="text-slate-900 dark:text-white font-bold text-[16px] leading-[22px] truncate group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">{{ album.name }}</h3>
+                <h3 class="text-slate-900 dark:text-white font-bold text-[16px] leading-[22px] truncate group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors">{{ album.name }}</h3>
                 <p class="text-slate-500 dark:text-[#b3b3b3] text-[12px] leading-[16px] mt-1">
                   {{ album.year ?? '—' }} • {{ album.kind === 'album' ? ('artistProfile.albumKind' | translate) : ('artistProfile.singleKind' | translate) }} • {{ 'artistProfile.tracksCount' | translate: { count: album.trackCount } }}
                 </p>
@@ -154,14 +154,14 @@
                 [routerLink]="['/library/artist', rel.uuid]"
                 class="group bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] flex flex-col items-center text-center transition-all duration-200 hover:-translate-y-1 shadow-sm dark:shadow-none"
               >
-                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-4 ring-2 ring-transparent group-hover:ring-[#00d2ff] transition-all shadow-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mb-4 ring-2 ring-transparent group-hover:ring-[var(--accent)] transition-all shadow-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center">
                   @if (rel.coverTrack?.coverCacheKey) {
                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" [src]="heroPhotoFor(rel)" [alt]="rel.name" loading="lazy" (error)="onImgError($event, '/images/avatar-default.svg')" />
                   } @else {
-                    <span class="text-[40px] font-extrabold text-[#005575] dark:text-[#00d2ff]">{{ rel.name.charAt(0).toUpperCase() }}</span>
+                    <span class="text-[40px] font-extrabold text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ rel.name.charAt(0).toUpperCase() }}</span>
                   }
                 </div>
-                <span class="text-slate-900 dark:text-white font-bold text-[16px] leading-[22px] truncate group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">{{ rel.name }}</span>
+                <span class="text-slate-900 dark:text-white font-bold text-[16px] leading-[22px] truncate group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors">{{ rel.name }}</span>
                 <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] mt-1">{{ 'artists.artistLine' | translate: { count: rel.trackCount } }}</span>
               </a>
             }
@@ -174,7 +174,7 @@
   <div class="px-4 sm:px-8 py-16 text-center">
     <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">person_search</span>
     <p class="mt-4 text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ 'artistProfile.notFound' | translate }}</p>
-    <a routerLink="/library/list-artists" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+    <a routerLink="/library/list-artists" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
       {{ 'artistProfile.backToList' | translate }}
     </a>
   </div>

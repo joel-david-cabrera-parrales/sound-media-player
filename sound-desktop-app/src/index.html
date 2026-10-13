@@ -9,10 +9,22 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script>
     try {
+      var ACCENTS = {
+        cyan: ['#00d2ff', '#0088cc'],
+        violet: ['#8b5cf6', '#6d28d9'],
+        emerald: ['#10b981', '#047857'],
+        fuchsia: ['#ec4899', '#be185d'],
+        amber: ['#f59e0b', '#b45309']
+      };
       var raw = localStorage.getItem('sound.profile');
-      var theme = raw ? (JSON.parse(raw).settings || {}).theme : null;
-      if (theme !== 'light') document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
+      var settings = raw ? (JSON.parse(raw).settings || {}) : {};
+      var theme = settings.theme || 'dark';
+      var dark = theme === 'dark' || (theme !== 'light' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.toggle('dark', dark);
+      var accent = ACCENTS[settings.accent] || ACCENTS.cyan;
+      document.documentElement.style.setProperty('--accent', accent[0]);
+      document.documentElement.style.setProperty('--accent-deep', accent[1]);
     } catch (e) {
       document.documentElement.classList.add('dark');
     }

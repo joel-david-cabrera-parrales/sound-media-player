@@ -8,14 +8,14 @@
     <!-- Header Brand Anchor -->
     <div class="flex items-center justify-start md:justify-center lg:justify-start gap-3 px-2 pt-2">
       <div
-        class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[#005575] dark:text-[#00d2ff] dark:shadow-[0_0_15px_rgba(0,210,255,0.25)] border border-slate-200 dark:border-white/[0.08] flex-shrink-0">
+        class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] dark:shadow-[0_0_15px_color-mix(in_srgb,var(--accent)_25%,transparent)] border border-slate-200 dark:border-white/[0.08] flex-shrink-0">
         <span class="material-symbols-outlined text-[24px]">graphic_eq</span>
       </div>
       <div class="drawer-label flex flex-col">
         <span
           class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white tracking-tight leading-none">Sound</span>
         <span
-          class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold tracking-wider uppercase mt-1">{{
+          class="text-[11px] leading-[14px] text-[var(--accent-ink)] dark:text-[var(--accent)] font-semibold tracking-wider uppercase mt-1">{{
           'common.brandTagline' | translate }}</span>
       </div>
       <button type="button" (click)="closeDrawer()" aria-label="{{ 'shell.sidebar.closeMenu' | translate }}"
@@ -48,19 +48,19 @@
         class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-between px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] border border-transparent group">
         <span class="flex items-center gap-4">
           <span
-            class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">library_music</span>
+            class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors">library_music</span>
           <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.library' | translate
             }}</span>
         </span>
         <span
-          class="nav-dot drawer-label inline-block w-1.5 h-1.5 rounded-full bg-[#00d2ff] dark:shadow-[0_0_8px_#00d2ff]"></span>
+          class="nav-dot drawer-label inline-block w-1.5 h-1.5 rounded-full bg-[var(--accent)] dark:shadow-[0_0_8px_var(--accent)]"></span>
       </a>
 
       <a routerLink="/media-player/list-artists" routerLinkActive="nav-active"
         [routerLinkActiveOptions]="{ exact: true }" (click)="closeDrawer()" [title]="'shell.sidebar.artist' | translate"
         class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
         <span
-          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">groups</span>
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors">groups</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">
           {{ 'shell.sidebar.artist' | translate }}
         </span>
@@ -71,7 +71,7 @@
         [title]="'shell.sidebar.import' | translate"
         class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
         <span
-          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">drive_folder_upload</span>
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors">drive_folder_upload</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.import' | translate
           }}</span>
       </a>
@@ -92,7 +92,7 @@
       <a routerLink="/media-player/liked-songs" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeDrawer()" [title]="'shell.sidebar.liked' | translate"
         class="nav-link text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center justify-start md:justify-center lg:justify-start gap-4 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-[#2a2a2a] group">
         <span
-          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">favorite</span>
+          class="material-symbols-outlined nav-icon text-[22px] text-slate-500 dark:text-[#b3b3b3] group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors">favorite</span>
         <span class="drawer-label text-[14px] leading-[18px] font-semibold">{{ 'shell.sidebar.liked' | translate
           }}</span>
       </a>
