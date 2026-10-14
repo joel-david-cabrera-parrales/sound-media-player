@@ -2,8 +2,8 @@ import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { PROFILE_STORAGE_KEY } from '../../../shared/utils/profile-photo';
 import { fullNameValidator, pastDateValidator } from '../../../shared/validators/profile.validators';
+import { ProfileService } from '../../../shared/services/profile.service';
 import { ThemeService } from '../../../shared/services/theme.service';
 import { ACCENTS, type AccentId, type ThemeMode } from '../../../shared/models/user-settings';
 import { TranslationService } from '../../../shared/services/translation.service';
@@ -22,6 +22,7 @@ export class Settings {
   protected readonly themeService = inject(ThemeService);
   private readonly i18n = inject(TranslationService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly profile = inject(ProfileService);
 
   protected readonly theme = this.themeService.theme;
   protected readonly accent = this.themeService.accent;
@@ -50,22 +51,10 @@ export class Settings {
   });
 
   constructor() {
-    const stored = this.readProfile();
-    if (typeof stored['name'] === 'string') this.form.controls.fullName.setValue(stored['name']);
-    if (typeof stored['birthdate'] === 'string') this.form.controls.birthdate.setValue(stored['birthdate']);
-    if (typeof stored['photo'] === 'string' && stored['photo']) {
-      this.photoUrl = stored['photo'];
-    }
+    this.form.controls.fullName.setValue(this.profile.name());
+    this.form.controls.birthdate.setValue(this.profile.birthdate());
+    this.photoUrl = this.profile.photo();
     this.updateSafePhoto();
-  }
-
-  private readProfile(): Record<string, unknown> {
-    try {
-      const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
-      return (raw ? JSON.parse(raw) : {}) as Record<string, unknown>;
-    } catch {
-      return {};
-    }
   }
 
   private updateSafePhoto(): void {
@@ -135,17 +124,11 @@ export class Settings {
       return;
     }
     const { fullName, birthdate } = this.form.getRawValue();
-    const profile = {
-      ...this.readProfile(),
+    this.profile.updateProfile({
       name: fullName.trim(),
       birthdate,
-      ...(this.photoUrl ? { photo: this.photoUrl } : {}),
-    };
-    try {
-      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
-    } catch {
-      // Sin almacenamiento: no persiste
-    }
+      photo: this.photoUrl,
+    });
     this.saved.set(true);
     if (this.saveTimer) clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.saved.set(false), 2500);

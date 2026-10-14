@@ -1,4 +1,4 @@
-<header class="h-16 flex-shrink-0 bg-white/85 dark:bg-[#121212]/85 backdrop-blur-xl border-b border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 md:gap-4 z-20">
+<header class="relative z-30 h-16 flex-shrink-0 bg-white/85 dark:bg-[#121212]/85 backdrop-blur-xl border-b border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 md:gap-4">
   <!-- Left: Hamburger (mobile) + Search Box & Categorical Pills -->
   <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0 max-w-2xl">
     <!-- Hamburger: opens sidebar drawer on mobile -->
@@ -65,18 +65,18 @@
       <span class="absolute top-2 right-2 w-2 h-2 bg-[var(--accent)] rounded-full ring-2 ring-white dark:ring-[#121212] dark:shadow-[0_0_6px_var(--accent)]"></span>
     </button>
     <!-- User Avatar + Account Menu -->
-    <div class="ml-1 pl-2 border-l border-slate-200 dark:border-white/[0.08] flex items-center relative">
+    <div class="ml-1 pl-2 border-l border-slate-200 dark:border-white/[0.08] flex items-center">
       <button type="button" (click)="toggleAccountMenu()" [attr.aria-expanded]="accountMenuOpen()" aria-haspopup="menu"
         [attr.aria-label]="'account.menuLabel' | translate"
         class="relative w-9 h-9 rounded-full overflow-hidden ring-1 ring-slate-300 dark:ring-white/16 hover:ring-[var(--accent)] transition-all">
-        <img class="w-full h-full object-cover" [alt]="'common.photoAlt' | translate" [src]="avatarUrl" (error)="onAvatarError($event)" />
+        <img class="w-full h-full object-cover" [alt]="'common.photoAlt' | translate" [src]="avatarUrl()" (error)="onAvatarError($event)" />
       </button>
       @if (accountMenuOpen()) {
-        <div class="fixed inset-0 z-[85]" (click)="closeAccountMenu()" aria-hidden="true"></div>
+        <div class="fixed inset-0 z-[65]" (click)="closeAccountMenu()" aria-hidden="true"></div>
         <div role="menu" [attr.aria-label]="'account.menuLabel' | translate"
-          class="absolute right-0 top-[calc(100%+8px)] z-[90] w-64 rounded-xl border border-slate-200 dark:border-white/16 bg-white dark:bg-[#181818] shadow-2xl p-2 select-none">
+          class="fixed top-[68px] right-4 md:right-6 z-[70] w-64 rounded-xl border border-slate-200 dark:border-white/16 bg-white dark:bg-[#181818] shadow-2xl p-2 select-none">
           <div class="flex items-center gap-3 px-2.5 py-2 border-b border-slate-200 dark:border-white/[0.08] mb-1">
-            <img class="w-9 h-9 rounded-full object-cover flex-shrink-0" [src]="avatarUrl" [alt]="'common.photoAlt' | translate" (error)="onAvatarError($event)" />
+            <img class="w-9 h-9 rounded-full object-cover flex-shrink-0" [src]="avatarUrl()" [alt]="'common.photoAlt' | translate" (error)="onAvatarError($event)" />
             <span class="text-[14px] leading-[18px] font-semibold text-slate-900 dark:text-white truncate">{{ userName() }}</span>
           </div>
           <a routerLink="/library/settings" (click)="closeAccountMenu()" role="menuitem"
