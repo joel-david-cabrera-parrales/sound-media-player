@@ -2,26 +2,13 @@ import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { PROFILE_STORAGE_KEY } from '../../../shared/utils/profile-photo';
-import { LocalMusicService, type LocalArtist } from '../../services/local-music.service';
+import { ProfileService } from '../../../shared/services/profile.service';
+import { LocalMusicService, normalizeArtistName, type LocalArtist } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
+import { formatTrackDuration, type Track } from '../../models/track.model';
+import { trackCoverCached } from '../../../shared/utils/cover-cache';
 import { genreImage } from '../../models/genre-images';
 import { DEFAULT_GENRE_COVER } from '../../models/genre-taxonomy';
-
-function getProfileFirstName(): string {
-  try {
-    const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
-    if (!raw) return 'Alex';
-    const profile = JSON.parse(raw) as { name?: unknown };
-    if (typeof profile.name === 'string' && profile.name.trim()) {
-      return profile.name.trim().split(/\s+/)[0];
-    }
-    return 'Alex';
-  } catch {
-    return 'Alex';
-  }
-}
 
 interface GenreStat {
   id: string;
@@ -40,8 +27,9 @@ export class Home {
   protected readonly library = inject(LocalMusicService);
   protected readonly player = inject(AudioPlayerService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly profile = inject(ProfileService);
 
-  protected readonly userName = getProfileFirstName();
+  protected readonly userName = computed(() => this.profile.firstName());
 
   protected readonly greetingKey: string = (() => {
     const hour = new Date().getHours();
@@ -88,11 +76,7 @@ export class Home {
   }
 
   protected coverFor(track: Track): string | SafeUrl {
-    const url = coverUrlFor(track, '/images/track-cover.svg');
-    if (url.startsWith('sound-cover:')) {
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-    return url;
+    return trackCoverCached(this.sanitizer, track, '/images/track-cover.svg');
   }
 
   protected artistCover(artist: LocalArtist): string | SafeUrl {
@@ -114,20 +98,23 @@ export class Home {
   }
 
   protected artistFirstTrack(artist: LocalArtist): Track | null {
-    const key = artist.name.trim().toLowerCase();
+    const key = normalizeArtistName(artist.name);
     return (
-      this.library.tracks().find((t) => t.artist.trim().toLowerCase() === key) ?? null
+      this.library.tracks().find((t) => normalizeArtistName(t.artist) === key) ?? null
     );
   }
 
   protected playTrack(track: Track | null): void {
-    if (track) this.player.play(track);
+    if (track) this.player.playContext(track, this.library.recentTracks());
   }
 
   protected playArtist(artist: LocalArtist, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    this.playTrack(this.artistFirstTrack(artist));
+    const key = normalizeArtistName(artist.name);
+    const artistTracks = this.library.tracks().filter((t) => normalizeArtistName(t.artist) === key);
+    const first = this.artistFirstTrack(artist);
+    if (first) this.player.playContext(first, artistTracks, artist.name);
   }
 
   protected isCurrentTrack(track: Track): boolean {

@@ -5,6 +5,8 @@ import { LocalMusicService } from './local-music.service';
 export type RepeatMode = 0 | 1 | 2;
 
 const PLAYER_STATE_KEY = 'sound.player.v1';
+const HISTORY_KEY = 'sound.history.v1';
+const HISTORY_MAX = 50;
 const POSITION_SAVE_INTERVAL_MS = 5000;
 
 interface PersistedPlayerState {
@@ -54,8 +56,11 @@ export class AudioPlayerService {
   private readonly library = inject(LocalMusicService);
   private audio: HTMLAudioElement | null = null;
   private pendingResumeSec: number | null = null;
+  private pendingSeekSec: number | null = null;
   private restoring = false;
   private lastPersistAt = 0;
+  /** Token anti-carrera: solo el último play() puede fijar error/historial. */
+  private playToken = 0;
 
   readonly currentTrack = signal<Track | null>(null);
   readonly isPlaying = signal(false);
@@ -74,8 +79,20 @@ export class AudioPlayerService {
   /** Cola manual ("Añadir a la cola"): se consume antes que el orden de librería. */
   readonly upNext = signal<Track[]>([]);
 
+  /**
+   * Contexto de reproducción: la lista visible/filtrada de la página desde la
+   * que se inició la reproducción ("esas canciones son las que deben ir").
+   */
+  readonly contextQueue = signal<Track[]>([]);
+  /** Etiqueta del contexto (nombre de playlist, artista, género...). Null = genérico. */
+  readonly contextLabel = signal<string | null>(null);
+
+  /** Historial de reproducción (más reciente primero), persistente. */
+  readonly history = signal<Track[]>([]);
+
   constructor() {
     this.restore();
+    this.restoreHistory();
   }
 
   private ensureAudio(): HTMLAudioElement {
@@ -92,13 +109,21 @@ export class AudioPlayerService {
       this.audio.addEventListener('loadedmetadata', () => {
         const dur = this.audio?.duration ?? 0;
         this.durationSec.set(Number.isFinite(dur) ? dur : 0);
-        if (this.pendingResumeSec != null && this.audio) {
-          const pos = Math.min(this.pendingResumeSec, Math.max(0, dur - 2));
+        const pending = this.pendingSeekSec ?? this.pendingResumeSec;
+        if (pending != null && this.audio) {
+          const pos = Math.min(pending, Math.max(0, dur - 2));
           if (pos > 0) {
-            this.audio.currentTime = pos;
+            try {
+              this.audio.currentTime = pos;
+            } catch {
+              // metadata aún no lista: se reintentará en el próximo evento
+              this.pendingSeekSec = pending;
+              return;
+            }
             this.currentTimeSec.set(pos);
           }
           this.pendingResumeSec = null;
+          this.pendingSeekSec = null;
         }
         this.restoring = false;
       });
@@ -109,7 +134,8 @@ export class AudioPlayerService {
       });
       this.audio.addEventListener('ended', () => {
         this.isPlaying.set(false);
-        // Auto-avance con vuelta a la primera (repeat off y all)
+        // Auto-avance: repeat off se detiene al final (stopAtEnd en next()),
+        // repeat all/one envuelven. El modo one usa además audio.loop.
         this.next();
       });
       this.audio.addEventListener('error', () => {
@@ -141,11 +167,16 @@ export class AudioPlayerService {
     this.error.set(null);
     this.restoring = false;
     this.pendingResumeSec = null;
+    this.pendingSeekSec = null;
     const el = this.ensureAudio();
+    const token = ++this.playToken;
     // Si es la misma pista, alternar
     if (this.currentTrack()?.id === track.id && el.src) {
       if (el.paused) {
-        void el.play().catch((err: unknown) => {
+        void el.play().then(() => {
+          if (token !== this.playToken) return;
+        }).catch((err: unknown) => {
+          if (token !== this.playToken) return;
           console.error('[player] play() rechazado:', err, 'src:', el.src);
           this.error.set(describePlayError(err));
         });
@@ -154,13 +185,23 @@ export class AudioPlayerService {
       }
       return;
     }
+    const prev = this.currentTrack();
     this.currentTrack.set(track);
     this.currentTimeSec.set(0);
     this.durationSec.set(0);
     el.loop = this.repeatMode() === 2;
     el.src = url;
-    el.currentTime = 0;
-    void el.play().catch((err: unknown) => {
+    try {
+      el.currentTime = 0;
+    } catch {
+      // src aún sin metadata: el seek inicial se aplica en loadedmetadata
+    }
+    void el.play().then(() => {
+      if (token !== this.playToken) return;
+      // Historial solo si play() tuvo éxito (no en error).
+      if (prev) this.pushHistory(prev);
+    }).catch((err: unknown) => {
+      if (token !== this.playToken) return;
       console.error('[player] play() rechazado:', err, 'src:', el.src, 'track:', track.filePath);
       this.error.set(describePlayError(err));
     });
@@ -178,8 +219,107 @@ export class AudioPlayerService {
     this.upNext.update((q) => (q.some((t) => t.id === track.id) ? q : [...q, track]));
   }
 
-  /** Siguiente: primero la cola manual (resolviendo huérfanos), luego la librería. */
+  /** Elimina una pista de la cola manual. */
+  removeFromQueue(trackId: string): void {
+    this.upNext.update((q) => q.filter((t) => t.id !== trackId));
+  }
+
+  /** Vacía la cola manual (no toca el contexto de la página). */
+  clearQueue(): void {
+    this.upNext.set([]);
+  }
+
+  /** Reordena la cola manual (drag & drop del drawer). */
+  moveInQueue(from: number, to: number): void {
+    this.upNext.update((q) => {
+      if (from < 0 || from >= q.length || to < 0 || to >= q.length || from === to) return q;
+      const next = [...q];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
+      return next;
+    });
+  }
+
+  /** Reproduce una pista de la cola manual sacándola de la cola. */
+  playQueuedAt(index: number): void {
+    this.pruneStale();
+    const queued = this.upNext()[index];
+    if (!queued) return;
+    this.upNext.update((q) => q.filter((_, i) => i !== index));
+    const real = this.library.tracks().find((t) => t.id === queued.id);
+    // Huérfano: se descarta como en next(), sin reproducir objeto stale.
+    if (!real) {
+      this.next();
+      return;
+    }
+    this.play(real);
+  }
+
+  /**
+   * Reproduce una pista dentro de su lista visible (contexto de página).
+   * `list` es la lista filtrada/ordenada que se muestra; `label` el origen
+   * ("A continuación de: X"). El contexto sobrevive a next/previous.
+   */
+  playContext(track: Track, list: Track[], label?: string | null): void {
+    this.contextQueue.set([...list]);
+    this.contextLabel.set(label ?? null);
+    this.play(track);
+  }
+
+  /** Vacía el historial de reproducción. */
+  clearHistory(): void {
+    this.history.set([]);
+    this.persistHistory();
+  }
+
+  /** Resuelve una lista contra la librería actual (descarta huérfanos). */
+  private resolveQueue(list: Track[]): Track[] {
+    const all = this.library.tracks();
+    if (all.length === 0) return [];
+    const byId = new Map(all.map((t) => [t.id, t]));
+    return list.map((t) => byId.get(t.id)).filter((t): t is Track => !!t);
+  }
+
+  /** Purga eliminados de cola/contexto/historial contra la librería (vía resolver). */
+  private pruneStale(): void {
+    const all = this.library.tracks();
+    const byId = new Map(all.map((t) => [t.id, t]));
+    const resolve = (list: Track[]): Track[] =>
+      list.map((t) => byId.get(t.id)).filter((t): t is Track => !!t);
+    let changed = false;
+    this.upNext.update((q) => {
+      const next = resolve(q);
+      if (next.length !== q.length) changed = true;
+      return next;
+    });
+    this.contextQueue.update((q) => {
+      const next = resolve(q);
+      if (next.length !== q.length) changed = true;
+      return next;
+    });
+    this.history.update((h) => {
+      const next = resolve(h);
+      if (next.length !== h.length) changed = true;
+      return next;
+    });
+    if (changed) this.persistHistory();
+    void changed;
+  }
+
+  /** Pausa al final sin wrap (repeat off). */
+  private stopAtEnd(): void {
+    try {
+      this.audio?.pause();
+    } catch {
+      // pausa no disponible: se ignora
+    }
+    this.isPlaying.set(false);
+    this.persistNow();
+  }
+
+  /** Siguiente: cola manual, luego contexto de página, luego librería. */
   next(): void {
+    this.pruneStale();
     const queued = this.upNext()[0];
     if (queued) {
       this.upNext.update((q) => q.slice(1));
@@ -188,39 +328,108 @@ export class AudioPlayerService {
         this.play(real);
         return;
       }
+      // Huérfano: seguir resolviendo dentro del contexto/librería
+    }
+    const ctx = this.resolveQueue(this.contextQueue());
+    if (ctx.length > 0) {
+      const cur = this.currentTrack();
+      const idx = cur ? ctx.findIndex((t) => t.id === cur.id) : -1;
+      let target: Track | null = null;
+      if (this.shuffle() && ctx.length > 1) {
+        let i = idx;
+        while (i === idx || i < 0) {
+          i = Math.floor(Math.random() * ctx.length);
+        }
+        target = ctx[i];
+      } else if (idx < 0) {
+        target = ctx[0];
+      } else if (idx + 1 < ctx.length) {
+        target = ctx[idx + 1];
+      } else if (this.repeatMode() === 1 || this.repeatMode() === 2) {
+        // repeat all/one: vuelta a la primera; repeat off (0): detener al final.
+        target = ctx[0];
+      } else {
+        this.stopAtEnd();
+        return;
+      }
+      this.play(target);
+      return;
     }
     const queue = this.library.tracks();
     if (queue.length === 0) return;
     const cur = this.currentTrack();
     const idx = cur ? queue.findIndex((t) => t.id === cur.id) : -1;
-    let target: Track;
+    let target: Track | null = null;
     if (this.shuffle() && queue.length > 1) {
       let i = idx;
       while (i === idx || i < 0) {
         i = Math.floor(Math.random() * queue.length);
       }
       target = queue[i];
+    } else if (idx < 0) {
+      target = queue[0];
+    } else if (idx + 1 < queue.length) {
+      target = queue[idx + 1];
+    } else if (this.repeatMode() === 1 || this.repeatMode() === 2) {
+      target = queue[0];
     } else {
-      target = queue[idx < 0 ? 0 : (idx + 1) % queue.length];
+      this.stopAtEnd();
+      return;
     }
     this.play(target);
   }
 
-  /** Anterior de la cola (secuencial aunque haya shuffle), con vuelta a la última. */
+  /**
+   * Anterior: no rompe el contexto de página.
+   * - Si lleva >3s sonando, reinicia la pista actual.
+   * - Si el track actual no está en el contexto (vino de cola manual o se
+   *   eliminó), intenta el head del historial que siga en la pool; si no,
+   *   cae al último de la pool.
+   * - La cola manual (upNext) es futuro, no se consume aquí.
+   * - Secuencial dentro del contexto (o librería si no hay contexto), con wrap.
+   */
   previous(): void {
-    const queue = this.library.tracks();
-    if (queue.length === 0) return;
+    this.pruneStale();
+    if ((this.currentTimeSec() ?? 0) > 3 && this.currentTrack()) {
+      this.seekTo(0);
+      return;
+    }
+    const ctx = this.resolveQueue(this.contextQueue());
+    const pool = ctx.length > 0 ? ctx : this.library.tracks();
+    if (pool.length === 0) return;
     const cur = this.currentTrack();
-    const idx = cur ? queue.findIndex((t) => t.id === cur.id) : -1;
-    const target = queue[idx < 0 ? queue.length - 1 : (idx - 1 + queue.length) % queue.length];
-    this.play(target);
+    const idx = cur ? pool.findIndex((t) => t.id === cur.id) : -1;
+    if (idx > 0) {
+      this.play(pool[idx - 1]);
+      return;
+    }
+    if (idx === 0) {
+      this.play(pool[pool.length - 1]);
+      return;
+    }
+    const hist = this.resolveQueue(this.history());
+    const head = hist.find((t) => pool.some((p) => p.id === t.id));
+    this.play(head ?? pool[pool.length - 1]);
   }
 
   seekTo(seconds: number): void {
-    if (!this.audio || !this.currentTrack()) return;
-    const dur = this.audio.duration;
-    const clamped = Math.min(Number.isFinite(dur) ? dur : seconds, Math.max(0, seconds));
-    this.audio.currentTime = clamped;
+    if (!this.currentTrack()) return;
+    const el = this.audio;
+    if (!el) return;
+    const dur = el.duration;
+    // Antes de loadedmetadata (duración desconocida) se encola el seek pendiente.
+    if (!Number.isFinite(dur) || dur <= 0 || el.readyState < 1) {
+      this.pendingSeekSec = Math.max(0, seconds);
+      return;
+    }
+    const clamped = Math.min(dur, Math.max(0, seconds));
+    try {
+      el.currentTime = clamped;
+    } catch {
+      this.pendingSeekSec = clamped;
+      return;
+    }
+    this.pendingSeekSec = null;
     this.currentTimeSec.set(clamped);
     this.persistNow(clamped);
   }
@@ -259,6 +468,40 @@ export class AudioPlayerService {
 
   isCurrent(track: Track): boolean {
     return this.currentTrack()?.id === track.id;
+  }
+
+  private pushHistory(track: Track): void {
+    this.history.update((h) => [track, ...h.filter((t) => t.id !== track.id)].slice(0, HISTORY_MAX));
+    this.persistHistory();
+  }
+
+  private persistHistory(): void {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(this.history().map((t) => t.id)));
+    } catch {
+      // Sin almacenamiento: el historial solo vive en memoria
+    }
+  }
+
+  private restoreHistory(): void {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (!raw) return;
+      const ids = JSON.parse(raw) as unknown;
+      if (!Array.isArray(ids)) return;
+      const all = this.library.tracks();
+      const byId = new Map(all.map((t) => [t.id, t]));
+      const restored: Track[] = [];
+      for (const id of ids) {
+        if (typeof id !== 'string') continue;
+        const track = byId.get(id);
+        if (track && !restored.some((t) => t.id === track.id)) restored.push(track);
+        if (restored.length >= HISTORY_MAX) break;
+      }
+      this.history.set(restored);
+    } catch {
+      this.history.set([]);
+    }
   }
 
   private persistThrottled(): void {
@@ -310,7 +553,15 @@ export class AudioPlayerService {
     if (typeof s.trackId !== 'string' || !s.trackId) return;
     const track = this.library.tracks().find((t) => t.id === s.trackId) ?? null;
     const pos = typeof s.positionSec === 'number' && Number.isFinite(s.positionSec) ? Math.max(0, s.positionSec) : 0;
-    if (!track) return;
+    if (!track) {
+      // TrackId inexistente: limpia el estado para no reintentar un fantasma en cada arranque.
+      try {
+        localStorage.removeItem(PLAYER_STATE_KEY);
+      } catch {
+        // Sin almacenamiento: se ignora
+      }
+      return;
+    }
     // Restaura la última sesión pausada (sin autoplay: los navegadores lo bloquean).
     // Carga solo metadata para mostrar duración y dejar la posición lista.
     const url = audioUrlFor(track);

@@ -35,6 +35,11 @@ export class GenreResults {
   protected readonly genre = computed<{ id: string; label: string } | null>(() => {
     const id = this.genreId().get('id');
     if (!id || !isGenreId(id)) return null;
+    // Gate: con librería aún vacía no se puede saber si el género existe;
+    // se muestra la vista vacía en vez de un falso 404.
+    if (this.library.tracks().length === 0) {
+      return { id, label: genreLabel(id, this.i18n.currentLang()) };
+    }
     const known = this.library.libraryGenres().some((g) => g.id === id);
     if (!known) return null;
     return { id, label: genreLabel(id, this.i18n.currentLang()) };
@@ -44,8 +49,14 @@ export class GenreResults {
     effect(() => {
       const id = this.genreId().get('id');
       if (!id) return;
-      const known =
-        isGenreId(id) && this.library.libraryGenres().some((g) => g.id === id);
+      if (!isGenreId(id)) {
+        void this.router.navigate(['/not-found']);
+        return;
+      }
+      // Gate: espera a que la librería tenga contenido antes de dictaminar
+      // "inexistente". Distingue válido-pero-vacío (vista vacía) de 404.
+      if (this.library.tracks().length === 0 || this.library.scanning()) return;
+      const known = this.library.libraryGenres().some((g) => g.id === id);
       if (!known) {
         void this.router.navigate(['/not-found']);
       }
@@ -92,18 +103,18 @@ export class GenreResults {
   protected playAll(): void {
     const list = this.tracks();
     if (list.length === 0) return;
-    this.player.play(list[0]);
-    for (const t of list.slice(1)) this.player.queueNext(t);
+    this.player.playContext(list[0], list, this.genre()?.label);
   }
 
   protected playShuffle(): void {
     const list = this.tracks();
     if (list.length === 0) return;
-    this.player.play(list[Math.floor(Math.random() * list.length)]);
+    if (!this.player.shuffle()) this.player.toggleShuffle();
+    this.player.playContext(list[Math.floor(Math.random() * list.length)], list, this.genre()?.label);
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.tracks(), this.genre()?.label);
   }
 
   protected isCurrentTrack(track: Track): boolean {

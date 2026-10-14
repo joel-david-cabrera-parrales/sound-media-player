@@ -1,0 +1,50 @@
+<div class="relative w-full h-full overflow-hidden flex flex-col select-none">
+  <!-- Fondo ambiental -->
+  <div class="absolute inset-0 bg-gradient-to-br from-slate-200 via-slate-100 to-slate-100 dark:from-[#0c1f33] dark:via-[#0d1620] dark:to-[#121212] opacity-80 pointer-events-none"></div>
+  <div class="absolute -top-32 -left-32 w-96 h-96 bg-[var(--accent)]/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="relative z-10 flex-1 flex flex-col min-h-0 px-6 lg:px-14 py-8 max-w-5xl w-full mx-auto">
+    <!-- Cabecera -->
+    <div class="flex items-center justify-between pb-6 mb-4 border-b border-slate-200 dark:border-white/[0.08]">
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-ping flex-shrink-0"></span>
+        <span class="text-[14px] leading-[18px] text-[var(--accent-ink)] dark:text-[var(--accent)] tracking-wider uppercase font-semibold flex-shrink-0">
+          {{ 'lyrics.live' | translate }}
+        </span>
+        @if (currentTrack(); as track) {
+          <span class="text-slate-400 dark:text-[#6a6a6a]">•</span>
+          <h2 class="text-[16px] leading-[22px] font-semibold text-slate-500 dark:text-[#b3b3b3] truncate">
+            {{ track.title }} • {{ track.artist }}
+          </h2>
+        }
+      </div>
+      <a
+        routerLink="/library/home"
+        class="text-slate-500 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors flex-shrink-0"
+        [title]="'lyrics.back' | translate"
+      >
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </a>
+    </div>
+
+    <!-- Placeholder sin letras -->
+    <div class="flex-1 flex flex-col items-center justify-center text-center gap-4 py-16">
+      @if (currentTrack(); as track) {
+        <div class="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl bg-slate-200 dark:bg-[#242424]">
+          <img class="w-full h-full object-cover" [src]="coverFor(track)" [alt]="track.title" (error)="onImgError($event)" />
+        </div>
+        <h3 class="text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white">{{ track.title }}</h3>
+        <p class="text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3]">{{ track.artist }}</p>
+      }
+      <span class="w-14 h-14 rounded-full bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center mt-2">
+        <span class="material-symbols-outlined text-[26px] text-slate-400 dark:text-[#6a6a6a]">mic</span>
+      </span>
+      <p class="text-[16px] leading-[22px] font-semibold text-slate-600 dark:text-[#b3b3b3]">
+        {{ 'lyrics.empty' | translate }}
+      </p>
+      <p class="text-[13px] leading-[18px] text-slate-400 dark:text-[#6a6a6a] max-w-sm">
+        {{ 'lyrics.emptyHint' | translate }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, OnDestroy, effect, signal } from '@angular/core';
 import {
   ACCENTS,
   AccentId,
@@ -16,10 +16,11 @@ function systemIsDark(): boolean {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ThemeService {
+export class ThemeService implements OnDestroy {
   readonly theme = signal<ThemeMode>(loadSettings().theme);
   readonly accent = signal<AccentId>(loadSettings().accent);
   private readonly systemDark = signal<boolean>(systemIsDark());
+  private mediaQuery: MediaQueryList | null = null;
 
   /** Tema efectivo (resuelve `system` contra el SO). */
   readonly isDark = (): boolean => {
@@ -29,8 +30,8 @@ export class ThemeService {
 
   constructor() {
     try {
-      const mq = window.matchMedia('(prefers-color-scheme: dark)');
-      mq.addEventListener('change', (e) => this.systemDark.set(e.matches));
+      this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      this.mediaQuery.addEventListener('change', this.onSystemChange);
     } catch {
       // matchMedia no disponible: se queda el valor inicial
     }
@@ -59,4 +60,18 @@ export class ThemeService {
     this.accent.set(accent);
     saveSettings({ accent });
   }
+
+  ngOnDestroy(): void {
+    try {
+      this.mediaQuery?.removeEventListener('change', this.onSystemChange);
+    } catch {
+      // matchMedia no disponible: se ignora
+    }
+    this.mediaQuery = null;
+  }
+
+  /** Handler nombrado para poder remover el listener en ngOnDestroy. */
+  private readonly onSystemChange = (e: MediaQueryListEvent): void => {
+    this.systemDark.set(e.matches);
+  };
 }

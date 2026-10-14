@@ -1,8 +1,8 @@
 @if (service.menu(); as target) {
-  <div class="fixed inset-0 z-[65]" (click)="service.closeMenu()" aria-hidden="true"></div>
+  <div class="fixed inset-0 z-[78]" (click)="service.closeMenu()" aria-hidden="true"></div>
   <div
     role="menu"
-    class="fixed z-[70] w-56 max-w-[calc(100vw-2rem)] rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/16 shadow-2xl py-1.5 text-[14px] leading-[20px]"
+    class="fixed z-[80] w-56 max-w-[calc(100vw-2rem)] rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/16 shadow-2xl py-1.5 text-[14px] leading-[20px]"
     [style.left.px]="target.x"
     [style.top.px]="target.y"
   >

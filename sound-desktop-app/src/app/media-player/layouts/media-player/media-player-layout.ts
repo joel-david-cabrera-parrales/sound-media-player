@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { Sidebar } from '../../../shared/components/sidebar/sidebar';
 import { Topbar } from '../../../shared/components/topbar/topbar';
 import { MediaControlBar } from '../../../shared/components/media-control-bar/media-control-bar';
+import { QueueDrawer } from '../../../shared/components/queue-drawer/queue-drawer';
 
 @Component({
   selector: 'media-player-layout',
-  imports: [RouterOutlet, Sidebar, Topbar, MediaControlBar],
+  imports: [RouterOutlet, Sidebar, Topbar, MediaControlBar, QueueDrawer],
   templateUrl: './media-player-layout.html',
   styleUrl: './media-player-layout.css',
 })

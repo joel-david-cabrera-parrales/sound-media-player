@@ -19,12 +19,12 @@ export const routes: Routes = [
         component: PlaylistsList,
       },
       {
-        path: ':id',
-        component: PlaylistDetail,
-      },
-      {
         path: ':id/edit',
         component: PlaylistBuilder,
+      },
+      {
+        path: ':id',
+        component: PlaylistDetail,
       },
     ],
   },

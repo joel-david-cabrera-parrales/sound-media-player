@@ -7,6 +7,7 @@ import {
   type PlaylistEntry,
 } from '../models/playlist';
 import type { Track } from '../../media-player/models/track.model';
+import { migrateLegacyPhotoUrl } from '../../shared/utils/profile-photo';
 
 export const PLAYLISTS_KEY = 'sound.playlists';
 export const PLAYLIST_DRAFT_KEY = 'sound.playlistDraft';
@@ -51,11 +52,12 @@ function readPlaylists(): Playlist[] {
       .filter((p) => p && typeof p.id === 'string' && typeof p.name === 'string')
       .map((p) => {
         const updatedAt = typeof p.updatedAt === 'string' ? p.updatedAt : new Date().toISOString();
+        const rawCover = typeof p.coverUrl === 'string' ? p.coverUrl : null;
         return {
           id: p.id as string,
           name: p.name as string,
           description: typeof p.description === 'string' ? p.description : '',
-          coverUrl: typeof p.coverUrl === 'string' ? p.coverUrl : null,
+          coverUrl: migrateLegacyPhotoUrl(rawCover) ?? rawCover,
           entries: normalizeEntries(
             (p as unknown as Record<string, unknown>)['entries'] ??
               (p as unknown as Record<string, unknown>)['trackIds'],
@@ -75,11 +77,12 @@ function readDraft(): PlaylistDraft {
     const raw = localStorage.getItem(PLAYLIST_DRAFT_KEY);
     if (!raw) return { ...EMPTY_DRAFT, entries: [] };
     const parsed = JSON.parse(raw) as Partial<PlaylistDraft> & { trackIds?: unknown };
+    const rawCover = typeof parsed.coverUrl === 'string' ? parsed.coverUrl : null;
     return {
       playlistId: typeof parsed.playlistId === 'string' ? parsed.playlistId : null,
       name: typeof parsed.name === 'string' ? parsed.name : '',
       description: typeof parsed.description === 'string' ? parsed.description : '',
-      coverUrl: typeof parsed.coverUrl === 'string' ? parsed.coverUrl : null,
+      coverUrl: migrateLegacyPhotoUrl(rawCover) ?? rawCover,
       entries: normalizeEntries(parsed.entries ?? parsed.trackIds, new Date().toISOString()),
     };
   } catch {

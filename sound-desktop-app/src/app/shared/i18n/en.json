@@ -4,7 +4,8 @@
     "photoAlt": "Profile photo",
     "changePhoto": "Change profile photo",
     "installApp": "Install app",
-    "searchApp": "Search in the app"
+    "searchApp": "Search in the app",
+    "fallbackName": "Alex"
   },
   "welcome": {
     "app": {
@@ -35,7 +36,7 @@
         "birthInvalid": "Invalid date.",
         "birthFuture": "Date cannot be in the future.",
         "photoType": "File must be an image.",
-        "photoSize": "Image cannot exceed 5 MB."
+        "photoSize": "Image cannot exceed 4 MB."
       }
     },
     "setup": {
@@ -87,8 +88,32 @@
       "queue": "Play queue",
       "devices": "Available devices",
       "mute": "Mute",
-      "expand": "Open immersive player"
+      "expand": "Open immersive player",
+      "seek": "Seek",
+      "volume": "Volume"
     }
+  },
+  "queue": {
+    "title": "Play queue",
+    "close": "Close queue",
+    "tabQueue": "Queue",
+    "tabHistory": "History",
+    "nowPlaying": "Now playing",
+    "live": "Live",
+    "upNext": "Up next",
+    "upNextFrom": "Up next from:",
+    "clearQueue": "Clear queue",
+    "remove": "Remove from queue",
+    "emptyQueue": "The queue is empty",
+    "historyTitle": "History",
+    "clearHistory": "Clear history",
+    "emptyHistory": "No history yet"
+  },
+  "lyrics": {
+    "live": "Live lyrics",
+    "back": "Back",
+    "empty": "No lyrics yet",
+    "emptyHint": "Lyrics for this song are not available yet."
   },
   "notFound": {
     "badge": "Module unavailable",
@@ -118,12 +143,14 @@
     },
     "genres": {
       "title": "Your favorite stations and genres",
-      "songs": "{{count}} songs"
+      "songs": "{{count}} songs",
+      "songs.one": "1 song"
     }
   },
   "immersive": {
     "close": "Exit full screen",
     "playingFrom": "Playing from your library",
+    "unknownAlbum": "Unknown album",
     "share": "Share track",
     "more": "More playback options",
     "fullscreen": "Full screen"
@@ -197,6 +224,7 @@
     "more": "More options",
     "popular": "Popular",
     "topCount": "{{count}} songs",
+    "topCount.one": "1 song",
     "like": "Like",
     "discography": "Discography",
     "filterAll": "All",
@@ -206,6 +234,7 @@
     "albumKind": "Album",
     "singleKind": "Single / EP",
     "tracksCount": "{{count}} songs",
+    "tracksCount.one": "1 song",
     "related": "Same genre",
     "notFound": "Artist not found",
     "backToList": "Back to artists"
@@ -258,6 +287,7 @@
     "sortPopular": "Popular",
     "sortAZ": "A – Z",
     "songsCount": "{{count}} songs",
+    "songsCount.one": "1 song",
     "emptyLibraryTitle": "No imported genres yet",
     "emptyLibraryDesc": "Import music folders and their genres will show up here.",
     "goImport": "Import music",
@@ -269,6 +299,7 @@
   "liked": {
     "title": "Liked songs",
     "subtitle": "{{count}} saved songs",
+    "subtitle.one": "1 saved song",
     "emptyTitle": "No favorites yet",
     "emptyDesc": "Tap the heart on any song and it will show up here.",
     "goLibrary": "Browse library",
@@ -285,8 +316,10 @@
     "badgeSong": "Song",
     "badgeAlbum": "Album",
     "badgeGenre": "Genre",
-    "heroSongs": "songs",
-    "heroAlbums": "albums",
+    "heroSongs": "{{count}} songs",
+    "heroSongs.one": "1 song",
+    "heroAlbums": "{{count}} albums",
+    "heroAlbums.one": "1 album",
     "viewArtist": "View artist",
     "songsTitle": "Top songs",
     "showAll": "Show all",
@@ -296,6 +329,7 @@
     "albumsSubtitle": "Matches in your collection",
     "exploreCatalog": "Explore catalog",
     "albumTracks": "{{count}} songs",
+    "albumTracks.one": "1 song",
     "playlistsTitle": "Your playlists",
     "playlistsSubtitle": "Lists matching your search",
     "morePlaylists": "More playlists",
@@ -304,7 +338,7 @@
     "emptyDesc": "Type in the top search box and press Enter to see results.",
     "noResults": "No results for “{{q}}”",
     "noResultsDesc": "Try another title, artist, or album.",
-    "noExact": "No exact results found for",
+    "noExact": "No exact results found for \"{{q}}\"",
     "noExactDesc": "The matching engine scanned names in your catalog but found no precise match.",
     "didYouMean": "Did you mean:",
     "physicalHint": "Were you looking in your physical library?",
@@ -328,6 +362,7 @@
       "emptyDesc": "Create your first list to organize your music.",
       "noResults": "No lists with that name.",
       "songs": "{{count}} songs",
+      "songs.one": "1 song",
       "confirmDelete": "Delete this list?",
       "deleteYes": "Yes",
       "deleteNo": "No",
@@ -396,6 +431,7 @@
       "addSongs": "Add songs",
       "related": "Related lists",
       "relatedCount": "{{count}} songs",
+      "relatedCount.one": "1 song",
       "notFound": "List not found"
     }
   },
@@ -422,8 +458,9 @@
     "toastAdded": "“{{track}}” added to “{{list}}”"
   },
   "genre": {
-    "songsOf": "Songs by",
+    "songsOf": "Songs by \"{{label}}\"",
     "heroDesc": "{{count}} songs in your library",
+    "heroDesc.one": "1 song in your library",
     "playAll": "Play all",
     "shuffle": "Shuffle",
     "emptyTitle": "No songs in this genre",
@@ -442,6 +479,7 @@
     "personal": {
       "title": "Personal Information",
       "tag": "Identity",
+      "photoFormats": "JPG or PNG",
       "maxSize": "max 4MB",
       "save": "Save changes",
       "saved": "Saved"

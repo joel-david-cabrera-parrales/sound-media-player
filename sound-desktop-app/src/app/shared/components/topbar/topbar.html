@@ -21,7 +21,7 @@
         class="w-full h-10 pl-10 pr-10 bg-slate-100 dark:bg-[#181818] hover:bg-slate-200 dark:hover:bg-[#242424] focus:bg-white dark:focus:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all duration-200"
         [placeholder]="'shell.topbar.searchPlaceholder' | translate"
         type="text" />
-      <button type="button" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.topbar.filters' | translate">
+      <button type="button" (click)="openSearchPrefs()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.topbar.filters' | translate">
         <span class="material-symbols-outlined text-[18px]">tune</span>
       </button>
     </div>
@@ -52,17 +52,16 @@
   <!-- Right Side: Topbar Trailing Actions -->
   <div class="flex items-center gap-2 md:gap-3 flex-shrink-0">
     <!-- Theme Toggle -->
-    <button type="button" (click)="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="isDarkTheme() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
+    <button type="button" (click)="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="(isDarkTheme() ? 'shell.topbar.toLight' : 'shell.topbar.toDark') | translate">
       <span class="material-symbols-outlined text-[20px]">{{ isDarkTheme() ? 'dark_mode' : 'light_mode' }}</span>
     </button>
     <!-- History Action -->
-    <button type="button" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="'shell.topbar.history' | translate">
+    <button type="button" (click)="openHistory()" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="'shell.topbar.history' | translate">
       <span class="material-symbols-outlined text-[20px]">history</span>
     </button>
-    <!-- Notifications Action with Electric Cyan Badge -->
-    <button type="button" class="relative w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="'shell.topbar.notifications' | translate">
+    <!-- Notifications: sin sistema de avisos, deshabilitado con title (sin badge permanente). -->
+    <button type="button" disabled class="relative w-9 h-9 rounded-full hidden sm:flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] opacity-50 cursor-not-allowed" [title]="'shell.topbar.notifications' | translate" [attr.aria-label]="'shell.topbar.notifications' | translate">
       <span class="material-symbols-outlined text-[20px]">notifications</span>
-      <span class="absolute top-2 right-2 w-2 h-2 bg-[var(--accent)] rounded-full ring-2 ring-white dark:ring-[#121212] dark:shadow-[0_0_6px_var(--accent)]"></span>
     </button>
     <!-- User Avatar + Account Menu -->
     <div class="ml-1 pl-2 border-l border-slate-200 dark:border-white/[0.08] flex items-center">

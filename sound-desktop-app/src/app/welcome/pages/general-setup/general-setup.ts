@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
@@ -8,13 +8,18 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
   templateUrl: './general-setup.html',
   styleUrl: './general-setup.css',
 })
-export class GeneralSetup {
+export class GeneralSetup implements OnDestroy {
   private readonly router = inject(Router);
+  private readonly timer: ReturnType<typeof setTimeout>;
 
   constructor() {
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.navigateToLibrary();
     }, 3500);
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.timer);
   }
 
   protected navigateToLibrary(): void {

@@ -47,7 +47,7 @@
             </div>
           </div>
           <h2 class="text-[22px] leading-[28px] md:text-[28px] md:leading-[34px] font-extrabold text-slate-900 dark:text-white tracking-tight">
-            {{ 'searchResults.noExact' | translate }} <span class="text-[var(--accent-ink)] dark:text-[var(--accent)]">"{{ q() }}"</span>
+            {{ 'searchResults.noExact' | translate: { q: q() } }}
           </h2>
           <p class="mt-2 text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3] max-w-xl">
             {{ 'searchResults.noExactDesc' | translate }}
@@ -59,7 +59,7 @@
                 {{ 'searchResults.didYouMean' | translate }}
               </span>
               @for (s of suggestions(); track s) {
-                <a [routerLink]="[]" [queryParams]="{ q: s }"
+                <a [routerLink]="[]" [queryParams]="{ q: s }" queryParamsHandling="merge"
                   class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[color-mix(in_srgb,var(--accent)_50%,transparent)] transition-colors">
                   {{ s }}
                   <span class="material-symbols-outlined text-[14px] text-slate-400 dark:text-[#6a6a6a]">north_east</span>
@@ -94,7 +94,7 @@
           </div>
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
             @for (album of trendingAlbums(); track album.name) {
-              <div (click)="playTrack(album.tracks[0])" (keydown.enter)="playTrack(album.tracks[0])" tabindex="0" role="button"
+              <div (click)="playAlbum(album)" (keydown.enter)="playAlbum(album)" (keydown.space)="playAlbum(album); $event.preventDefault()" tabindex="0" role="button" [attr.aria-label]="album.name"
                 class="group bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] transition-all duration-200 cursor-pointer shadow-sm dark:shadow-none">
                 <div class="relative aspect-square w-full rounded-lg overflow-hidden mb-3 bg-slate-100 dark:bg-[#242424]">
                   <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" [src]="album.cover" [alt]="album.name" loading="lazy" (error)="onImgError($event, '/images/track-cover.svg')" />
@@ -117,7 +117,7 @@
           </h2>
           <div class="flex flex-wrap gap-2.5 mt-4">
             @for (term of frequentSearches(); track term) {
-              <a [routerLink]="[]" [queryParams]="{ q: term }"
+              <a [routerLink]="[]" [queryParams]="{ q: term }" queryParamsHandling="merge"
                 class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[color-mix(in_srgb,var(--accent)_50%,transparent)] text-[13px] font-semibold text-slate-700 dark:text-[#e5e2e1] transition-colors">
                 <span class="material-symbols-outlined text-[16px] text-slate-400 dark:text-[#6a6a6a]">history</span>
                 {{ term }}
@@ -156,15 +156,15 @@
                     </h3>
                     <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] mt-1 flex items-center gap-2 flex-wrap">
                       @if (top.kind === 'artist') {
-                        <span>{{ top.stats[0] }} {{ 'searchResults.heroSongs' | translate }}</span>
+                        <span>{{ 'searchResults.heroSongs' | translate: { count: top.stats[0] } }}</span>
                         <span>•</span>
-                        <span>{{ top.stats[1] }} {{ 'searchResults.heroAlbums' | translate }}</span>
+                        <span>{{ 'searchResults.heroAlbums' | translate: { count: top.stats[1] } }}</span>
                       } @else if (top.kind === 'track') {
                         <span class="text-[var(--accent-ink)] dark:text-[var(--accent)] font-medium">{{ top.stats[0] }}</span>
                         <span>•</span>
                         <span>{{ top.stats[1] }}</span>
                       } @else {
-                        <span>{{ top.stats[0] }} {{ 'searchResults.heroSongs' | translate }}</span>
+                        <span>{{ 'searchResults.heroSongs' | translate: { count: top.stats[0] } }}</span>
                       }
                       @if (top.subtitle) {
                         <span>•</span>
@@ -181,7 +181,7 @@
                   } @else {
                     <span></span>
                   }
-                  <button type="button" (click)="playTrack(top.track)" [disabled]="!top.track"
+                  <button type="button" (click)="playTopResult(top)" [disabled]="!top.track"
                     [title]="'shell.dock.play' | translate"
                     class="w-12 h-12 rounded-full bg-[var(--accent)] text-black flex items-center justify-center dark:shadow-[0_0_24px_-2px_color-mix(in_srgb,var(--accent)_70%,transparent)] group-hover:scale-110 active:scale-95 transition-all duration-200 disabled:opacity-40">
                     <span class="material-symbols-outlined text-3xl font-bold fill ml-0.5">play_arrow</span>
@@ -204,7 +204,7 @@
               <div class="flex flex-col gap-1.5">
                 @for (track of matchedTracks().slice(0, 4); track track.id) {
                   <div
-                    (click)="playTrack(track)" (keydown.enter)="playTrack(track)" tabindex="0" role="button"
+                    (click)="playTrack(track)" (keydown.enter)="playTrack(track)" (keydown.space)="playTrack(track); $event.preventDefault()" tabindex="0" role="button" [attr.aria-label]="track.title"
                     class="group flex items-center justify-between gap-3 p-2.5 rounded-lg transition-all duration-150 border cursor-pointer"
                     [class]="isCurrentTrack(track)
                       ? 'bg-slate-100 dark:bg-[#242424]/70 border-[color-mix(in_srgb,var(--accent)_30%,transparent)]'
@@ -306,7 +306,7 @@
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @for (album of matchedAlbums().slice(0, 4); track album.name) {
-              <div (click)="playTrack(album.tracks[0])" (keydown.enter)="playTrack(album.tracks[0])" tabindex="0" role="button"
+              <div (click)="playAlbum(album)" (keydown.enter)="playAlbum(album)" (keydown.space)="playAlbum(album); $event.preventDefault()" tabindex="0" role="button" [attr.aria-label]="album.name"
                 class="group bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] hover:border-white/16 transition-all duration-200 flex flex-col justify-between cursor-pointer shadow-sm dark:shadow-none">
                 <div>
                   <div class="relative aspect-square w-full rounded-lg overflow-hidden mb-3 bg-slate-100 dark:bg-[#242424]">

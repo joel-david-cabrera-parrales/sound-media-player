@@ -1,0 +1,218 @@
+@if (ui.drawerOpen()) {
+  <div
+    class="fixed inset-x-0 top-0 bottom-[76px] sm:bottom-[90px] z-[65] bg-black/40 transition-opacity duration-300"
+    [class.opacity-0]="!ui.drawerVisible()"
+    [class.opacity-100]="ui.drawerVisible()"
+    (click)="close()"
+    aria-hidden="true"
+  ></div>
+  <aside
+    #drawerPanel
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="'queue.title' | translate"
+    class="fixed top-0 right-0 bottom-[76px] sm:bottom-[90px] z-[70] w-80 lg:w-96 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-[#181818]/95 backdrop-blur-2xl border-l border-slate-200 dark:border-white/[0.08] flex flex-col select-none shadow-2xl transition-transform duration-300 ease-out will-change-transform"
+    [class.translate-x-full]="!ui.drawerVisible()"
+    [class.translate-x-0]="ui.drawerVisible()"
+  >
+    <!-- Header + tabs -->
+    <div class="p-5 pb-3 border-b border-slate-200 dark:border-white/[0.08] flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white tracking-tight">
+          {{ 'queue.title' | translate }}
+        </h3>
+        <button
+          #closeBtn
+          type="button"
+          (click)="close()"
+          [attr.aria-label]="'queue.close' | translate"
+          class="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-[#242424] flex items-center justify-center text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors"
+        >
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+      <div class="grid grid-cols-2 p-1 bg-slate-100 dark:bg-[#242424] rounded-lg border border-slate-200 dark:border-white/[0.08]">
+        <button
+          type="button"
+          (click)="setTab('queue')"
+          [class]="ui.activeTab() === 'queue'
+            ? 'py-1.5 text-[12px] leading-[16px] font-bold text-[var(--accent-ink)] dark:text-[var(--accent)] bg-white dark:bg-[#181818] rounded shadow-sm text-center transition-all'
+            : 'py-1.5 text-[12px] leading-[16px] font-medium text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white text-center transition-colors'"
+        >
+          {{ 'queue.tabQueue' | translate }}
+          @if (queueCount() > 0) {
+            <span class="ml-1 text-[11px] opacity-80">({{ queueCount() }})</span>
+          }
+        </button>
+        <button
+          type="button"
+          (click)="setTab('history')"
+          [class]="ui.activeTab() === 'history'
+            ? 'py-1.5 text-[12px] leading-[16px] font-bold text-[var(--accent-ink)] dark:text-[var(--accent)] bg-white dark:bg-[#181818] rounded shadow-sm text-center transition-all'
+            : 'py-1.5 text-[12px] leading-[16px] font-medium text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white text-center transition-colors'"
+        >
+          {{ 'queue.tabHistory' | translate }}
+        </button>
+      </div>
+    </div>
+
+    @if (ui.activeTab() === 'queue') {
+      <!-- Cola -->
+      <div class="flex-1 overflow-y-auto px-5 py-4 space-y-6 custom-scrollbar">
+        @if (currentTrack(); as current) {
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[11px] leading-[14px] uppercase tracking-wider text-slate-500 dark:text-[#6a6a6a] font-bold">
+                {{ 'queue.nowPlaying' | translate }}
+              </span>
+              <span class="text-[11px] leading-[14px] text-[var(--accent-ink)] dark:text-[var(--accent)] font-semibold flex items-center gap-1">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span>
+                {{ 'queue.live' | translate }}
+              </span>
+            </div>
+            <div class="p-3 bg-slate-100/80 dark:bg-[#242424]/80 border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] rounded-xl relative overflow-hidden">
+              <div class="flex items-center gap-3 relative z-10">
+                <div class="relative w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden bg-slate-200 dark:bg-[#121212]">
+                  <img class="w-full h-full object-cover" [src]="coverFor(current)" [alt]="current.title" loading="lazy" (error)="onImgError($event)" />
+                  @if (isPlaying()) {
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center gap-0.5">
+                      <div class="w-1 bg-[var(--accent)] rounded-full eq-bar-1 h-3"></div>
+                      <div class="w-1 bg-[var(--accent)] rounded-full eq-bar-2 h-4"></div>
+                      <div class="w-1 bg-[var(--accent)] rounded-full eq-bar-3 h-2"></div>
+                    </div>
+                  }
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h4 class="text-[14px] leading-[20px] font-bold text-[var(--accent-ink)] dark:text-[var(--accent)] truncate">{{ current.title }}</h4>
+                  <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate mt-0.5">{{ current.artist }} • {{ current.album }}</p>
+                </div>
+                <button
+                  type="button"
+                  (click)="togglePlay()"
+                  [title]="(isPlaying() ? 'shell.dock.pause' : 'shell.dock.play') | translate"
+                  class="w-9 h-9 rounded-full bg-[var(--accent)] text-[#0e0e0e] flex items-center justify-center hover:scale-105 active:scale-95 transition-all flex-shrink-0"
+                >
+                  <span class="material-symbols-outlined text-[20px] fill">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="min-w-0">
+              @if (contextLabel(); as label) {
+                <span class="text-[11px] leading-[14px] uppercase tracking-wider text-slate-500 dark:text-[#6a6a6a] font-bold">{{ 'queue.upNextFrom' | translate }}</span>
+                <span class="text-[11px] leading-[14px] text-slate-900 dark:text-white font-semibold ml-1 truncate">{{ label }}</span>
+              } @else {
+                <span class="text-[11px] leading-[14px] uppercase tracking-wider text-slate-500 dark:text-[#6a6a6a] font-bold">{{ 'queue.upNext' | translate }}</span>
+              }
+            </div>
+            @if (isManual()) {
+              <button type="button" (click)="clearQueue()" class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] hover:text-red-600 dark:hover:text-red-400 transition-colors hover:underline flex-shrink-0">
+                {{ 'queue.clearQueue' | translate }}
+              </button>
+            }
+          </div>
+          @if (queueItems().length > 0) {
+            <div class="space-y-1.5">
+              @for (track of queueItems(); track track.id; let i = $index) {
+                <div
+                  (click)="playItem(track, i)"
+                  (keydown.enter)="playItem(track, i)"
+                  (keydown.space)="playItem(track, i); $event.preventDefault()"
+                  tabindex="0"
+                  role="button"
+                  [attr.aria-label]="track.title"
+                  [attr.draggable]="isManual()"
+                  (dragstart)="onDragStart(i, $event)"
+                  (dragover)="onDragOver($event)"
+                  (drop)="onDrop(i, $event)"
+                  (dragend)="onDragEnd()"
+                  [class.opacity-60]="isDragging(i)"
+                  class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#242424] group transition-colors cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-white/[0.08]"
+                >
+                  @if (isManual()) {
+                    <span class="material-symbols-outlined text-slate-400 dark:text-[#6a6a6a] group-hover:text-slate-500 dark:group-hover:text-[#b3b3b3] cursor-grab text-[18px] flex-shrink-0">drag_indicator</span>
+                  }
+                  <div class="relative w-10 h-10 rounded-md overflow-hidden flex-shrink-0 bg-slate-200 dark:bg-[#242424]">
+                    <img class="w-full h-full object-cover" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onImgError($event)" />
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                      <span class="material-symbols-outlined text-white text-[20px] fill">play_arrow</span>
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] truncate transition-colors">{{ track.title }}</div>
+                    <div class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
+                  </div>
+                  <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] group-hover:text-slate-600 dark:group-hover:text-[#b3b3b3] tabular-nums">{{ formatDuration(track.durationSec) }}</span>
+                  @if (isManual()) {
+                    <button
+                      type="button"
+                      (click)="removeItem(track.id, $event)"
+                      [title]="'queue.remove' | translate"
+                      [attr.aria-label]="'queue.remove' | translate"
+                      class="w-7 h-7 rounded-full opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-focus-within:opacity-100 hover:bg-slate-200 dark:hover:bg-[#2a2a2a] flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-red-600 dark:hover:text-red-400 transition-all flex-shrink-0"
+                    >
+                      <span class="material-symbols-outlined text-[16px]">close</span>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="flex flex-col items-center justify-center py-10 text-center gap-2">
+              <span class="material-symbols-outlined text-[32px] text-slate-300 dark:text-[#393939]">queue_music</span>
+              <p class="text-[13px] leading-[18px] font-medium text-slate-500 dark:text-[#6a6a6a]">{{ 'queue.emptyQueue' | translate }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <!-- Historial -->
+      <div class="flex-1 overflow-y-auto px-5 py-4 custom-scrollbar">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[11px] leading-[14px] uppercase tracking-wider text-slate-500 dark:text-[#6a6a6a] font-bold">{{ 'queue.historyTitle' | translate }}</span>
+          @if (historyTracks().length > 0) {
+            <button type="button" (click)="clearHistory()" class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] hover:text-red-600 dark:hover:text-red-400 transition-colors hover:underline">
+              {{ 'queue.clearHistory' | translate }}
+            </button>
+          }
+        </div>
+        @if (historyTracks().length > 0) {
+          <div class="space-y-1.5">
+            @for (track of historyTracks(); track track.id) {
+              <div
+                (click)="playHistoryTrack(track)"
+                (keydown.enter)="playHistoryTrack(track)"
+                (keydown.space)="playHistoryTrack(track); $event.preventDefault()"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="track.title"
+                class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#242424] group transition-colors cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-white/[0.08]"
+              >
+                <div class="relative w-10 h-10 rounded-md overflow-hidden flex-shrink-0 bg-slate-200 dark:bg-[#242424]">
+                  <img class="w-full h-full object-cover" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onImgError($event)" />
+                  <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                    <span class="material-symbols-outlined text-white text-[20px] fill">play_arrow</span>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] truncate transition-colors">{{ track.title }}</div>
+                  <div class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
+                </div>
+                <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] tabular-nums">{{ formatDuration(track.durationSec) }}</span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="flex flex-col items-center justify-center py-10 text-center gap-2">
+            <span class="material-symbols-outlined text-[32px] text-slate-300 dark:text-[#393939]">history</span>
+            <p class="text-[13px] leading-[18px] font-medium text-slate-500 dark:text-[#6a6a6a]">{{ 'queue.emptyHistory' | translate }}</p>
+          </div>
+        }
+      </div>
+    }
+  </aside>
+}

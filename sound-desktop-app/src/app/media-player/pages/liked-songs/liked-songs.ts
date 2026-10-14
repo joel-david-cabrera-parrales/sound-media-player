@@ -37,7 +37,7 @@ export class LikedSongs {
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.library.likedTracks());
   }
 
   protected isCurrentTrack(track: Track): boolean {

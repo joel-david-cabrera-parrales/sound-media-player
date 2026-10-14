@@ -11,7 +11,7 @@ import { PROFILE_STORAGE_KEY } from '../../guards/profile-setup.guard';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { fullNameValidator, pastDateValidator } from '../../../shared/validators/profile.validators';
 
-const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
 const DEFAULT_AVATAR = '/images/avatar-default.svg';
 
 function toSoundPhotoUrl(filePath: string): string {
@@ -65,10 +65,21 @@ export class InitialSetup {
     this.updateSafePhoto();
   }
 
-  private updateSafePhoto(): void {
-    this.safePhotoUrl = this.photoUrl
-      ? this.sanitizer.bypassSecurityTrustUrl(this.photoUrl)
-      : DEFAULT_AVATAR;
+  protected updateSafePhoto(): void {
+    if (!this.photoUrl) {
+      this.safePhotoUrl = DEFAULT_AVATAR;
+      return;
+    }
+    if (
+      this.photoUrl.startsWith('sound-photo:') ||
+      this.photoUrl.startsWith('data:') ||
+      this.photoUrl.startsWith('blob:') ||
+      this.photoUrl.startsWith('http')
+    ) {
+      this.safePhotoUrl = this.sanitizer.bypassSecurityTrustUrl(this.photoUrl);
+      return;
+    }
+    this.safePhotoUrl = DEFAULT_AVATAR;
   }
 
   protected readonly form = new FormGroup({
@@ -115,6 +126,12 @@ export class InitialSetup {
       this.photoUrl = reader.result as string;
       this.updateSafePhoto();
     };
+    reader.onerror = () => {
+      this.photoError = 'photoType';
+    };
+    reader.onabort = () => {
+      this.photoError = 'photoType';
+    };
     reader.readAsDataURL(file);
     input.value = '';
   }
@@ -123,6 +140,22 @@ export class InitialSetup {
     if (this.photoUrl && this.photoUrl !== DEFAULT_AVATAR) {
       this.photoUrl = null;
       this.updateSafePhoto();
+    }
+  }
+
+  private persistProfile(profile: Record<string, unknown>): void {
+    try {
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+    } catch (err) {
+      // Cuota excedida (foto dataURL ~MBs): reintenta sin foto y navega igual con aviso.
+      console.warn('[initial-setup] No se pudo persistir la foto (cuota), se guarda sin foto.', err);
+      try {
+        const { photo: _dropped, ...rest } = profile;
+        void _dropped;
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(rest));
+      } catch {
+        // Sin almacenamiento: se continúa igual a general-setup
+      }
     }
   }
 
@@ -142,7 +175,7 @@ export class InitialSetup {
     if (this.photoUrl) {
       profile['photo'] = this.photoUrl;
     }
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+    this.persistProfile(profile);
     this.router.navigate(['/welcome/general-setup']);
   }
 
@@ -155,7 +188,7 @@ export class InitialSetup {
     if (this.photoUrl) {
       profile['photo'] = this.photoUrl;
     }
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+    this.persistProfile(profile);
     this.router.navigate(['/welcome/general-setup']);
   }
 }

@@ -1,10 +1,11 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, OnDestroy, computed, inject, signal } from '@angular/core';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import {
   DEFAULT_AVATAR,
   PROFILE_STORAGE_KEY,
   migrateLegacyPhotoUrl,
 } from '../utils/profile-photo';
+import { TranslationService } from './translation.service';
 
 export interface ProfilePatch {
   name?: string;
@@ -18,8 +19,9 @@ export interface ProfilePatch {
  * Topbar y Settings lo consumen para que la foto/nombre se sincronicen sin recargar.
  */
 @Injectable({ providedIn: 'root' })
-export class ProfileService {
+export class ProfileService implements OnDestroy {
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly i18n = inject(TranslationService);
 
   readonly name = signal('');
   readonly birthdate = signal('');
@@ -29,21 +31,42 @@ export class ProfileService {
   readonly displayName = computed(() => this.name().trim() || 'Sound');
   readonly firstName = computed(() => {
     const trimmed = this.name().trim();
-    return trimmed ? trimmed.split(/\s+/)[0] : 'Alex';
+    return trimmed ? trimmed.split(/\s+/)[0] : this.i18n.translate('common.fallbackName');
   });
   readonly avatarUrl = computed<SafeUrl | string>(() => {
     const photo = this.photo();
-    return photo ? this.sanitizer.bypassSecurityTrustUrl(photo) : DEFAULT_AVATAR;
+    if (!photo) return DEFAULT_AVATAR;
+    // Valida el esquema antes de bypassSecurityTrustUrl.
+    if (
+      photo.startsWith('sound-photo:') ||
+      photo.startsWith('data:') ||
+      photo.startsWith('blob:') ||
+      photo.startsWith('http')
+    ) {
+      return this.sanitizer.bypassSecurityTrustUrl(photo);
+    }
+    return DEFAULT_AVATAR;
   });
 
   constructor() {
     this.refresh();
     try {
-      window.addEventListener('storage', () => this.refresh());
+      window.addEventListener('storage', this.onStorage);
     } catch {
       // Sin window (SSR): se queda el valor inicial
     }
   }
+
+  ngOnDestroy(): void {
+    try {
+      window.removeEventListener('storage', this.onStorage);
+    } catch {
+      // Sin window: se ignora
+    }
+  }
+
+  /** Handler nombrado para poder remover el listener en ngOnDestroy. */
+  private readonly onStorage = (): void => this.refresh();
 
   /** Relee localStorage y actualiza los signals (incluye migración legacy). */
   refresh(): void {

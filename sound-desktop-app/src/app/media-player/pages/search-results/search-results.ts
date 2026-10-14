@@ -1,12 +1,13 @@
-import { Component, ElementRef, ViewChild, computed, inject } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { LocalMusicService, type LocalArtist } from '../../services/local-music.service';
+import { LocalMusicService, normalizeArtistName, type LocalArtist } from '../../services/local-music.service';
 import { PlaylistsService } from '../../../playlist/services/playlists.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
+import { safeUrlCached, trackCoverCached } from '../../../shared/utils/cover-cache';
 import { normalizeText as norm } from '../../../shared/utils/text';
 
 export type ResultsFilter = 'all' | 'songs' | 'artists' | 'albums' | 'playlists';
@@ -83,7 +84,7 @@ function loadSearchHistory(): string[] {
   templateUrl: './search-results.html',
   styleUrl: './search-results.css',
 })
-export class SearchResults {
+export class SearchResults implements OnDestroy {
   protected readonly library = inject(LocalMusicService);
   protected readonly player = inject(AudioPlayerService);
   protected readonly store = inject(PlaylistsService);
@@ -258,8 +259,8 @@ export class SearchResults {
     if (!playlist) return '/images/track-cover.svg';
     if (playlist.coverUrl) {
       const url = playlist.coverUrl;
-      if (url.startsWith('sound-photo:') || url.startsWith('data:')) {
-        return this.sanitizer.bypassSecurityTrustUrl(url);
+      if (url.startsWith('sound-photo:') || url.startsWith('data:') || url.startsWith('sound-cover:')) {
+        return safeUrlCached(this.sanitizer, url);
       }
       return url;
     }
@@ -279,15 +280,17 @@ export class SearchResults {
   protected playPlaylist(playlistId: string, event: Event): void {
     event.stopPropagation();
     const playlist = this.store.getById(playlistId);
-    const first = playlist
-      ? this.store.resolveTracks(playlist, this.library.tracks())[0]
-      : undefined;
-    if (first) this.player.play(first);
+    const list = playlist ? this.store.resolveTracks(playlist, this.library.tracks()) : [];
+    const first = list[0];
+    if (first) this.player.playContext(first, list, playlist?.name);
   }
 
-  /** "Quizás quisiste decir": top-3 reales por parecido (Levenshtein ≤ 0.45). */
+  /** "Quizás quisiste decir": top-3 reales por parecido (Levenshtein ≤ 0.45, con debounce). */
+  protected readonly suggestQuery = signal('');
+  private suggestTimer: ReturnType<typeof setTimeout> | null = null;
+
   protected readonly suggestions = computed<string[]>(() => {
-    const q = norm(this.q());
+    const q = this.suggestQuery();
     if (!q || q.length < 2) return [];
     const candidates = new Map<string, string>();
     for (const t of this.library.tracks()) {
@@ -344,8 +347,46 @@ export class SearchResults {
       });
   });
 
-  /** Búsquedas frecuentes reales (historial). */
-  protected readonly frequentSearches = computed<string[]>(() => loadSearchHistory());
+  /** Búsquedas frecuentes reales (historial reactivo: se refresca al navegar/recordar). */
+  protected readonly frequentSearches = signal<string[]>(loadSearchHistory());
+
+  private readonly onFrequentStorage = (e: StorageEvent): void => {
+    if (!e.key || e.key === 'sound.searchHistory') {
+      this.frequentSearches.set(loadSearchHistory());
+    }
+  };
+
+  constructor() {
+    this.suggestQuery.set(norm(this.q()));
+    try {
+      window.addEventListener('storage', this.onFrequentStorage);
+    } catch {
+      // Sin window: se ignora
+    }
+    effect(() => {
+      // Relee el historial cuando cambia la query (el componente se reutiliza por queryParams).
+      void this.q();
+      this.frequentSearches.set(loadSearchHistory());
+    });
+    effect(() => {
+      // Debounce de 150ms para el cálculo costoso de suggestions (Levenshtein).
+      const qv = norm(this.q());
+      if (this.suggestTimer) clearTimeout(this.suggestTimer);
+      this.suggestTimer = setTimeout(() => this.suggestQuery.set(qv), 150);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.suggestTimer) {
+      clearTimeout(this.suggestTimer);
+      this.suggestTimer = null;
+    }
+    try {
+      window.removeEventListener('storage', this.onFrequentStorage);
+    } catch {
+      // Sin window: se ignora
+    }
+  }
 
   protected async rescanAndGoImport(): Promise<void> {
     await this.library.rescan();
@@ -359,11 +400,7 @@ export class SearchResults {
   }
 
   protected coverFor(track: Track): string | SafeUrl {
-    const url = coverUrlFor(track, '/images/track-cover.svg');
-    if (url.startsWith('sound-cover:')) {
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-    return url;
+    return trackCoverCached(this.sanitizer, track, '/images/track-cover.svg');
   }
 
   protected artistCover(artist: LocalArtist): string | SafeUrl {
@@ -371,7 +408,7 @@ export class SearchResults {
     const url = coverUrlFor(artist.coverTrack, '');
     if (!url) return '/images/avatar-default.svg';
     return url.startsWith('sound-cover:')
-      ? this.sanitizer.bypassSecurityTrustUrl(url)
+      ? safeUrlCached(this.sanitizer, url)
       : url;
   }
 
@@ -389,12 +426,43 @@ export class SearchResults {
   }
 
   protected artistFirstTrack(artist: LocalArtist): Track | null {
-    const key = artist.name.trim().toLowerCase();
-    return this.library.tracks().find((t) => t.artist.trim().toLowerCase() === key) ?? null;
+    const key = normalizeArtistName(artist.name);
+    return this.library.tracks().find((t) => normalizeArtistName(t.artist) === key) ?? null;
   }
 
   protected playTrack(track: Track | null): void {
-    if (track) this.player.play(track);
+    if (track) this.player.playContext(track, this.matchedTracks());
+  }
+
+  /** Reproduce el tracklist propio del álbum con su nombre como label. */
+  protected playAlbum(album: AlbumGroup): void {
+    const first = album.tracks[0];
+    if (first) this.player.playContext(first, [...album.tracks], album.name);
+  }
+
+  /** Top result de género/álbum: contexto propio en vez de matchedTracks ajeno. */
+  protected playTopResult(top: TopResult): void {
+    if (!top.track) return;
+    if (top.kind === 'album') {
+      const album =
+        this.matchedAlbums().find((a) => a.name === top.title) ??
+        this.trendingAlbums().find((a) => a.name === top.title);
+      if (album) {
+        this.playAlbum(album);
+        return;
+      }
+      this.player.playContext(top.track, [top.track], top.title);
+      return;
+    }
+    if (top.kind === 'genre') {
+      const list = this.library.tracks().filter((t) => t.genre?.trim() === top.title);
+      if (list.length > 0) {
+        const first = list.find((t) => t.id === top.track?.id) ?? list[0];
+        this.player.playContext(first, list, top.title);
+        return;
+      }
+    }
+    this.playTrack(top.track);
   }
 
   protected isCurrentTrack(track: Track): boolean {

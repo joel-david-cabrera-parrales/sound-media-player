@@ -1,10 +1,11 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { FavoriteButton } from '../favorite-button/favorite-button';
 import { AudioPlayerService } from '../../../media-player/services/audio-player.service';
 import { LocalMusicService } from '../../../media-player/services/local-music.service';
+import { QueueUiService } from '../../services/queue-ui.service';
 import { coverUrlFor, formatTrackDuration } from '../../../media-player/models/track.model';
 
 @Component({
@@ -17,6 +18,9 @@ export class MediaControlBar {
   private readonly player = inject(AudioPlayerService);
   private readonly library = inject(LocalMusicService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly queueUi = inject(QueueUiService);
+
+  protected readonly isQueueOpen = this.queueUi.drawerOpen;
 
   // Estado vivo del servicio (volumen/mute/repeat/shuffle persisten en localStorage)
   protected readonly isShuffled = this.player.shuffle;
@@ -82,7 +86,11 @@ export class MediaControlBar {
 
   protected onSeekPointerDown(event: PointerEvent): void {
     if (!this.player.hasTrack()) return;
-    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    try {
+      (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    } catch {
+      // setPointerCapture no disponible: se continúa sin captura
+    }
     this.seekDragging.set(true);
     this.seekPreviewRatio.set(this.ratioFromEvent(event));
   }
@@ -95,17 +103,33 @@ export class MediaControlBar {
   protected onSeekPointerUp(event: PointerEvent): void {
     if (!this.seekDragging()) return;
     this.seekDragging.set(false);
+    try {
+      if ((event.currentTarget as HTMLElement).hasPointerCapture?.(event.pointerId)) {
+        (event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
+      }
+    } catch {
+      // liberación no disponible: se ignora
+    }
     const ratio = this.ratioFromEvent(event);
     const dur = this.player.durationSec();
     if (dur > 0) this.player.seekTo(ratio * dur);
+    else this.player.seekTo(ratio * (this.player.currentTrack()?.durationSec ?? 0));
   }
 
   protected onSeekPointerCancel(): void {
     this.seekDragging.set(false);
   }
 
+  protected onSeekLostCapture(): void {
+    this.seekDragging.set(false);
+  }
+
   protected onVolumePointerDown(event: PointerEvent): void {
-    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    try {
+      (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    } catch {
+      // setPointerCapture no disponible: se continúa sin captura
+    }
     this.volumeDragging.set(true);
     // Volumen en vivo durante el drag
     this.player.setVolume01(this.ratioFromEvent(event));
@@ -121,6 +145,68 @@ export class MediaControlBar {
   }
 
   protected onVolumePointerCancel(): void {
+    this.volumeDragging.set(false);
+  }
+
+  protected onVolumeLostCapture(): void {
+    this.volumeDragging.set(false);
+  }
+
+  protected onSeekKey(event: KeyboardEvent): void {
+    if (!this.player.hasTrack()) return;
+    const dur = this.player.durationSec() || this.player.currentTrack()?.durationSec || 0;
+    if (!dur) return;
+    const cur = this.player.currentTimeSec();
+    const step = Math.max(1, dur * 0.02);
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowUp':
+        event.preventDefault();
+        this.player.seekTo(Math.min(dur, cur + step));
+        break;
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        event.preventDefault();
+        this.player.seekTo(Math.max(0, cur - step));
+        break;
+      case 'Home':
+        event.preventDefault();
+        this.player.seekTo(0);
+        break;
+      case 'End':
+        event.preventDefault();
+        this.player.seekTo(dur);
+        break;
+    }
+  }
+
+  protected onVolumeKey(event: KeyboardEvent): void {
+    const step = 0.05;
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowUp':
+        event.preventDefault();
+        this.player.setVolume01(this.player.volume01() + step);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        event.preventDefault();
+        this.player.setVolume01(this.player.volume01() - step);
+        break;
+      case 'Home':
+        event.preventDefault();
+        this.player.setVolume01(0);
+        break;
+      case 'End':
+        event.preventDefault();
+        this.player.setVolume01(1);
+        break;
+    }
+  }
+
+  @HostListener('window:blur')
+  protected onWindowBlur(): void {
+    this.seekDragging.set(false);
     this.volumeDragging.set(false);
   }
 
@@ -146,6 +232,10 @@ export class MediaControlBar {
 
   protected toggleMute(): void {
     this.player.toggleMute();
+  }
+
+  protected toggleQueue(): void {
+    this.queueUi.toggleDrawer();
   }
 
   protected readonly isFavorite = computed(() => {

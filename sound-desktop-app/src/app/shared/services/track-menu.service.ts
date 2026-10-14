@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, OnDestroy, inject, signal } from '@angular/core';
 import type { Track } from '../../media-player/models/track.model';
 import { AudioPlayerService } from '../../media-player/services/audio-player.service';
 import { TranslationService } from './translation.service';
@@ -10,7 +10,7 @@ export interface TrackMenuTarget {
 }
 
 @Injectable({ providedIn: 'root' })
-export class TrackMenuService {
+export class TrackMenuService implements OnDestroy {
   private readonly player = inject(AudioPlayerService);
   private readonly i18n = inject(TranslationService);
 
@@ -30,8 +30,20 @@ export class TrackMenuService {
     const margin = 8;
     const w = 224;
     const h = 190;
-    const x = Math.max(margin, Math.min(event.clientX, window.innerWidth - w - margin));
-    const y = Math.max(margin, Math.min(event.clientY, window.innerHeight - h - margin));
+    // Flip en bordes: si no cabe abajo/derecha, abre arriba/izquierda del cursor.
+    let x = event.clientX;
+    let y = event.clientY;
+    try {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      if (x + w > vw - margin) x = Math.max(margin, x - w);
+      else x = Math.max(margin, Math.min(x, vw - w - margin));
+      if (y + h > vh - margin) y = Math.max(margin, y - h);
+      else y = Math.max(margin, Math.min(y, vh - h - margin));
+    } catch {
+      x = Math.max(margin, x);
+      y = Math.max(margin, y);
+    }
     this.menu.set({ track, x, y });
   }
 
@@ -81,5 +93,12 @@ export class TrackMenuService {
     this.toast.set(message);
     if (this.toastTimer) clearTimeout(this.toastTimer);
     this.toastTimer = setTimeout(() => this.toast.set(null), ms);
+  }
+
+  ngOnDestroy(): void {
+    if (this.toastTimer) {
+      clearTimeout(this.toastTimer);
+      this.toastTimer = null;
+    }
   }
 }

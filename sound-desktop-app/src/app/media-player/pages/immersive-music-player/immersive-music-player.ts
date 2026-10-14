@@ -2,12 +2,13 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { TranslationService } from '../../../shared/services/translation.service';
 import { SoundwaveShader } from '../../components/soundwave-shader/soundwave-shader';
 import { AudioPlayerService } from '../../services/audio-player.service';
+import { QueueUiService } from '../../../shared/services/queue-ui.service';
 import { coverUrlFor } from '../../models/track.model';
 
 const FALLBACK_COVER = '/images/immersive-cover.svg';
-const UNKNOWN_ALBUM = 'Álbum desconocido';
 
 @Component({
   selector: 'media-player-immersive-music-player',
@@ -18,6 +19,8 @@ const UNKNOWN_ALBUM = 'Álbum desconocido';
 export class ImmersiveMusicPlayer {
   private readonly player = inject(AudioPlayerService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly queueUi = inject(QueueUiService);
+  private readonly i18n = inject(TranslationService);
 
   protected readonly currentTrack = this.player.currentTrack;
   /** Id del track cuya carátula falló (para reintentar al cambiar de canción). */
@@ -38,9 +41,13 @@ export class ImmersiveMusicPlayer {
   protected readonly trackArtist = computed(() => this.player.currentTrack()?.artist ?? '');
   /** Álbum real; si no hay, el género. Vacío si no suena nada útil. */
   protected readonly trackAlbum = computed(() => {
+    const unknownAlbum = this.i18n.translate('immersive.unknownAlbum');
     const track = this.player.currentTrack();
     if (!track) return '';
-    if (track.album && track.album !== UNKNOWN_ALBUM) return track.album;
+    const album = (track.album ?? '').trim();
+    if (album && album !== unknownAlbum && album !== 'Álbum desconocido' && album !== 'Unknown album') {
+      return track.album;
+    }
     return track.genre ?? '';
   });
 
@@ -63,5 +70,31 @@ export class ImmersiveMusicPlayer {
     } catch {
       this.isFullscreen.set(!!document.fullscreenElement);
     }
+  }
+
+  /** Compartir: función mínima real (Web Share API con fallback a portapapeles). */
+  protected async shareCurrent(): Promise<void> {
+    const track = this.player.currentTrack();
+    if (!track) return;
+    const text = `${track.title} — ${track.artist}`;
+    try {
+      const nav = navigator as Navigator & { share?: (data: { title: string; text: string }) => Promise<void> };
+      if (typeof nav.share === 'function') {
+        await nav.share({ title: track.title, text });
+        return;
+      }
+      throw new Error('no-share');
+    } catch {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        // portapapeles no disponible: se ignora
+      }
+    }
+  }
+
+  /** Más opciones: función mínima real (abre la cola de reproducción). */
+  protected openMore(): void {
+    this.queueUi.openDrawer('queue');
   }
 }

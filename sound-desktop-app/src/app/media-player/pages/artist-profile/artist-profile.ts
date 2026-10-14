@@ -55,6 +55,8 @@ export class ArtistProfile {
   protected readonly albums = computed<AlbumGroup[]>(() => {
     const byAlbum = new Map<string, Track[]>();
     for (const t of this.tracks()) {
+      // Álbum "" no genera pseudo-álbum: se omiten vacíos en la discografía.
+      if (!t.album.trim()) continue;
       const key = t.album.trim().toLowerCase();
       const list = byAlbum.get(key);
       if (list) list.push(t);
@@ -73,13 +75,16 @@ export class ArtistProfile {
     });
   });
 
-  protected readonly likedIds = signal<Set<string>>(new Set());
   protected readonly albumFilter = signal<'all' | 'album' | 'single'>('all');
 
   constructor() {
     effect(() => {
       const uuid = this.artistId().get('artistId');
-      if (uuid && !this.library.artistByUuid(uuid)) {
+      if (!uuid) return;
+      // Gate: con librería aún vacía o escaneando no se puede dictaminar
+      // "inexistente"; la vista inline de notFound cubre el caso real.
+      if (this.library.tracks().length === 0 || this.library.scanning()) return;
+      if (!this.library.artistByUuid(uuid)) {
         void this.router.navigate(['/not-found']);
       }
     });
@@ -141,12 +146,13 @@ export class ArtistProfile {
   }
 
   protected playAll(): void {
-    const first = this.tracks()[0];
-    if (first) this.player.play(first);
+    const list = this.tracks();
+    const first = list[0];
+    if (first) this.player.playContext(first, list, this.artist()?.name);
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.tracks(), this.artist()?.name);
   }
 
   protected isCurrentTrack(track: Track): boolean {
@@ -164,16 +170,11 @@ export class ArtistProfile {
   }
 
   protected toggleLike(trackId: string): void {
-    this.likedIds.update((set) => {
-      const next = new Set(set);
-      if (next.has(trackId)) next.delete(trackId);
-      else next.add(trackId);
-      return next;
-    });
+    this.library.toggleLike(trackId);
   }
 
   protected isLiked(trackId: string): boolean {
-    return this.likedIds().has(trackId);
+    return this.library.isLiked(trackId);
   }
 
   protected goNotFound(): void {

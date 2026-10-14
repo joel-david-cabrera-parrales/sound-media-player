@@ -1,9 +1,11 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, HostListener, OnDestroy, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationStart, Router, RouterLink } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { DEFAULT_AVATAR } from '../../utils/profile-photo';
 import { ProfileService } from '../../services/profile.service';
+import { QueueUiService } from '../../services/queue-ui.service';
 import { ShellUiService } from '../../services/shell-ui.service';
 import { ThemeService } from '../../services/theme.service';
 
@@ -15,11 +17,13 @@ type FilterPill = 'todo' | 'carpetas';
   templateUrl: './topbar.html',
   styleUrl: './topbar.css',
 })
-export class Topbar {
+export class Topbar implements OnDestroy {
   private readonly shellUi = inject(ShellUiService);
   private readonly router = inject(Router);
   private readonly themeService = inject(ThemeService);
   private readonly profile = inject(ProfileService);
+  private readonly queueUi = inject(QueueUiService);
+  private readonly navSub: Subscription;
 
   protected search = '';
   protected activePill: FilterPill = 'todo';
@@ -27,6 +31,17 @@ export class Topbar {
   protected readonly avatarUrl = this.profile.avatarUrl;
   protected readonly userName = this.profile.displayName;
   protected readonly accountMenuOpen = signal(false);
+
+  constructor() {
+    // Cierra el menú de cuenta al navegar.
+    this.navSub = this.router.events
+      .pipe(filter((e): e is NavigationStart => e instanceof NavigationStart))
+      .subscribe(() => this.closeAccountMenu());
+  }
+
+  ngOnDestroy(): void {
+    this.navSub.unsubscribe();
+  }
 
   protected onAvatarError(event: Event): void {
     const img = event.target as HTMLImageElement;
@@ -43,7 +58,17 @@ export class Topbar {
   protected submitSearch(): void {
     const q = this.search.trim();
     if (!q) return;
-    void this.router.navigate(['/library/search/results'], { queryParams: { q } });
+    void this.router.navigate(['/library/search/results'], { queryParams: { q }, queryParamsHandling: 'merge' });
+  }
+
+  /** Ajustes de búsqueda/filtros: función mínima real (lleva a ajustes). */
+  protected openSearchPrefs(): void {
+    void this.router.navigate(['/library/settings']);
+  }
+
+  /** Historial: función mínima real (abre el drawer en la pestaña de historial). */
+  protected openHistory(): void {
+    this.queueUi.openDrawer('history');
   }
 
   protected toggleSidebar(): void {

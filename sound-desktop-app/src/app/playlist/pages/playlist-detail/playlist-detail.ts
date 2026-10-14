@@ -8,7 +8,8 @@ import { PlaylistsService } from '../../services/playlists.service';
 import type { Playlist } from '../../models/playlist';
 import { LocalMusicService } from '../../../media-player/services/local-music.service';
 import { AudioPlayerService } from '../../../media-player/services/audio-player.service';
-import { coverUrlFor, formatTrackDuration, type Track } from '../../../media-player/models/track.model';
+import { formatTrackDuration, type Track } from '../../../media-player/models/track.model';
+import { safeUrlCached, trackCoverCached } from '../../../shared/utils/cover-cache';
 
 type DetailSort = 'added' | 'title' | 'artist' | 'duration';
 
@@ -107,11 +108,21 @@ export class PlaylistDetail {
       .map((r) => r.playlist);
   });
 
+  /** Conteos memoizados por playlist id (evita resolveTracks por CD en el template). */
+  protected readonly relatedCounts = computed<Record<string, number>>(() => {
+    const all = this.library.tracks();
+    const out: Record<string, number> = {};
+    for (const p of this.store.playlists()) {
+      out[p.id] = this.store.resolveTracks(p, all).length;
+    }
+    return out;
+  });
+
   protected heroCover(): string | SafeUrl {
     const cover = this.playlist()?.coverUrl;
     if (cover) {
-      if (cover.startsWith('sound-photo:') || cover.startsWith('data:')) {
-        return this.sanitizer.bypassSecurityTrustUrl(cover);
+      if (cover.startsWith('sound-photo:') || cover.startsWith('data:') || cover.startsWith('sound-cover:')) {
+        return safeUrlCached(this.sanitizer, cover);
       }
       return cover;
     }
@@ -121,11 +132,7 @@ export class PlaylistDetail {
   }
 
   protected coverFor(track: Track): string | SafeUrl {
-    const url = coverUrlFor(track, '/images/track-cover.svg');
-    if (url.startsWith('sound-cover:')) {
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-    return url;
+    return trackCoverCached(this.sanitizer, track, '/images/track-cover.svg');
   }
 
   protected onImgError(event: Event, fallback: string): void {
@@ -153,16 +160,17 @@ export class PlaylistDetail {
   }
 
   protected relatedCount(playlist: Playlist): number {
-    return this.store.resolveTracks(playlist, this.library.tracks()).length;
+    return this.relatedCounts()[playlist.id] ?? this.store.resolveTracks(playlist, this.library.tracks()).length;
   }
 
   protected playAll(): void {
-    const first = this.rows()[0]?.track;
-    if (first) this.player.play(first);
+    const rows = this.rows();
+    const first = rows[0]?.track;
+    if (first) this.player.playContext(first, rows.map((r) => r.track), this.playlist()?.name);
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.rows().map((r) => r.track), this.playlist()?.name);
   }
 
   protected isCurrentTrack(track: Track): boolean {

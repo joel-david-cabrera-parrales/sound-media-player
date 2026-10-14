@@ -14,7 +14,7 @@
       <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] blur-3xl pointer-events-none"></div>
       <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="space-y-1">
-          <h1 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-bold text-slate-900 dark:text-white tracking-tight">{{ greetingKey | translate: { name: userName } }}</h1>
+          <h1 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-bold text-slate-900 dark:text-white tracking-tight">{{ greetingKey | translate: { name: userName() } }}</h1>
           <p class="text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3]">{{ 'home.heroQuestion' | translate }}</p>
         </div>
         @if (resumeTrack(); as resume) {

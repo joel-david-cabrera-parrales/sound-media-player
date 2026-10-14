@@ -1,7 +1,8 @@
-import { Component, ElementRef, ViewChild, effect, inject, input, output, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, effect, inject, input, linkedSignal, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { migrateLegacyPhotoUrl } from '../../utils/profile-photo';
 
 export interface PlaylistFormValue {
   name: string;
@@ -10,11 +11,19 @@ export interface PlaylistFormValue {
 }
 
 const DEFAULT_COVER = '/images/track-cover.svg';
+const MAX_COVER_BYTES = 4 * 1024 * 1024;
 
 function toSoundPhotoUrl(filePath: string): string {
+  const api = window.electronAPI as unknown as { toPhotoUrl?: (p: string) => string } | undefined;
+  if (api?.toPhotoUrl) {
+    try {
+      return api.toPhotoUrl(filePath);
+    } catch {
+      // fallback local
+    }
+  }
   const normalized = filePath.replace(/\\/g, '/');
-  const encoded = encodeURI(normalized).replace(/#/g, '%23').replace(/\?/g, '%3F');
-  return `sound-photo:///${encoded}`;
+  return `sound-photo://photo?path=${encodeURIComponent(normalized)}`;
 }
 
 @Component({
@@ -31,20 +40,20 @@ export class PlaylistFormModal {
 
   private readonly sanitizer = inject(DomSanitizer);
 
-  protected readonly name = signal('');
-  protected readonly description = signal('');
-  protected readonly coverUrl = signal<string | null>(null);
+  protected readonly name = linkedSignal(() => this.initial()?.name ?? '');
+  protected readonly description = linkedSignal(() => this.initial()?.description ?? '');
+  protected readonly coverUrl = linkedSignal<string | null>(() => migrateLegacyPhotoUrl(this.initial()?.coverUrl) ?? this.initial()?.coverUrl ?? null);
   protected readonly touched = signal(false);
+  protected readonly coverError = signal<string | null>(null);
 
   @ViewChild('coverInput') private coverInput?: ElementRef<HTMLInputElement>;
 
   constructor() {
     effect(() => {
-      const value = this.initial();
-      this.name.set(value?.name ?? '');
-      this.description.set(value?.description ?? '');
-      this.coverUrl.set(value?.coverUrl ?? null);
+      // Solo resetea el flag cuando cambia la referencia memoizada de initial.
+      void this.initial();
       this.touched.set(false);
+      this.coverError.set(null);
     });
   }
 
@@ -82,8 +91,14 @@ export class PlaylistFormModal {
     const file = input.files?.[0];
     input.value = '';
     if (!file || !file.type.startsWith('image/')) return;
+    if (file.size > MAX_COVER_BYTES) {
+      this.coverError.set('photoSize');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => this.coverUrl.set(reader.result as string);
+    reader.onerror = () => this.coverError.set('photoType');
+    reader.onabort = () => this.coverError.set('photoType');
     reader.readAsDataURL(file);
   }
 

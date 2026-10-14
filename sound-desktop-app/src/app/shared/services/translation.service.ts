@@ -25,20 +25,25 @@ export class TranslationService {
 
   translate(key: string, params?: Record<string, unknown>): string {
     const dict = DICTIONARIES[this.currentLang()];
-    const keys = key.split('.');
-    let current: unknown = dict;
-
-    for (const k of keys) {
-      if (current && typeof current === 'object' && k in current) {
-        current = (current as Dictionary)[k];
-      } else {
-        return key;
+    // Plurales básicos: si count === 1 y existe la variante `.one`, úsala.
+    const count = params?.['count'];
+    const singularKey =
+      (count === 1 || count === '1') && typeof key === 'string' ? `${key}.one` : null;
+    const lookup = (k: string): string | null => {
+      const keys = k.split('.');
+      let current: unknown = dict;
+      for (const part of keys) {
+        if (current && typeof current === 'object' && part in current) {
+          current = (current as Dictionary)[part];
+        } else {
+          return null;
+        }
       }
-    }
-
-    const result = typeof current === 'string' ? current : key;
-    if (!params) return result;
-    return result.replace(/\{\{(\w+)\}\}/g, (_, p: string) => {
+      return typeof current === 'string' ? current : null;
+    };
+    const template = (singularKey ? lookup(singularKey) : null) ?? lookup(key) ?? key;
+    if (!params) return template;
+    return template.replace(/\{\{(\w+)\}\}/g, (_, p: string) => {
       const val = params[p];
       return val !== undefined ? String(val) : `{{${p}}}`;
     });

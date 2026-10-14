@@ -145,9 +145,9 @@ export class PlaylistBuilder {
     await this.router.navigate(['/playlist']);
   }
 
-  protected editInitial(): PlaylistFormValue | null {
+  protected readonly editInitial = computed<PlaylistFormValue | null>(() => {
     const playlist = this.playlist();
     if (!playlist) return null;
     return { name: playlist.name, description: playlist.description, coverUrl: playlist.coverUrl };
-  }
+  });
 }
