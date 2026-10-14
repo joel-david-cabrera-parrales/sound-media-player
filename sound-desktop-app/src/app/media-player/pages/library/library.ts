@@ -13,7 +13,8 @@ import { TrackMenuService } from '../../../shared/services/track-menu.service';
 import { PlaylistsService } from '../../../playlist/services/playlists.service';
 import { LocalMusicService } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
+import { formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
+import { trackCoverCached } from '../../../shared/utils/cover-cache';
 import { normalizeText } from '../../../shared/utils/text';
 
 type SortMode = 'title' | 'artist' | 'album' | 'duration';
@@ -86,11 +87,7 @@ export class Library {
   );
 
   protected coverFor(track: Track): string | SafeUrl {
-    const url = coverUrlFor(track, '/images/track-cover.svg');
-    if (url.startsWith('sound-cover:')) {
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-    return url;
+    return trackCoverCached(this.sanitizer, track, '/images/track-cover.svg');
   }
 
   protected onCoverError(event: Event): void {

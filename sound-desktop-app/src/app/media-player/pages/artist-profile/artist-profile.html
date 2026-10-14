@@ -28,11 +28,13 @@
 
     <!-- Action Bar -->
     <section class="px-6 md:px-12 py-6 flex items-center gap-4 md:gap-6">
-      <button type="button" (click)="playAll()" [title]="'artistProfile.play' | translate"
-        class="w-14 h-14 rounded-full bg-[var(--accent)] text-[#0e0e0e] flex items-center justify-center hover:scale-105 active:scale-95 transition-all dark:shadow-[0_0_24px_color-mix(in_srgb,var(--accent)_45%,transparent)] cursor-pointer group flex-shrink-0">
-        <span class="material-symbols-outlined text-[32px] fill group-hover:scale-110 transition-transform">play_arrow</span>
-      </button>
-      <button type="button" (click)="toggleFollow()"
+      @if (tracks().length > 0) {
+        <button type="button" (click)="playAll()" [title]="'artistProfile.play' | translate"
+          class="w-14 h-14 rounded-full bg-[var(--accent)] text-[#0e0e0e] flex items-center justify-center hover:scale-105 active:scale-95 transition-all dark:shadow-[0_0_24px_color-mix(in_srgb,var(--accent)_45%,transparent)] cursor-pointer group flex-shrink-0">
+          <span class="material-symbols-outlined text-[32px] fill group-hover:scale-110 transition-transform">play_arrow</span>
+        </button>
+      }
+      <button type="button" (click)="toggleFollow()" [attr.aria-pressed]="isFollowing()"
         [class]="isFollowing()
           ? 'px-5 py-2.5 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] text-[14px] leading-[18px] font-bold hover:bg-[color-mix(in_srgb,var(--accent)_25%,transparent)] transition-all active:scale-95'
           : 'px-5 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white text-[14px] leading-[18px] font-semibold hover:border-[var(--accent)] transition-all active:scale-95'">
@@ -57,7 +59,8 @@
             <div
               (click)="playTrack(track)"
               (keydown.enter)="playTrack(track)"
-              tabindex="0" role="button"
+              (keydown.space)="playTrack(track); $event.preventDefault()"
+              tabindex="0" role="button" [attr.aria-label]="track.title"
               class="group flex items-center justify-between gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors border border-transparent hover:border-slate-200 dark:hover:border-white/[0.08] cursor-pointer"
               [class]="isCurrentTrack(track) ? 'bg-slate-100 dark:bg-[#242424]/40 border-slate-200 dark:border-white/[0.08]' : ''"
             >

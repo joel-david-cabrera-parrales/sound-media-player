@@ -4,7 +4,7 @@
     aria-modal="true"
     (click)="menu.closeAssign()"
     (keydown.escape)="menu.closeAssign()"
-    class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md select-none"
+    class="fixed inset-0 z-[75] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md select-none"
   >
     <div
       role="document"
@@ -96,7 +96,7 @@
 }
 
 @if (menu.toast(); as toast) {
-  <div class="fixed bottom-28 right-4 sm:right-8 z-[80] flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-[#181818] border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] shadow-2xl dark:shadow-cyan-950/40 text-slate-900 dark:text-white max-w-[calc(100vw-2rem)]">
+  <div class="fixed bottom-28 right-4 sm:right-8 z-[85] flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-[#181818] border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] shadow-2xl dark:shadow-cyan-950/40 text-slate-900 dark:text-white max-w-[calc(100vw-2rem)]">
     <div class="w-7 h-7 rounded-full bg-[var(--accent)] flex items-center justify-center text-[#001f28] flex-shrink-0">
       <span class="material-symbols-outlined text-base font-bold">check</span>
     </div>

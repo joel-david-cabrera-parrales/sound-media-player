@@ -5,6 +5,7 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import {
   LocalArtist,
   LocalMusicService,
+  normalizeArtistName,
 } from '../../services/local-music.service';
 import { coverUrlFor } from '../../models/track.model';
 import { AudioPlayerService } from '../../services/audio-player.service';
@@ -38,12 +39,12 @@ export class Artist {
     let list = this.library.artists();
     if (q) list = list.filter((a) => normalizeText(a.name).includes(q));
     if (letter !== 'all') {
-      const normLetter = normalizeText(letter);
-      list = list.filter((a) =>
-        letter === '#'
-          ? !/^[a-z]/i.test(normalizeText(a.name))
-          : normalizeText(a.name).startsWith(normLetter),
-      );
+      if (letter === '#') {
+        list = list.filter((a) => !/^[A-ZÑ]/i.test(a.name.trim().charAt(0)));
+      } else {
+        // Ñ distinta de N: compara la primera letra cruda en mayúsculas.
+        list = list.filter((a) => a.name.trim().charAt(0).toUpperCase() === letter);
+      }
     }
     const sorted = [...list];
     switch (this.sort()) {
@@ -73,15 +74,19 @@ export class Artist {
 
   protected isPlaying(artist: LocalArtist): boolean {
     const current = this.player.currentTrack();
-    return !!current && current.artist.trim().toLowerCase() === artist.name.trim().toLowerCase();
+    return !!current && normalizeArtistName(current.artist) === normalizeArtistName(artist.name);
   }
 
   protected playArtist(artist: LocalArtist, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    const key = artist.name.trim().toLowerCase();
-    const artistTracks = this.library.tracks().filter((t) => t.artist.trim().toLowerCase() === key);
-    const first = artist.coverTrack ?? artistTracks[0];
+    const key = normalizeArtistName(artist.name);
+    const artistTracks = this.library.tracks().filter((t) => normalizeArtistName(t.artist) === key);
+    if (artistTracks.length === 0) return;
+    // Garantiza que el track reproducido pertenezca a artistTracks.
+    const candidate = artist.coverTrack;
+    const first =
+      candidate && artistTracks.some((t) => t.id === candidate.id) ? candidate : artistTracks[0];
     if (first) this.player.playContext(first, artistTracks, artist.name);
   }
 

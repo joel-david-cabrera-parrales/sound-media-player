@@ -36,7 +36,7 @@
         <h2 class="text-[18px] leading-[24px] font-semibold text-slate-900 dark:text-white">{{ 'search.resultsTitle' | translate }}</h2>
         @if (selectedGenreId()) {
           <button type="button" (click)="clearGenreFilter()" class="flex items-center gap-1 px-3 py-1 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] text-[12px] font-semibold text-[var(--accent-ink)] dark:text-[var(--accent)]">
-            {{ selectedGenreId() }}
+            {{ selectedGenreLabel() }}
             <span class="material-symbols-outlined text-[16px]">close</span>
           </button>
         }
@@ -49,13 +49,13 @@
         }
       } @else {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-          @for (item of results(); track item.kind + item.label) {
+          @for (item of results(); track item.track ? item.track.id : item.kind + ':' + item.label) {
             <button
               type="button"
               (click)="item.kind === 'track' && item.track ? playTrack(item.track) : item.kind === 'artist' && item.artistName ? selectArtist(item.artistName) : item.genreId ? openGenre(item.genreId, item.label) : null"
               class="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all text-left group"
             >
-              <img class="w-11 h-11 rounded-lg object-cover shrink-0" [src]="item.cover" [alt]="item.label" loading="lazy" />
+              <img class="w-11 h-11 rounded-lg object-cover shrink-0" [src]="item.cover" [alt]="item.label" loading="lazy" (error)="onImgError($event)" />
               <span class="min-w-0 flex-1">
                 <span class="block text-[14px] font-semibold text-slate-900 dark:text-white truncate">{{ item.label }}</span>
                 <span class="block text-[11px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ typeLabel(item.kind) }} • {{ item.sub }}</span>
@@ -87,7 +87,7 @@
         <p class="text-[13px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.historyEmpty' | translate }}</p>
       } @else {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          @for (entry of history(); track entry.kind + entry.text) {
+          @for (entry of history(); track entry.kind + ':' + entry.text + ':' + (entry.refId ?? '')) {
             <div class="relative flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all group">
               <button type="button" (click)="openHistory(entry)" class="flex items-center gap-3 min-w-0 flex-1 text-left">
                 <span class="w-11 h-11 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] shrink-0 overflow-hidden">
@@ -177,7 +177,7 @@
       <p class="text-[16px] font-bold text-slate-900 dark:text-white">{{ 'search.radarTitle' | translate }}</p>
       <p class="text-[12px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.radarDesc' | translate }}</p>
     </div>
-    <button type="button" class="px-5 py-2.5 rounded-full bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all active:scale-95 shrink-0 flex items-center gap-2">
+    <button type="button" (click)="openRadarPrefs()" [title]="'search.radarCta' | translate" class="px-5 py-2.5 rounded-full bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all active:scale-95 shrink-0 flex items-center gap-2">
       <span class="material-symbols-outlined text-[18px] text-[var(--accent-ink)] dark:text-[var(--accent)]">tune</span>
       {{ 'search.radarCta' | translate }}
     </button>

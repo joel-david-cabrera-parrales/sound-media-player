@@ -96,7 +96,7 @@
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
         @for (track of filtered(); track track.id) {
           <div
-            (click)="playTrack(track)" (keydown.enter)="playTrack(track)" tabindex="0" role="button"
+            (click)="playTrack(track)" (keydown.enter)="playTrack(track)" (keydown.space)="playTrack(track); $event.preventDefault()" tabindex="0" role="button" [attr.aria-label]="track.title"
             class="group relative p-3.5 rounded-xl bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424]/90 transition-all duration-200 border flex flex-col gap-3 cursor-pointer shadow-sm dark:shadow-none"
             [class]="isCurrentTrack(track) ? 'border-[color-mix(in_srgb,var(--accent)_40%,transparent)]' : 'border-slate-200 dark:border-white/[0.08]'"
           >
@@ -131,7 +131,7 @@
                 <span class="font-bold text-[16px] leading-[22px] truncate cursor-pointer hover:underline flex-1 min-w-0"
                   [class]="isCurrentTrack(track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'">{{ track.title }}</span>
                 <button type="button" (click)="menu.openMenu(track, $event)" [title]="'trackMenu.open' | translate"
-                  class="p-0.5 rounded text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-all flex-shrink-0">
+                  class="p-0.5 rounded text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-focus-within:opacity-100 transition-all flex-shrink-0">
                   <span class="material-symbols-outlined text-[18px]">more_vert</span>
                 </button>
               </div>
@@ -153,7 +153,7 @@
         </div>
         @for (track of filtered(); track track.id; let i = $index) {
           <div
-            (click)="playTrack(track)" (keydown.enter)="playTrack(track)" tabindex="0" role="button"
+            (click)="playTrack(track)" (keydown.enter)="playTrack(track)" (keydown.space)="playTrack(track); $event.preventDefault()" tabindex="0" role="button" [attr.aria-label]="track.title"
             class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0"
           >
             <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">

@@ -4,7 +4,8 @@
     "photoAlt": "Foto de perfil",
     "changePhoto": "Cambiar foto de perfil",
     "installApp": "Instalar app",
-    "searchApp": "Buscar en la app"
+    "searchApp": "Buscar en la app",
+    "fallbackName": "Alex"
   },
   "welcome": {
     "app": {
@@ -35,7 +36,7 @@
         "birthInvalid": "Fecha inválida.",
         "birthFuture": "La fecha no puede ser futura.",
         "photoType": "El archivo debe ser una imagen.",
-        "photoSize": "La imagen no puede superar los 5 MB."
+        "photoSize": "La imagen no puede superar los 4 MB."
       }
     },
     "setup": {
@@ -87,7 +88,9 @@
       "queue": "Cola de reproducción",
       "devices": "Dispositivos disponibles",
       "mute": "Silenciar",
-      "expand": "Abrir reproductor inmersivo"
+      "expand": "Abrir reproductor inmersivo",
+      "seek": "Posición de reproducción",
+      "volume": "Volumen"
     }
   },
   "queue": {
@@ -139,12 +142,14 @@
     },
     "genres": {
       "title": "Tus estaciones y géneros favoritos",
-      "songs": "{{count}} canciones"
+      "songs": "{{count}} canciones",
+      "songs.one": "1 canción"
     }
   },
   "immersive": {
     "close": "Cerrar pantalla completa",
     "playingFrom": "Reproduciendo desde la biblioteca",
+    "unknownAlbum": "Álbum desconocido",
     "share": "Compartir pista",
     "more": "Más opciones de reproducción",
     "fullscreen": "Pantalla completa"
@@ -218,6 +223,7 @@
     "more": "Más opciones",
     "popular": "Populares",
     "topCount": "{{count}} canciones",
+    "topCount.one": "1 canción",
     "like": "Me gusta",
     "discography": "Discografía",
     "filterAll": "Todo",
@@ -227,6 +233,7 @@
     "albumKind": "Álbum",
     "singleKind": "Sencillo / EP",
     "tracksCount": "{{count}} canciones",
+    "tracksCount.one": "1 canción",
     "related": "Del mismo género",
     "notFound": "Artista no encontrado",
     "backToList": "Volver a artistas"
@@ -279,6 +286,7 @@
     "sortPopular": "Populares",
     "sortAZ": "A – Z",
     "songsCount": "{{count}} canciones",
+    "songsCount.one": "1 canción",
     "emptyLibraryTitle": "Aún no hay géneros importados",
     "emptyLibraryDesc": "Importa carpetas con música y aquí verás sus géneros.",
     "goImport": "Importar música",
@@ -290,6 +298,7 @@
   "liked": {
     "title": "Canciones que te gustan",
     "subtitle": "{{count}} canciones guardadas",
+    "subtitle.one": "1 canción guardada",
     "emptyTitle": "Aún no tienes favoritas",
     "emptyDesc": "Marca el corazón en cualquier canción y aparecerá aquí.",
     "goLibrary": "Explorar biblioteca",
@@ -306,8 +315,10 @@
     "badgeSong": "Canción",
     "badgeAlbum": "Álbum",
     "badgeGenre": "Género",
-    "heroSongs": "canciones",
-    "heroAlbums": "álbumes",
+    "heroSongs": "{{count}} canciones",
+    "heroSongs.one": "1 canción",
+    "heroAlbums": "{{count}} álbumes",
+    "heroAlbums.one": "1 álbum",
     "viewArtist": "Ver artista",
     "songsTitle": "Canciones más escuchadas",
     "showAll": "Mostrar todas",
@@ -317,6 +328,7 @@
     "albumsSubtitle": "Coincidencias en tu colección",
     "exploreCatalog": "Explorar catálogo",
     "albumTracks": "{{count}} canciones",
+    "albumTracks.one": "1 canción",
     "playlistsTitle": "Tus playlists",
     "playlistsSubtitle": "Listas que coinciden con tu búsqueda",
     "morePlaylists": "Ver más playlists",
@@ -325,7 +337,7 @@
     "emptyDesc": "Escribe en el buscador superior y pulsa Enter para ver resultados.",
     "noResults": "Sin resultados para “{{q}}”",
     "noResultsDesc": "Prueba con otro título, artista o álbum.",
-    "noExact": "No encontramos resultados exactos para",
+    "noExact": "No encontramos resultados exactos para \"{{q}}\"",
     "noExactDesc": "El motor de resolución analizó nombres de tu catálogo pero no detectó ninguna coincidencia precisa.",
     "didYouMean": "Quizás quisiste decir:",
     "physicalHint": "¿Buscabas en tu librería física?",
@@ -349,6 +361,7 @@
       "emptyDesc": "Crea tu primera lista para organizar tu música.",
       "noResults": "Sin listas con ese nombre.",
       "songs": "{{count}} canciones",
+      "songs.one": "1 canción",
       "confirmDelete": "¿Eliminar esta lista?",
       "deleteYes": "Sí",
       "deleteNo": "No",
@@ -417,6 +430,7 @@
       "addSongs": "Añadir canciones",
       "related": "Listas relacionadas",
       "relatedCount": "{{count}} canciones",
+      "relatedCount.one": "1 canción",
       "notFound": "Lista no encontrada"
     }
   },
@@ -443,8 +457,9 @@
     "toastAdded": "“{{track}}” añadida a “{{list}}”"
   },
   "genre": {
-    "songsOf": "Canciones de",
+    "songsOf": "Canciones de \"{{label}}\"",
     "heroDesc": "{{count}} canciones en tu biblioteca",
+    "heroDesc.one": "1 canción en tu biblioteca",
     "playAll": "Reproducir todo",
     "shuffle": "Aleatorio",
     "emptyTitle": "Sin canciones de este género",
@@ -463,6 +478,7 @@
     "personal": {
       "title": "Información Personal",
       "tag": "Identidad",
+      "photoFormats": "JPG o PNG",
       "maxSize": "máx. 4MB",
       "save": "Guardar cambios",
       "saved": "Guardado"

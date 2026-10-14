@@ -1,5 +1,6 @@
 import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { TranslationService } from '../../shared/services/translation.service';
+import { normalizeText } from '../../shared/utils/text';
 import { formatTrackSize, type Track } from '../models/track.model';
 import { ArtistImageService } from './artist-image.service';
 import {
@@ -42,8 +43,9 @@ export interface LocalArtist {
   artistImageUrl: string | null;
 }
 
+/** Única normalización de artista (minúsculas + sin diacríticos). */
 export function normalizeArtistName(name: string): string {
-  return name.trim().toLowerCase();
+  return normalizeText(name);
 }
 
 export function normalizeArtistNameForApi(name: string): string {

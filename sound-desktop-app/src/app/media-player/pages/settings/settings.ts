@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
@@ -18,7 +18,7 @@ const DEFAULT_AVATAR = '/images/avatar-default.svg';
   templateUrl: './settings.html',
   styleUrl: './settings.css',
 })
-export class Settings {
+export class Settings implements OnDestroy {
   protected readonly themeService = inject(ThemeService);
   private readonly i18n = inject(TranslationService);
   private readonly sanitizer = inject(DomSanitizer);
@@ -57,10 +57,28 @@ export class Settings {
     this.updateSafePhoto();
   }
 
+  ngOnDestroy(): void {
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer);
+      this.saveTimer = null;
+    }
+  }
+
   private updateSafePhoto(): void {
-    this.safePhotoUrl = this.photoUrl
-      ? this.sanitizer.bypassSecurityTrustUrl(this.photoUrl)
-      : DEFAULT_AVATAR;
+    if (!this.photoUrl) {
+      this.safePhotoUrl = DEFAULT_AVATAR;
+      return;
+    }
+    if (
+      this.photoUrl.startsWith('sound-photo:') ||
+      this.photoUrl.startsWith('data:') ||
+      this.photoUrl.startsWith('blob:') ||
+      this.photoUrl.startsWith('http')
+    ) {
+      this.safePhotoUrl = this.sanitizer.bypassSecurityTrustUrl(this.photoUrl);
+      return;
+    }
+    this.safePhotoUrl = DEFAULT_AVATAR;
   }
 
   protected async pickPhoto(): Promise<void> {
@@ -95,6 +113,12 @@ export class Settings {
     reader.onload = () => {
       this.photoUrl = reader.result as string;
       this.updateSafePhoto();
+    };
+    reader.onerror = () => {
+      this.photoError = 'size';
+    };
+    reader.onabort = () => {
+      this.photoError = 'size';
     };
     reader.readAsDataURL(file);
   }

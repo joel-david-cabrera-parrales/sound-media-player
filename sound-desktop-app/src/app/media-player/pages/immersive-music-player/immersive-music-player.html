@@ -42,11 +42,11 @@
     }
     <!-- Acciones Trailing Superior Derecha -->
     <div class="flex items-center gap-2">
-      <button type="button" [attr.aria-label]="'immersive.share' | translate"
+      <button type="button" (click)="shareCurrent()" [disabled]="!currentTrack()" [attr.aria-label]="'immersive.share' | translate"
         class="w-9 h-9 flex items-center justify-center rounded-full bg-white/60 dark:bg-[#121212]/60 hover:bg-slate-200 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors duration-150 backdrop-blur-md active:scale-95">
         <span class="material-symbols-outlined text-[20px]">share</span>
       </button>
-      <button type="button" [attr.aria-label]="'immersive.more' | translate"
+      <button type="button" (click)="openMore()" [attr.aria-label]="'immersive.more' | translate"
         class="w-9 h-9 flex items-center justify-center rounded-full bg-white/60 dark:bg-[#121212]/60 hover:bg-slate-200 dark:hover:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors duration-150 backdrop-blur-md active:scale-95">
         <span class="material-symbols-outlined text-[20px]">more_horiz</span>
       </button>

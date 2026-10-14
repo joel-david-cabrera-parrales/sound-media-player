@@ -1,11 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, computed, effect, inject, signal } from '@angular/core';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TrackMenuService } from '../../services/track-menu.service';
 import { TranslationService } from '../../services/translation.service';
 import { PlaylistsService } from '../../../playlist/services/playlists.service';
 import { PlaylistFormModal, type PlaylistFormValue } from '../playlist-form-modal/playlist-form-modal';
-import { coverUrlFor } from '../../../media-player/models/track.model';
 import { normalizeText } from '../../utils/text';
 
 @Component({
@@ -22,6 +21,25 @@ export class AddToPlayListModal {
 
   protected readonly search = signal('');
   protected readonly showCreate = signal(false);
+
+  constructor() {
+    // Resetea el estado interno al cerrar el modal.
+    effect(() => {
+      if (!this.menu.assignOpen()) {
+        this.showCreate.set(false);
+        this.search.set('');
+      }
+    });
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void {
+    if (this.showCreate()) {
+      this.showCreate.set(false);
+      return;
+    }
+    if (this.menu.assignOpen()) this.menu.closeAssign();
+  }
 
   protected readonly filtered = computed(() => {
     const q = normalizeText(this.search());
@@ -43,7 +61,7 @@ export class AddToPlayListModal {
     if (!playlist) return '/images/track-cover.svg';
     if (playlist.coverUrl) {
       const url = playlist.coverUrl;
-      if (url.startsWith('sound-photo:') || url.startsWith('data:')) {
+      if (url.startsWith('sound-photo:') || url.startsWith('data:') || url.startsWith('sound-cover:')) {
         return this.sanitizer.bypassSecurityTrustUrl(url);
       }
       return url;

@@ -7,7 +7,8 @@ import { LocalMusicService } from '../../services/local-music.service';
 import { AudioPlayerService } from '../../services/audio-player.service';
 import { coverUrlFor, type Track } from '../../models/track.model';
 import { genreImage } from '../../models/genre-images';
-import { DEFAULT_GENRE_COVER } from '../../models/genre-taxonomy';
+import { DEFAULT_GENRE_COVER, genreLabel } from '../../models/genre-taxonomy';
+import { normalizeText } from '../../../shared/utils/text';
 
 type SearchFilter = 'all' | 'music' | 'podcasts' | 'live';
 type GenreSort = 'popular' | 'az';
@@ -127,9 +128,12 @@ export class Search {
 
   /** Resultados en vivo (canciones + artistas + géneros importados). */
   protected readonly results = computed<ResultItem[]>(() => {
+    // Suscripción al idioma para que las etiquetas se recalculen al cambiar lengua.
+    const lang = this.i18n.currentLang();
+    void lang;
     const filter = this.activeFilter();
     if (filter === 'podcasts' || filter === 'live') return [];
-    const q = this.query().trim().toLowerCase();
+    const q = normalizeText(this.query());
     const sel = this.selectedGenreId();
     let tracks = this.library.tracks();
     if (sel) {
@@ -140,9 +144,9 @@ export class Search {
       if (filter === 'all' || filter === 'music') {
         for (const t of tracks) {
           if (
-            t.title.toLowerCase().includes(q) ||
-            t.artist.toLowerCase().includes(q) ||
-            t.album.toLowerCase().includes(q)
+            normalizeText(t.title).includes(q) ||
+            normalizeText(t.artist).includes(q) ||
+            normalizeText(t.album).includes(q)
           ) {
             out.push({
               kind: 'track',
@@ -159,7 +163,7 @@ export class Search {
       }
       if (filter === 'all') {
         for (const a of this.library.artists()) {
-          if (a.name.toLowerCase().includes(q)) {
+          if (normalizeText(a.name).includes(q)) {
             out.push({
               kind: 'artist',
               label: a.name,
@@ -173,7 +177,7 @@ export class Search {
           }
         }
         for (const g of this.library.libraryGenres()) {
-          if (g.label.toLowerCase().includes(q)) {
+          if (normalizeText(g.label).includes(q)) {
             out.push({
               kind: 'genre',
               label: g.label,
@@ -207,6 +211,8 @@ export class Search {
 
   protected setQuery(value: string): void {
     this.query.set(value);
+    // Limpia filtros cruzados: buscar por texto anula el filtro de género.
+    if (value.trim()) this.selectedGenreId.set(null);
   }
 
   protected clearQuery(): void {
@@ -242,6 +248,20 @@ export class Search {
     if (!img.src.endsWith('/images/genre-default.svg')) {
       img.src = DEFAULT_GENRE_COVER;
     }
+  }
+
+  protected onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+  }
+
+  /** Etiqueta localizada del género para el chip (no el id crudo). */
+  protected selectedGenreLabel(): string {
+    const id = this.selectedGenreId();
+    if (!id) return '';
+    const found = this.library.libraryGenres().find((g) => g.id === id);
+    if (found) return found.label;
+    return genreLabel(id, this.i18n.currentLang());
   }
 
   protected typeLabel(kind: HistoryKind): string {
@@ -286,6 +306,11 @@ export class Search {
     this.selectedGenreId.set(null);
   }
 
+  /** Radar: función mínima real (lleva a ajustes donde viven las preferencias). */
+  protected openRadarPrefs(): void {
+    void this.router.navigate(['/library/settings']);
+  }
+
   protected openHistory(entry: SearchHistoryEntry): void {
     if (entry.kind === 'track' && entry.refId) {
       const track = this.library.tracks().find((t) => t.id === entry.refId);
@@ -297,10 +322,12 @@ export class Search {
       return;
     }
     if (entry.kind === 'artist') {
+      this.selectedGenreId.set(null);
       this.query.set(entry.text);
       return;
     }
     if (entry.kind === 'genre' && entry.refId) {
+      this.query.set('');
       this.selectedGenreId.set(entry.refId);
     }
   }

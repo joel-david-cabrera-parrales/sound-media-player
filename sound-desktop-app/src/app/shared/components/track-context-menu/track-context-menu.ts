@@ -19,6 +19,16 @@ export class TrackContextMenu {
     this.service.closeMenu();
   }
 
+  @HostListener('window:resize')
+  protected onResize(): void {
+    this.service.closeMenu();
+  }
+
+  @HostListener('document:scroll')
+  protected onScroll(): void {
+    if (this.service.menu()) this.service.closeMenu();
+  }
+
   protected coverFor(track: Track): string | SafeUrl {
     const url = coverUrlFor(track, '/images/track-cover.svg');
     if (url.startsWith('sound-cover:')) {

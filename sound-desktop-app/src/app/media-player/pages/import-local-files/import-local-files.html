@@ -84,6 +84,7 @@
     tabindex="0"
     (click)="addFolder()"
     (keydown.enter)="addFolder()"
+    (dragenter)="onDragEnter($event)"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)"
@@ -128,7 +129,7 @@
         <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white truncate">{{ 'import.syncedTitle' | translate }}</h3>
         <span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#242424] text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] flex-shrink-0">{{ 'import.activeCount' | translate: { count: library.connectedCount() } }}</span>
       </div>
-      <button type="button" class="text-[12px] leading-[16px] text-[var(--accent-ink)] dark:text-[var(--accent)] hover:underline flex items-center gap-1 flex-shrink-0">
+      <button type="button" (click)="openScanPrefs()" [title]="'import.scanPrefs' | translate" class="text-[12px] leading-[16px] text-[var(--accent-ink)] dark:text-[var(--accent)] hover:underline flex items-center gap-1 flex-shrink-0">
         <span class="material-symbols-outlined text-[16px]">settings</span>
         <span class="hidden sm:inline">{{ 'import.scanPrefs' | translate }}</span>
       </button>
@@ -206,7 +207,7 @@
               <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'import.autosync' | translate }}</span>
             </div>
             <div class="flex items-center gap-1">
-              <button type="button" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors" [title]="'import.explore' | translate">
+              <button type="button" disabled class="p-2 rounded-full text-slate-400 dark:text-[#6a6a6a] opacity-50 cursor-not-allowed" [title]="'import.explore' | translate" [attr.aria-label]="'import.explore' | translate">
                 <span class="material-symbols-outlined text-[18px]">{{ folder.icon }}</span>
               </button>
               <button type="button" (click)="library.rescan(folder.id)" [disabled]="library.scanning()" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-[var(--accent-ink)] dark:hover:text-[var(--accent)] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors disabled:opacity-50" [title]="'import.rescan' | translate">
@@ -256,6 +257,8 @@
           tabindex="0"
           (click)="playTrack(track)"
           (keydown.enter)="playTrack(track)"
+          (keydown.space)="playTrack(track); $event.preventDefault()"
+          [attr.aria-label]="track.title"
           class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0"
         >
           <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
@@ -267,7 +270,7 @@
             }
           </div>
           <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
-            <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(track)" [alt]="track.title" loading="lazy" />
+            <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onCoverError($event)" />
             <div class="truncate min-w-0">
               <div class="text-[14px] leading-[20px] text-slate-900 dark:text-white group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] font-semibold truncate">{{ track.title }}</div>
               <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
