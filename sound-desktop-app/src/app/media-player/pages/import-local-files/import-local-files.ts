@@ -42,7 +42,7 @@ export class ImportLocalFiles {
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.visibleTracks());
   }
 
   protected isPlayingTrack(track: Track): boolean {

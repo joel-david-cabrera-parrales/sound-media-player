@@ -5,6 +5,7 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
 import { FavoriteButton } from '../favorite-button/favorite-button';
 import { AudioPlayerService } from '../../../media-player/services/audio-player.service';
 import { LocalMusicService } from '../../../media-player/services/local-music.service';
+import { QueueUiService } from '../../services/queue-ui.service';
 import { coverUrlFor, formatTrackDuration } from '../../../media-player/models/track.model';
 
 @Component({
@@ -17,6 +18,9 @@ export class MediaControlBar {
   private readonly player = inject(AudioPlayerService);
   private readonly library = inject(LocalMusicService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly queueUi = inject(QueueUiService);
+
+  protected readonly isQueueOpen = this.queueUi.drawerOpen;
 
   // Estado vivo del servicio (volumen/mute/repeat/shuffle persisten en localStorage)
   protected readonly isShuffled = this.player.shuffle;
@@ -146,6 +150,10 @@ export class MediaControlBar {
 
   protected toggleMute(): void {
     this.player.toggleMute();
+  }
+
+  protected toggleQueue(): void {
+    this.queueUi.toggleDrawer();
   }
 
   protected readonly isFavorite = computed(() => {

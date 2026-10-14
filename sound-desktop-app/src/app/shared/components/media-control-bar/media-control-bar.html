@@ -90,10 +90,10 @@
   </div>
   <!-- Right Segment: Volume & Auxiliary Controls -->
   <div class="hidden md:flex items-center justify-end gap-3 w-1/4 min-w-[200px]">
-    <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.lyrics' | translate">
+    <a routerLink="/library/lyrics" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.lyrics' | translate">
       <span class="material-symbols-outlined text-[19px]">mic</span>
-    </button>
-    <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.queue' | translate">
+    </a>
+    <button type="button" (click)="toggleQueue()" [class]="isQueueOpen() ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'" class="hidden lg:block transition-colors" [title]="'shell.dock.queue' | translate">
       <span class="material-symbols-outlined text-[19px]">queue_music</span>
     </button>
     <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.devices' | translate">

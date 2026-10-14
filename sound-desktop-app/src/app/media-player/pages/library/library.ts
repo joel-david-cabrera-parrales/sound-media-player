@@ -109,7 +109,7 @@ export class Library {
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.filtered());
   }
 
   protected isLiked(track: Track): boolean {

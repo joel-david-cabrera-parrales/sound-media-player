@@ -92,18 +92,17 @@ export class GenreResults {
   protected playAll(): void {
     const list = this.tracks();
     if (list.length === 0) return;
-    this.player.play(list[0]);
-    for (const t of list.slice(1)) this.player.queueNext(t);
+    this.player.playContext(list[0], list, this.genre()?.label);
   }
 
   protected playShuffle(): void {
     const list = this.tracks();
     if (list.length === 0) return;
-    this.player.play(list[Math.floor(Math.random() * list.length)]);
+    this.player.playContext(list[Math.floor(Math.random() * list.length)], list, this.genre()?.label);
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.tracks(), this.genre()?.label);
   }
 
   protected isCurrentTrack(track: Track): boolean {

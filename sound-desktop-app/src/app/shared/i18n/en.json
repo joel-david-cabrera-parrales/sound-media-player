@@ -90,6 +90,28 @@
       "expand": "Open immersive player"
     }
   },
+  "queue": {
+    "title": "Play queue",
+    "close": "Close queue",
+    "tabQueue": "Queue",
+    "tabHistory": "History",
+    "nowPlaying": "Now playing",
+    "live": "Live",
+    "upNext": "Up next",
+    "upNextFrom": "Up next from:",
+    "clearQueue": "Clear queue",
+    "remove": "Remove from queue",
+    "emptyQueue": "The queue is empty",
+    "historyTitle": "History",
+    "clearHistory": "Clear history",
+    "emptyHistory": "No history yet"
+  },
+  "lyrics": {
+    "live": "Live lyrics",
+    "back": "Back",
+    "empty": "No lyrics yet",
+    "emptyHint": "Lyrics for this song are not available yet."
+  },
   "notFound": {
     "badge": "Module unavailable",
     "subtitle": "Module or section not found",

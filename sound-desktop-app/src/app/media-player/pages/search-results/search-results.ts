@@ -279,10 +279,9 @@ export class SearchResults {
   protected playPlaylist(playlistId: string, event: Event): void {
     event.stopPropagation();
     const playlist = this.store.getById(playlistId);
-    const first = playlist
-      ? this.store.resolveTracks(playlist, this.library.tracks())[0]
-      : undefined;
-    if (first) this.player.play(first);
+    const list = playlist ? this.store.resolveTracks(playlist, this.library.tracks()) : [];
+    const first = list[0];
+    if (first) this.player.playContext(first, list, playlist?.name);
   }
 
   /** "Quizás quisiste decir": top-3 reales por parecido (Levenshtein ≤ 0.45). */
@@ -394,7 +393,7 @@ export class SearchResults {
   }
 
   protected playTrack(track: Track | null): void {
-    if (track) this.player.play(track);
+    if (track) this.player.playContext(track, this.matchedTracks());
   }
 
   protected isCurrentTrack(track: Track): boolean {

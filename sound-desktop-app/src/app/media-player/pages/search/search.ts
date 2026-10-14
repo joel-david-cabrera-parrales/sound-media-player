@@ -255,16 +255,20 @@ export class Search {
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    const visible = this.results()
+      .map((r) => r.track)
+      .filter((t): t is Track => !!t);
+    this.player.playContext(track, visible);
     this.remember({ text: track.title, kind: 'track', refId: track.id });
   }
 
   protected playGenre(genreId: string, label: string): void {
-    const first = this.library
+    const list = this.library
       .tracks()
-      .find((t) => t.genreIds?.includes(genreId) || t.genreId === genreId);
+      .filter((t) => t.genreIds?.includes(genreId) || t.genreId === genreId);
+    const first = list[0];
     if (!first) return;
-    this.player.play(first);
+    this.player.playContext(first, list, label);
     this.remember({ text: label, kind: 'genre', refId: genreId });
   }
 
@@ -286,7 +290,7 @@ export class Search {
     if (entry.kind === 'track' && entry.refId) {
       const track = this.library.tracks().find((t) => t.id === entry.refId);
       if (track) {
-        this.player.play(track);
+        this.player.playContext(track, this.library.tracks());
         return;
       }
       this.removeHistory(entry);

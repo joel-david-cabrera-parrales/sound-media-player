@@ -5,6 +5,8 @@ import { LocalMusicService } from './local-music.service';
 export type RepeatMode = 0 | 1 | 2;
 
 const PLAYER_STATE_KEY = 'sound.player.v1';
+const HISTORY_KEY = 'sound.history.v1';
+const HISTORY_MAX = 50;
 const POSITION_SAVE_INTERVAL_MS = 5000;
 
 interface PersistedPlayerState {
@@ -74,8 +76,20 @@ export class AudioPlayerService {
   /** Cola manual ("Añadir a la cola"): se consume antes que el orden de librería. */
   readonly upNext = signal<Track[]>([]);
 
+  /**
+   * Contexto de reproducción: la lista visible/filtrada de la página desde la
+   * que se inició la reproducción ("esas canciones son las que deben ir").
+   */
+  readonly contextQueue = signal<Track[]>([]);
+  /** Etiqueta del contexto (nombre de playlist, artista, género...). Null = genérico. */
+  readonly contextLabel = signal<string | null>(null);
+
+  /** Historial de reproducción (más reciente primero), persistente. */
+  readonly history = signal<Track[]>([]);
+
   constructor() {
     this.restore();
+    this.restoreHistory();
   }
 
   private ensureAudio(): HTMLAudioElement {
@@ -154,6 +168,8 @@ export class AudioPlayerService {
       }
       return;
     }
+    const prev = this.currentTrack();
+    if (prev) this.pushHistory(prev);
     this.currentTrack.set(track);
     this.currentTimeSec.set(0);
     this.durationSec.set(0);
@@ -178,7 +194,62 @@ export class AudioPlayerService {
     this.upNext.update((q) => (q.some((t) => t.id === track.id) ? q : [...q, track]));
   }
 
-  /** Siguiente: primero la cola manual (resolviendo huérfanos), luego la librería. */
+  /** Elimina una pista de la cola manual. */
+  removeFromQueue(trackId: string): void {
+    this.upNext.update((q) => q.filter((t) => t.id !== trackId));
+  }
+
+  /** Vacía la cola manual (no toca el contexto de la página). */
+  clearQueue(): void {
+    this.upNext.set([]);
+  }
+
+  /** Reordena la cola manual (drag & drop del drawer). */
+  moveInQueue(from: number, to: number): void {
+    this.upNext.update((q) => {
+      if (from < 0 || from >= q.length || to < 0 || to >= q.length || from === to) return q;
+      const next = [...q];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
+      return next;
+    });
+  }
+
+  /** Reproduce una pista de la cola manual sacándola de la cola. */
+  playQueuedAt(index: number): void {
+    const queued = this.upNext()[index];
+    if (!queued) return;
+    this.upNext.update((q) => q.filter((_, i) => i !== index));
+    const real = this.library.tracks().find((t) => t.id === queued.id) ?? queued;
+    this.play(real);
+  }
+
+  /**
+   * Reproduce una pista dentro de su lista visible (contexto de página).
+   * `list` es la lista filtrada/ordenada que se muestra; `label` el origen
+   * ("A continuación de: X"). El contexto sobrevive a next/previous.
+   */
+  playContext(track: Track, list: Track[], label?: string | null): void {
+    this.contextQueue.set([...list]);
+    this.contextLabel.set(label ?? null);
+    this.play(track);
+  }
+
+  /** Vacía el historial de reproducción. */
+  clearHistory(): void {
+    this.history.set([]);
+    this.persistHistory();
+  }
+
+  /** Resuelve una lista contra la librería actual (descarta huérfanos). */
+  private resolveQueue(list: Track[]): Track[] {
+    const all = this.library.tracks();
+    if (all.length === 0) return [];
+    const byId = new Map(all.map((t) => [t.id, t]));
+    return list.map((t) => byId.get(t.id)).filter((t): t is Track => !!t);
+  }
+
+  /** Siguiente: cola manual, luego contexto de página, luego librería. */
   next(): void {
     const queued = this.upNext()[0];
     if (queued) {
@@ -188,6 +259,24 @@ export class AudioPlayerService {
         this.play(real);
         return;
       }
+      // Huérfano: seguir resolviendo dentro del contexto/librería
+    }
+    const ctx = this.resolveQueue(this.contextQueue());
+    if (ctx.length > 0) {
+      const cur = this.currentTrack();
+      const idx = cur ? ctx.findIndex((t) => t.id === cur.id) : -1;
+      let target: Track;
+      if (this.shuffle() && ctx.length > 1) {
+        let i = idx;
+        while (i === idx || i < 0) {
+          i = Math.floor(Math.random() * ctx.length);
+        }
+        target = ctx[i];
+      } else {
+        target = ctx[idx < 0 ? 0 : (idx + 1) % ctx.length];
+      }
+      this.play(target);
+      return;
     }
     const queue = this.library.tracks();
     if (queue.length === 0) return;
@@ -206,9 +295,10 @@ export class AudioPlayerService {
     this.play(target);
   }
 
-  /** Anterior de la cola (secuencial aunque haya shuffle), con vuelta a la última. */
+  /** Anterior: contexto de página si existe, si no librería (secuencial). */
   previous(): void {
-    const queue = this.library.tracks();
+    const ctx = this.resolveQueue(this.contextQueue());
+    const queue = ctx.length > 0 ? ctx : this.library.tracks();
     if (queue.length === 0) return;
     const cur = this.currentTrack();
     const idx = cur ? queue.findIndex((t) => t.id === cur.id) : -1;
@@ -259,6 +349,40 @@ export class AudioPlayerService {
 
   isCurrent(track: Track): boolean {
     return this.currentTrack()?.id === track.id;
+  }
+
+  private pushHistory(track: Track): void {
+    this.history.update((h) => [track, ...h.filter((t) => t.id !== track.id)].slice(0, HISTORY_MAX));
+    this.persistHistory();
+  }
+
+  private persistHistory(): void {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(this.history().map((t) => t.id)));
+    } catch {
+      // Sin almacenamiento: el historial solo vive en memoria
+    }
+  }
+
+  private restoreHistory(): void {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (!raw) return;
+      const ids = JSON.parse(raw) as unknown;
+      if (!Array.isArray(ids)) return;
+      const all = this.library.tracks();
+      const byId = new Map(all.map((t) => [t.id, t]));
+      const restored: Track[] = [];
+      for (const id of ids) {
+        if (typeof id !== 'string') continue;
+        const track = byId.get(id);
+        if (track && !restored.some((t) => t.id === track.id)) restored.push(track);
+        if (restored.length >= HISTORY_MAX) break;
+      }
+      this.history.set(restored);
+    } catch {
+      this.history.set([]);
+    }
   }
 
   private persistThrottled(): void {

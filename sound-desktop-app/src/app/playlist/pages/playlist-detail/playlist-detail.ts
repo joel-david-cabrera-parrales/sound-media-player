@@ -157,12 +157,13 @@ export class PlaylistDetail {
   }
 
   protected playAll(): void {
-    const first = this.rows()[0]?.track;
-    if (first) this.player.play(first);
+    const rows = this.rows();
+    const first = rows[0]?.track;
+    if (first) this.player.playContext(first, rows.map((r) => r.track), this.playlist()?.name);
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.rows().map((r) => r.track), this.playlist()?.name);
   }
 
   protected isCurrentTrack(track: Track): boolean {

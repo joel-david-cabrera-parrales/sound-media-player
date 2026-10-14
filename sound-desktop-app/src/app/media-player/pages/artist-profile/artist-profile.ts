@@ -141,12 +141,13 @@ export class ArtistProfile {
   }
 
   protected playAll(): void {
-    const first = this.tracks()[0];
-    if (first) this.player.play(first);
+    const list = this.tracks();
+    const first = list[0];
+    if (first) this.player.playContext(first, list, this.artist()?.name);
   }
 
   protected playTrack(track: Track): void {
-    this.player.play(track);
+    this.player.playContext(track, this.tracks(), this.artist()?.name);
   }
 
   protected isCurrentTrack(track: Track): boolean {

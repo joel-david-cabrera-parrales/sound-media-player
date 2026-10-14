@@ -121,13 +121,16 @@ export class Home {
   }
 
   protected playTrack(track: Track | null): void {
-    if (track) this.player.play(track);
+    if (track) this.player.playContext(track, this.library.recentTracks());
   }
 
   protected playArtist(artist: LocalArtist, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    this.playTrack(this.artistFirstTrack(artist));
+    const key = artist.name.trim().toLowerCase();
+    const artistTracks = this.library.tracks().filter((t) => t.artist.trim().toLowerCase() === key);
+    const first = this.artistFirstTrack(artist);
+    if (first) this.player.playContext(first, artistTracks, artist.name);
   }
 
   protected isCurrentTrack(track: Track): boolean {

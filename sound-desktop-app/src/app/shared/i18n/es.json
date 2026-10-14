@@ -90,6 +90,28 @@
       "expand": "Abrir reproductor inmersivo"
     }
   },
+  "queue": {
+    "title": "Cola de reproducción",
+    "close": "Cerrar cola",
+    "tabQueue": "Cola",
+    "tabHistory": "Historial",
+    "nowPlaying": "Sonando ahora",
+    "live": "En directo",
+    "upNext": "A continuación",
+    "upNextFrom": "A continuación de:",
+    "clearQueue": "Borrar cola",
+    "remove": "Quitar de la cola",
+    "emptyQueue": "La cola está vacía",
+    "historyTitle": "Historial",
+    "clearHistory": "Borrar historial",
+    "emptyHistory": "Aún no hay historial"
+  },
+  "lyrics": {
+    "live": "Letras en vivo",
+    "back": "Volver",
+    "empty": "Sin letras aún",
+    "emptyHint": "Las letras de esta canción todavía no están disponibles."
+  },
   "notFound": {    "badge": "Módulo no disponible",
     "subtitle": "Módulo o sección no encontrada",
     "description": "La pestaña, sección o módulo que intentas abrir no está disponible, fue reubicada o no tienes permisos para acceder. Vuelve a la navegación principal.",

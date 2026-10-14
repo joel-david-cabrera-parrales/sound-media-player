@@ -79,8 +79,10 @@ export class Artist {
   protected playArtist(artist: LocalArtist, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    const first = artist.coverTrack;
-    if (first) this.player.play(first);
+    const key = artist.name.trim().toLowerCase();
+    const artistTracks = this.library.tracks().filter((t) => t.artist.trim().toLowerCase() === key);
+    const first = artist.coverTrack ?? artistTracks[0];
+    if (first) this.player.playContext(first, artistTracks, artist.name);
   }
 
   protected onPhotoError(event: Event): void {
