@@ -30,7 +30,7 @@
     @if (currentTrack()) {
       <div
         class="hidden md:flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/50 dark:bg-[#121212]/50 border border-slate-200 dark:border-white/[0.08] backdrop-blur-xl">
-        <span class="w-2 h-2 rounded-full bg-[#00d2ff] dark:shadow-[0_0_12px_#00d2ff] animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-[var(--accent)] dark:shadow-[0_0_12px_var(--accent)] animate-pulse"></span>
         <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] tracking-wide">
           {{ 'immersive.playingFrom' | translate }}
           @if (trackAlbum(); as album) {

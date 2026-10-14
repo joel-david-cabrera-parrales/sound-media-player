@@ -6,7 +6,7 @@
       <div class="flex items-center gap-2 text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] tracking-wide">
         <a routerLink="/library/home" class="hover:text-slate-700 dark:hover:text-[#b3b3b3] transition-colors">{{ 'shell.sidebar.library' | translate }}</a>
         <span class="material-symbols-outlined text-[12px]">chevron_right</span>
-        <span class="text-[#005575] dark:text-[#00d2ff] font-medium">{{ 'import.crumbHere' | translate }}</span>
+        <span class="text-[var(--accent-ink)] dark:text-[var(--accent)] font-medium">{{ 'import.crumbHere' | translate }}</span>
       </div>
       <h2 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-bold text-slate-900 dark:text-white tracking-tight">
         {{ 'import.title' | translate }}
@@ -21,15 +21,15 @@
         type="button"
         (click)="library.rescan()"
         [disabled]="library.scanning()"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 hover:border-[#00d2ff] text-slate-900 dark:text-white text-[14px] leading-[18px] font-semibold hover:bg-slate-100 dark:hover:bg-[#242424] transition-all duration-150 ease-out active:scale-95 disabled:opacity-50"
+        class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 hover:border-[var(--accent)] text-slate-900 dark:text-white text-[14px] leading-[18px] font-semibold hover:bg-slate-100 dark:hover:bg-[#242424] transition-all duration-150 ease-out active:scale-95 disabled:opacity-50"
       >
-        <span class="material-symbols-outlined text-[18px] text-[#005575] dark:text-[#00d2ff]" [class.animate-spin]="library.scanning()">sync</span>
+        <span class="material-symbols-outlined text-[18px] text-[var(--accent-ink)] dark:text-[var(--accent)]" [class.animate-spin]="library.scanning()">sync</span>
         <span>{{ library.scanning() ? ('import.scanning' | translate) : ('import.rescanNow' | translate) }}</span>
       </button>
       <button
         type="button"
         (click)="addFolder()"
-        class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] dark:shadow-[0_0_24px_-2px_rgba(0,210,255,0.45)] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all duration-150 ease-out active:scale-95"
+        class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] leading-[18px] dark:shadow-[0_0_24px_-2px_color-mix(in_srgb,var(--accent)_45%,transparent)] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all duration-150 ease-out active:scale-95"
       >
         <span class="material-symbols-outlined text-[20px] fill">drive_folder_upload</span>
         <span>{{ 'import.addFolder' | translate }}</span>
@@ -41,20 +41,20 @@
   <div class="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-none">
     <div class="flex items-center gap-3 min-w-0">
       <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00d2ff] opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00d2ff]"></span>
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--accent)]"></span>
       </span>
       <span class="text-[12px] leading-[16px] font-medium text-slate-900 dark:text-white truncate">{{ 'import.autoActive' | translate }}</span>
       <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] hidden sm:inline truncate">{{ 'import.watching' | translate }}</span>
     </div>
-    <span class="text-[11px] leading-[14px] text-[#005575] dark:text-[#00d2ff] font-semibold flex-shrink-0">{{ 'import.connected' | translate: { count: library.connectedCount() } }}</span>
+    <span class="text-[11px] leading-[14px] text-[var(--accent-ink)] dark:text-[var(--accent)] font-semibold flex-shrink-0">{{ 'import.connected' | translate: { count: library.connectedCount() } }}</span>
   </div>
 
   @if (library.scanning() || library.scanError() || player.error()) {
     <div class="space-y-2 px-4 py-3 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08]">
       @if (library.scanning()) {
         <div class="flex items-center gap-2 text-[12px] font-medium text-slate-600 dark:text-[#b3b3b3]">
-          <span class="material-symbols-outlined text-[18px] text-[#005575] dark:text-[#00d2ff] animate-spin">sync</span>
+          <span class="material-symbols-outlined text-[18px] text-[var(--accent-ink)] dark:text-[var(--accent)] animate-spin">sync</span>
           <span>{{ 'import.scanning' | translate }}</span>
           @if (library.scanProgress(); as p) {
             <span class="tabular-nums">({{ p.done }}/{{ p.total }})</span>
@@ -62,7 +62,7 @@
         </div>
         @if (library.scanProgress(); as p) {
           <div class="h-1.5 rounded-full bg-slate-200 dark:bg-[#242424] overflow-hidden">
-            <div class="h-full bg-[#00d2ff] transition-all" [style.width.%]="p.total > 0 ? (p.done / p.total) * 100 : 0"></div>
+            <div class="h-full bg-[var(--accent)] transition-all" [style.width.%]="p.total > 0 ? (p.done / p.total) * 100 : 0"></div>
           </div>
         }
       }
@@ -88,10 +88,10 @@
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)"
     [class]="isDragging()
-      ? 'relative group rounded-2xl border-2 border-dashed border-[#00d2ff] bg-[#00d2ff]/5 dark:bg-[#181818]/70 p-8 transition-all duration-300 text-center flex flex-col items-center justify-center gap-4 cursor-pointer'
-      : 'relative group rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[#00d2ff] bg-white/40 dark:bg-[#181818]/40 hover:bg-slate-50 dark:hover:bg-[#181818]/70 p-8 transition-all duration-300 text-center flex flex-col items-center justify-center gap-4 cursor-pointer'"
+      ? 'relative group rounded-2xl border-2 border-dashed border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_5%,transparent)] dark:bg-[#181818]/70 p-8 transition-all duration-300 text-center flex flex-col items-center justify-center gap-4 cursor-pointer'
+      : 'relative group rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[var(--accent)] bg-white/40 dark:bg-[#181818]/40 hover:bg-slate-50 dark:hover:bg-[#181818]/70 p-8 transition-all duration-300 text-center flex flex-col items-center justify-center gap-4 cursor-pointer'"
   >
-    <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-[#005575] dark:text-[#00d2ff] group-hover:scale-110 dark:group-hover:shadow-[0_0_24px_rgba(0,210,255,0.3)] transition-all duration-300">
+    <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] group-hover:scale-110 dark:group-hover:shadow-[0_0_24px_color-mix(in_srgb,var(--accent)_30%,transparent)] transition-all duration-300">
       <span class="material-symbols-outlined text-[36px]">folder_open</span>
     </div>
     <div class="space-y-1">
@@ -112,7 +112,7 @@
       @for (codec of ['FLAC', 'WAV', 'ALAC', 'AIFF', 'MP3', 'DSD (DSF/DFF)', 'AAC']; track codec) {
         <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/[0.08] text-[11px] font-mono font-semibold text-slate-900 dark:text-white tracking-wide">{{ codec }}</span>
       }
-      <span class="px-3 py-1 rounded-full bg-[#00d2ff]/10 border border-[#00d2ff]/40 text-[11px] font-semibold text-[#005575] dark:text-[#00d2ff] flex items-center gap-1">
+      <span class="px-3 py-1 rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] text-[11px] font-semibold text-[var(--accent-ink)] dark:text-[var(--accent)] flex items-center gap-1">
         <span class="material-symbols-outlined text-[14px]">high_quality</span>
         {{ 'import.hiresReady' | translate }}
       </span>
@@ -124,11 +124,11 @@
   <div class="space-y-4">
     <div class="flex items-center justify-between gap-3">
       <div class="flex items-center gap-2 min-w-0">
-        <span class="material-symbols-outlined text-[#005575] dark:text-[#00d2ff] text-[20px] flex-shrink-0">folder_copy</span>
+        <span class="material-symbols-outlined text-[var(--accent-ink)] dark:text-[var(--accent)] text-[20px] flex-shrink-0">folder_copy</span>
         <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white truncate">{{ 'import.syncedTitle' | translate }}</h3>
         <span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#242424] text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] flex-shrink-0">{{ 'import.activeCount' | translate: { count: library.connectedCount() } }}</span>
       </div>
-      <button type="button" class="text-[12px] leading-[16px] text-[#005575] dark:text-[#00d2ff] hover:underline flex items-center gap-1 flex-shrink-0">
+      <button type="button" class="text-[12px] leading-[16px] text-[var(--accent-ink)] dark:text-[var(--accent)] hover:underline flex items-center gap-1 flex-shrink-0">
         <span class="material-symbols-outlined text-[16px]">settings</span>
         <span class="hidden sm:inline">{{ 'import.scanPrefs' | translate }}</span>
       </button>
@@ -141,7 +141,7 @@
         <button
           type="button"
           (click)="addFolder()"
-          class="px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95"
+          class="px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95"
         >
           {{ 'import.addFolder' | translate }}
         </button>
@@ -153,7 +153,7 @@
       @for (folder of library.folders(); track folder.id) {
         <div class="p-4 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/16 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm dark:shadow-none">
           <div class="flex items-start gap-3.5 min-w-0">
-            <div class="w-11 h-11 rounded-lg bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/16 flex items-center justify-center text-[#005575] dark:text-[#00d2ff] shrink-0">
+            <div class="w-11 h-11 rounded-lg bg-slate-100 dark:bg-[#242424] border border-slate-200 dark:border-white/16 flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] shrink-0">
               <span class="material-symbols-outlined text-[24px]">hard_drive</span>
             </div>
             <div class="space-y-1 min-w-0">
@@ -163,7 +163,7 @@
                   <span
                     class="px-2 py-0.5 rounded text-[10px] font-bold border"
                     [class]="folder.badgeHiRes
-                      ? 'bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border-[#00d2ff]/30'
+                      ? 'bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border-[color-mix(in_srgb,var(--accent)_30%,transparent)]'
                       : 'bg-slate-100 dark:bg-[#242424] text-slate-500 dark:text-[#b3b3b3] border-slate-200 dark:border-white/[0.08]'"
                   >{{ folder.badge }}</span>
                 }
@@ -195,7 +195,7 @@
                 [attr.aria-checked]="folder.autoSync"
                 [attr.aria-label]="'import.autosync' | translate"
                 (click)="library.toggleAutoSync(folder.id)"
-                [class]="folder.autoSync ? 'bg-[#00d2ff]' : 'bg-slate-300 dark:bg-[#242424]'"
+                [class]="folder.autoSync ? 'bg-[var(--accent)]' : 'bg-slate-300 dark:bg-[#242424]'"
                 class="relative inline-flex w-10 h-5 rounded-full transition-colors flex-shrink-0"
               >
                 <span
@@ -209,7 +209,7 @@
               <button type="button" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors" [title]="'import.explore' | translate">
                 <span class="material-symbols-outlined text-[18px]">{{ folder.icon }}</span>
               </button>
-              <button type="button" (click)="library.rescan(folder.id)" [disabled]="library.scanning()" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-[#005575] dark:hover:text-[#00d2ff] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors disabled:opacity-50" [title]="'import.rescan' | translate">
+              <button type="button" (click)="library.rescan(folder.id)" [disabled]="library.scanning()" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-[var(--accent-ink)] dark:hover:text-[var(--accent)] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors disabled:opacity-50" [title]="'import.rescan' | translate">
                 <span class="material-symbols-outlined text-[18px]" [class.animate-spin]="library.scanning()">refresh</span>
               </button>
               <button type="button" (click)="library.removeFolder(folder.id)" class="p-2 rounded-full text-slate-500 dark:text-[#b3b3b3] hover:text-red-600 dark:hover:text-[#ef4444] hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-colors" [title]="'import.removeDir' | translate">
@@ -229,7 +229,7 @@
         <h3 class="text-[16px] leading-[22px] font-semibold text-slate-900 dark:text-white">{{ 'import.recentTitle' | translate }}</h3>
         <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">{{ 'import.recentDesc' | translate }}</p>
       </div>
-      <span class="text-[12px] leading-[16px] text-[#005575] dark:text-[#00d2ff] font-semibold flex-shrink-0">
+      <span class="text-[12px] leading-[16px] text-[var(--accent-ink)] dark:text-[var(--accent)] font-semibold flex-shrink-0">
         {{ 'import.seeAll' | translate: { total: library.tracks().length } }}
       </span>
     </div>
@@ -260,16 +260,16 @@
         >
           <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
             @if (isPlayingTrack(track)) {
-              <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] animate-pulse">graphic_eq</span>
+              <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] animate-pulse">graphic_eq</span>
             } @else {
               <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
-              <span class="material-symbols-outlined text-[20px] text-[#005575] dark:text-[#00d2ff] hidden group-hover:inline">play_arrow</span>
+              <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] hidden group-hover:inline">play_arrow</span>
             }
           </div>
           <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
             <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(track)" [alt]="track.title" loading="lazy" />
             <div class="truncate min-w-0">
-              <div class="text-[14px] leading-[20px] text-slate-900 dark:text-white group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] font-semibold truncate">{{ track.title }}</div>
+              <div class="text-[14px] leading-[20px] text-slate-900 dark:text-white group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] font-semibold truncate">{{ track.title }}</div>
               <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
             </div>
           </div>
@@ -278,7 +278,7 @@
             <span
               class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold border"
               [class]="track.hiRes
-                ? 'bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border-[#00d2ff]/30'
+                ? 'bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border-[color-mix(in_srgb,var(--accent)_30%,transparent)]'
                 : 'bg-slate-100 dark:bg-[#242424] text-slate-500 dark:text-[#b3b3b3] border-slate-200 dark:border-white/[0.08]'"
             >
               {{ track.format }}

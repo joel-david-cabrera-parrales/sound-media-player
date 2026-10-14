@@ -1,6 +1,6 @@
 .letter-nav {
   scrollbar-width: thin;
-  scrollbar-color: #00d2ff transparent;
+  scrollbar-color: var(--accent) transparent;
 }
 
 .letter-nav::-webkit-scrollbar {
@@ -12,10 +12,10 @@
 }
 
 .letter-nav::-webkit-scrollbar-thumb {
-  background: #00d2ff;
+  background: var(--accent);
   border-radius: 3px;
 }
 
 .letter-nav::-webkit-scrollbar-thumb:hover {
-  background: #00a2e6;
+  background: var(--accent-deep);
 }

@@ -11,6 +11,7 @@ import { Search } from './pages/search/search';
 import { SearchResults } from './pages/search-results/search-results';
 import { GenreResults } from './pages/genre-results/genre-results';
 import { LikedSongs } from './pages/liked-songs/liked-songs';
+import { Settings } from './pages/settings/settings';
 
 export const routes: Routes = [
   {
@@ -57,6 +58,10 @@ export const routes: Routes = [
       {
         path: 'liked-songs',
         component: LikedSongs,
+      },
+      {
+        path: 'settings',
+        component: Settings,
       },
     ],
   },

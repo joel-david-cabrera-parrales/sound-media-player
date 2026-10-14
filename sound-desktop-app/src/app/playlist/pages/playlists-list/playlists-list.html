@@ -5,14 +5,14 @@
         <h1 class="text-[26px] leading-[32px] md:text-[36px] md:leading-[44px] font-bold text-slate-900 dark:text-white tracking-tight">
           {{ 'playlists.list.title' | translate }}
         </h1>
-        <span class="px-2.5 py-0.5 rounded-full text-[11px] leading-[14px] font-semibold bg-slate-100 dark:bg-[#242424] text-[#005575] dark:text-[#00d2ff] border border-slate-200 dark:border-white/16">
+        <span class="px-2.5 py-0.5 rounded-full text-[11px] leading-[14px] font-semibold bg-slate-100 dark:bg-[#242424] text-[var(--accent-ink)] dark:text-[var(--accent)] border border-slate-200 dark:border-white/16">
           {{ 'playlists.list.count' | translate: { count: store.count() } }}
         </span>
       </div>
       <p class="text-[14px] leading-[20px] text-slate-600 dark:text-[#b3b3b3]">{{ 'playlists.list.subtitle' | translate }}</p>
     </div>
     <button type="button" (click)="openCreate()"
-      class="px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-extrabold text-[14px] leading-[18px] flex items-center gap-2 dark:shadow-[0_0_20px_rgba(0,210,255,0.4)] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all duration-200 active:scale-95 self-start md:self-auto">
+      class="px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-extrabold text-[14px] leading-[18px] flex items-center gap-2 dark:shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_40%,transparent)] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all duration-200 active:scale-95 self-start md:self-auto">
       <span class="material-symbols-outlined text-[20px] fill">add</span>
       <span>{{ 'playlists.list.new' | translate }}</span>
     </button>
@@ -26,7 +26,7 @@
       (input)="setSearch(q.value)"
       type="text"
       [placeholder]="'playlists.list.filter' | translate"
-      class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 rounded-xl text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#00d2ff] transition-all"
+      class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 rounded-xl text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[var(--accent)] transition-all"
     />
   </div>
 
@@ -36,7 +36,7 @@
       <p class="mt-3 text-[20px] leading-[26px] font-bold text-slate-900 dark:text-white">{{ 'playlists.list.emptyTitle' | translate }}</p>
       <p class="mt-1 text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3]">{{ 'playlists.list.emptyDesc' | translate }}</p>
       <button type="button" (click)="openCreate()"
-        class="mt-5 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+        class="mt-5 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] leading-[18px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
         {{ 'playlists.list.new' | translate }}
       </button>
     </div>
@@ -45,7 +45,7 @@
   } @else {
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
       <button type="button" (click)="openCreate()"
-        class="min-h-[220px] rounded-xl border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[#00d2ff]/60 flex flex-col items-center justify-center gap-2 text-slate-400 dark:text-[#6a6a6a] hover:text-[#005575] dark:hover:text-[#00d2ff] transition-all group">
+        class="min-h-[220px] rounded-xl border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[color-mix(in_srgb,var(--accent)_60%,transparent)] flex flex-col items-center justify-center gap-2 text-slate-400 dark:text-[#6a6a6a] hover:text-[var(--accent-ink)] dark:hover:text-[var(--accent)] transition-all group">
         <span class="material-symbols-outlined text-[36px] group-hover:scale-110 transition-transform">add</span>
         <span class="text-[13px] font-semibold">{{ 'playlists.list.new' | translate }}</span>
       </button>
@@ -79,7 +79,7 @@
           } @else {
             <div class="absolute top-6 right-6 hidden group-hover:flex items-center gap-2">
               <a [routerLink]="['/playlist', playlist.id, 'edit']" [title]="'playlists.list.edit' | translate"
-                class="w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-[#00d2ff] hover:text-black transition-all">
+                class="w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-[var(--accent)] hover:text-black transition-all">
                 <span class="material-symbols-outlined text-[18px]">edit</span>
               </a>
               <button type="button" (click)="askDelete(playlist.id, $event)" [title]="'playlists.list.delete' | translate"

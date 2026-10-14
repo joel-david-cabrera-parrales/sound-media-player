@@ -1,15 +1,15 @@
 .cyan-glow {
-  box-shadow: 0 4px 14px -4px rgba(0, 130, 180, 0.4);
+  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 :host-context(.dark) .cyan-glow {
-  box-shadow: 0 0 24px -2px rgba(0, 210, 255, 0.45);
+  box-shadow: 0 0 24px -2px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .cyan-glow-subtle {
-  box-shadow: 0 2px 8px -2px rgba(0, 130, 180, 0.3);
+  box-shadow: 0 2px 8px -2px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 :host-context(.dark) .cyan-glow-subtle {
-  box-shadow: 0 0 12px rgba(0, 210, 255, 0.25);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 25%, transparent);
 }

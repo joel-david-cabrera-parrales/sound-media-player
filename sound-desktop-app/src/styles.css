@@ -4,6 +4,17 @@
 /* Tema manual por clase en <html> (no prefers-color-scheme) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Acento de interfaz (lo escribe ThemeService según UserSettings.accent) */
+:root {
+  --accent: #00d2ff;
+  --accent-deep: #0088cc;
+  --accent-ink: color-mix(in srgb, var(--accent) 62%, black);
+}
+
+:root.dark {
+  --accent-ink: color-mix(in srgb, var(--accent) 88%, white);
+}
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;

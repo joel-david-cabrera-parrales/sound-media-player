@@ -31,6 +31,7 @@ export interface ScanProgress {
 export interface ElectronAPI {
   openFileDialogue: () => Promise<OpenFileResult>;
   openDirectoryDialogue?: () => Promise<OpenDirectoryResult>;
+  quitApp?: () => Promise<void>;
   scanFolder?: (input: ScanFolderInput) => Promise<ScanFolderResult>;
   onScanProgress?: (cb: (p: ScanProgress) => void) => () => void;
   toAudioUrl?: (filePath: string) => string;

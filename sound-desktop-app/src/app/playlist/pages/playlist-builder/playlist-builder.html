@@ -5,20 +5,20 @@
       <div class="flex items-center gap-2 text-[12px] leading-[16px] text-slate-500 dark:text-[#6a6a6a] min-w-0">
         <a routerLink="/playlist" class="hover:text-slate-900 dark:hover:text-white transition-colors truncate">{{ 'playlists.list.title' | translate }}</a>
         <span>/</span>
-        <span class="text-[#005575] dark:text-[#00d2ff] font-medium truncate">{{ playlist.name }}</span>
+        <span class="text-[var(--accent-ink)] dark:text-[var(--accent)] font-medium truncate">{{ playlist.name }}</span>
       </div>
       <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] flex-shrink-0">
-        <span class="w-2 h-2 rounded-full bg-[#00d2ff]"></span>
+        <span class="w-2 h-2 rounded-full bg-[var(--accent)]"></span>
         {{ draftCount() === 0 ? ('playlists.builder.draftEmpty' | translate) : ('playlists.builder.draft' | translate: { count: draftCount() }) }}
       </span>
     </div>
 
     <!-- Hero editable -->
     <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-white via-slate-100 to-white dark:from-[#181818] dark:via-[#201f1f] dark:to-[#242424] border border-slate-200 dark:border-white/[0.08] p-6 lg:p-8 shadow-sm dark:shadow-none">
-      <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[#00d2ff]/10 blur-3xl pointer-events-none"></div>
+      <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl pointer-events-none"></div>
       <div class="relative z-10 flex flex-col md:flex-row gap-6">
         <button type="button" (click)="openEdit()" [title]="'playlists.builder.editCover' | translate"
-          class="relative w-44 h-44 md:w-56 md:h-56 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[#00d2ff]/60 bg-slate-100 dark:bg-[#242424] flex-shrink-0 group mx-auto md:mx-0">
+          class="relative w-44 h-44 md:w-56 md:h-56 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-white/16 hover:border-[color-mix(in_srgb,var(--accent)_60%,transparent)] bg-slate-100 dark:bg-[#242424] flex-shrink-0 group mx-auto md:mx-0">
           <img class="absolute inset-0 w-full h-full object-cover" [src]="heroCover()" alt="" (error)="onImgError($event, '/images/track-cover.svg')" />
           <span class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
             <span class="material-symbols-outlined text-[32px] text-white">add_a_photo</span>
@@ -26,7 +26,7 @@
         </button>
         <div class="flex-1 min-w-0 flex flex-col justify-center gap-2">
           <div class="flex flex-wrap items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border border-[#00d2ff]/30">
+            <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)]">
               {{ 'playlists.builder.publicBadge' | translate }}
             </span>
             <span class="text-[12px] text-slate-500 dark:text-[#6a6a6a]">
@@ -35,7 +35,7 @@
           </div>
           <button type="button" (click)="openEdit()" class="text-left group">
             <span class="block text-[13px] font-medium text-slate-500 dark:text-[#6a6a6a]">{{ 'playlists.builder.nameLabel' | translate }}</span>
-            <span class="block text-[26px] leading-[32px] md:text-[32px] md:leading-[38px] font-extrabold text-slate-900 dark:text-white tracking-tight truncate group-hover:text-[#005575] dark:group-hover:text-[#00d2ff] transition-colors">
+            <span class="block text-[26px] leading-[32px] md:text-[32px] md:leading-[38px] font-extrabold text-slate-900 dark:text-white tracking-tight truncate group-hover:text-[var(--accent-ink)] dark:group-hover:text-[var(--accent)] transition-colors">
               {{ playlist.name }}
             </span>
           </button>
@@ -47,7 +47,7 @@
           </button>
           <div class="pt-1">
             <button type="button" (click)="saveAndExit()"
-              class="px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[13px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+              class="px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[13px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
               {{ 'playlists.builder.save' | translate }}
             </button>
           </div>
@@ -74,7 +74,7 @@
             (input)="setSearch(sq.value)"
             type="text"
             [placeholder]="'playlists.builder.searchPlaceholder' | translate"
-            class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 rounded-full text-[13px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[#00d2ff] transition-all"
+            class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 rounded-full text-[13px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[var(--accent)] transition-all"
           />
         </div>
       </div>
@@ -104,15 +104,15 @@
               </div>
               <div class="hidden md:block md:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.album }}</div>
               <div class="hidden md:block md:col-span-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#00d2ff]/15 text-[#005575] dark:text-[#00d2ff] border border-[#00d2ff]/30">{{ track.format.split(' ')[0] }}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)]">{{ track.format.split(' ')[0] }}</span>
               </div>
               <div class="col-span-2 text-right flex items-center justify-end gap-2">
                 <span class="text-[12px] font-mono text-slate-500 dark:text-[#b3b3b3]">{{ formatDuration(track.durationSec) }}</span>
                 <button type="button" (click)="toggleTrack(track)"
                   [title]="isAdded(track) ? ('playlists.builder.added' | translate) : ('playlists.builder.add' | translate)"
                   [class]="isAdded(track)
-                    ? 'inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#00d2ff]/15 border border-[#00d2ff]/40 text-[#005575] dark:text-[#00d2ff] text-[12px] font-bold'
-                    : 'inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-slate-700 dark:text-white text-[12px] font-semibold hover:border-[#00d2ff]/50 transition-all'"
+                    ? 'inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] text-[12px] font-bold'
+                    : 'inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-slate-700 dark:text-white text-[12px] font-semibold hover:border-[color-mix(in_srgb,var(--accent)_50%,transparent)] transition-all'"
                   class="active:scale-95">
                   <span class="material-symbols-outlined text-[16px]">{{ isAdded(track) ? 'check' : 'add' }}</span>
                   <span class="hidden sm:inline">{{ isAdded(track) ? ('playlists.builder.added' | translate) : ('playlists.builder.add' | translate) }}</span>
@@ -129,7 +129,7 @@
         </span>
         @if (visibleSuggestions().length < suggestions().length) {
           <button type="button" (click)="loadMore()"
-            class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#005575] dark:text-[#00d2ff] hover:underline">
+            class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--accent-ink)] dark:text-[var(--accent)] hover:underline">
             <span class="material-symbols-outlined text-[18px]">refresh</span>
             {{ 'playlists.builder.loadMore' | translate }}
           </button>
@@ -141,7 +141,7 @@
   <div class="px-4 sm:px-8 py-16 text-center">
     <span class="material-symbols-outlined text-[48px] text-slate-400 dark:text-[#6a6a6a]">queue_music</span>
     <p class="mt-4 text-[16px] font-semibold text-slate-900 dark:text-white">{{ 'playlists.builder.notFound' | translate }}</p>
-    <a routerLink="/playlist" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#00d2ff] text-[#001f28] font-bold text-[14px] hover:bg-[#00a2e6] dark:hover:bg-[#38bdf8] transition-all active:scale-95">
+    <a routerLink="/playlist" class="inline-block mt-4 px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">
       {{ 'playlists.list.title' | translate }}
     </a>
   </div>

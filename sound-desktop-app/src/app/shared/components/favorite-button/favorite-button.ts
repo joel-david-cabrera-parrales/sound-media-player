@@ -18,7 +18,7 @@ export class FavoriteButton {
   readonly buttonClass = input('');
   /** Color en reposo (el liked siempre es acento sólido). */
   readonly idleClass = input(
-    'text-slate-400 dark:text-[#6a6a6a] hover:text-[#005575] dark:hover:text-[#00d2ff]',
+    'text-slate-400 dark:text-[#6a6a6a] hover:text-[var(--accent-ink)] dark:hover:text-[var(--accent)]',
   );
   readonly iconClass = input('text-[20px]');
   readonly toggled = output<void>();

@@ -433,5 +433,51 @@
     "colAlbum": "Album",
     "colDuration": "Duration",
     "notFound": "Genre not found"
+  },
+  "settings": {
+    "crumbAccount": "Account",
+    "crumbPrefs": "General preferences",
+    "title": "Account Settings",
+    "subtitle": "Manage your audio identity, visual ambience and experience personalization.",
+    "personal": {
+      "title": "Personal Information",
+      "tag": "Identity",
+      "maxSize": "max 4MB",
+      "save": "Save changes",
+      "saved": "Saved"
+    },
+    "theme": {
+      "title": "Theme Preferences",
+      "tag": "Visual",
+      "desc": "Pick the right contrast mode for your listening and studio sessions.",
+      "dark": "Dark",
+      "darkDesc": "Deep immersion, studio blacks",
+      "light": "Light",
+      "lightDesc": "High contrast for daytime",
+      "system": "System (Auto)",
+      "systemDesc": "Syncs with the device OS"
+    },
+    "accent": {
+      "title": "Accent Color",
+      "tag": "Interface identity",
+      "desc": "Customize the main color of playback controls, dynamic waves and active selections.",
+      "cyan": "Cyan Sky",
+      "violet": "Electric Violet",
+      "emerald": "Emerald",
+      "fuchsia": "Fuchsia",
+      "amber": "Amber"
+    },
+    "language": {
+      "title": "Language",
+      "tag": "Localization",
+      "desc": "Set the default language for navigation, metadata and player notices.",
+      "esDesc": "Default language",
+      "enDesc": "Secondary language"
+    }
+  },
+  "account": {
+    "menuLabel": "Account menu",
+    "profile": "Profile settings",
+    "quit": "Quit app"
   }
 }
