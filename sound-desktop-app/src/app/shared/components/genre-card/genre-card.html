@@ -1,0 +1,18 @@
+<a
+  [routerLink]="['/library/genre', id()]"
+  [class]="cardClass()"
+>
+  <span [class]="textClass()">{{ label() }}</span>
+  <span [class]="countClass()">
+    {{ 'home.genres.songs' | translate: { count: count() } }}
+    <span class="material-symbols-outlined text-xs">arrow_forward</span>
+  </span>
+  @if (coverUrl()) {
+    <img
+      class="absolute -right-3 -bottom-3 w-16 h-16 rounded-full object-cover opacity-60 group-hover:scale-110 transition-transform"
+      [src]="coverUrl()"
+      [alt]="label()"
+      loading="lazy"
+    />
+  }
+</a>

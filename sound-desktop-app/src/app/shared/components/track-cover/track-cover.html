@@ -1,0 +1,11 @@
+@if (track()) {
+  <img
+    [src]="coverUrl()"
+    [alt]="alt()"
+    [class]="klass()"
+    [width]="width() || undefined"
+    [height]="height() || undefined"
+    loading="lazy"
+    (error)="onImgError($event)"
+  />
+}

@@ -1,0 +1,9 @@
+:host {
+  display: contents;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
