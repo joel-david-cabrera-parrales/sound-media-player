@@ -1,14 +1,14 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { TranslationService } from '../../../shared/services/translation.service';
-import { LocalMusicService } from '../../services/local-music.service';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor, type Track } from '../../models/track.model';
-import { genreImage } from '../../models/genre-images';
-import { DEFAULT_GENRE_COVER, genreLabel } from '../../models/genre-taxonomy';
-import { normalizeText } from '../../../shared/utils/text';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { TranslationService } from '../../../../../shared/services/translation.service';
+import { LocalMusicService } from '../../../../services/local-music.service';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { coverUrlFor, type Track } from '../../../../models/track.model';
+import { genreImage } from '../../../../models/genre-images';
+import { DEFAULT_GENRE_COVER, genreLabel } from '../../../../models/genre-taxonomy';
+import { normalizeText } from '../../../../../shared/utils/text';
 
 type SearchFilter = 'all' | 'music' | 'podcasts' | 'live';
 type GenreSort = 'popular' | 'az';

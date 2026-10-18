@@ -2,13 +2,13 @@ import { Component, ElementRef, OnDestroy, ViewChild, computed, effect, inject, 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { LocalMusicService, normalizeArtistName, type LocalArtist } from '../../services/local-music.service';
-import { PlaylistsService } from '../../../playlist/services/playlists.service';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
-import { safeUrlCached, trackCoverCached } from '../../../shared/utils/cover-cache';
-import { normalizeText as norm } from '../../../shared/utils/text';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { LocalMusicService, normalizeArtistName, type LocalArtist } from '../../../../services/local-music.service';
+import { PlaylistsService } from '../../../../../playlist/services/playlists.service';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { coverUrlFor, formatTrackDuration, type Track } from '../../../../models/track.model';
+import { safeUrlCached, trackCoverCached } from '../../../../../shared/utils/cover-cache';
+import { normalizeText as norm } from '../../../../../shared/utils/text';
 
 export type ResultsFilter = 'all' | 'songs' | 'artists' | 'albums' | 'playlists';
 
