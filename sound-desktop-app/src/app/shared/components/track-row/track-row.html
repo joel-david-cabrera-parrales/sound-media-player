@@ -1,0 +1,66 @@
+<div
+  class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0"
+  (click)="playTrack.emit(track())"
+  (keydown.enter)="playTrack.emit(track())"
+  (keydown.space)="playTrack.emit(track()); $event.preventDefault()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="track().title"
+>
+  <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
+    @if (isCurrent()) {
+      <span class="flex items-end gap-0.5 h-3.5">
+        <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-1"></span>
+        <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-2"></span>
+        <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-3"></span>
+      </span>
+    } @else {
+      <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ index() + 1 }}</span>
+      <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] hidden group-hover:inline fill">play_arrow</span>
+    }
+  </div>
+  <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
+    <shared-track-cover
+      [track]="track()"
+      [klass]="'w-10 h-10 rounded object-cover shrink-0'"
+    />
+    <div class="truncate min-w-0">
+      <div class="text-[14px] leading-[20px] font-semibold truncate"
+        [class]="isCurrent() ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'"
+      >
+        {{ track().title }}
+      </div>
+      <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track().artist }}</div>
+    </div>
+  </div>
+  @if (!compact()) {
+    <div class="hidden md:block md:col-span-4 lg:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track().album }}</div>
+    <div class="hidden lg:block lg:col-span-2">
+      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)]">
+        {{ track().format }}
+      </span>
+    </div>
+    <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3]">
+      {{ formatSize(track().sizeBytes) }}
+    </div>
+  }
+  <div class="col-span-2 md:col-span-1 text-[14px] md:text-[12px] leading-[20px] md:leading-[16px] text-slate-500 dark:text-[#b3b3b3] text-right font-mono flex items-center justify-end gap-1">
+    <span>{{ formatDuration(track().durationSec) }}</span>
+    <shared-favorite-button
+      [liked]="isLiked()"
+      [label]="'shell.dock.favorite' | translate"
+      [buttonClass]="'p-1 rounded-full transition-all active:scale-95'"
+      [idleClass]="isLiked() ? '' : 'opacity-0 group-hover:opacity-100'"
+      [iconClass]="'text-[18px]'"
+      (toggled)="onToggleLike()"
+    />
+    <button
+      type="button"
+      (click)="onOpenMenu($event)"
+      [title]="'trackMenu.open' | translate"
+      class="p-1 rounded-full text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-all"
+    >
+      <span class="material-symbols-outlined text-[18px]">more_horiz</span>
+    </button>
+  </div>
+</div>
