@@ -302,7 +302,16 @@
     "emptyTitle": "Aún no tienes favoritas",
     "emptyDesc": "Marca el corazón en cualquier canción y aparecerá aquí.",
     "goLibrary": "Explorar biblioteca",
-    "remove": "Quitar de favoritas"
+    "remove": "Quitar de favoritas",
+    "searchPlaceholder": "Buscar canciones favoritas...",
+    "sortBy": "Ordenar por:",
+    "sortTitle": "Título (A - Z)",
+    "sortArtist": "Artista",
+    "sortAlbum": "Álbum",
+    "sortDuration": "Duración",
+    "viewList": "Vista de lista",
+    "viewGrid": "Vista en cuadrícula",
+    "noResults": "Sin resultados para esa búsqueda."
   },
   "searchResults": {
     "pillAll": "Todo",

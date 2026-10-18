@@ -303,7 +303,16 @@
     "emptyTitle": "No favorites yet",
     "emptyDesc": "Tap the heart on any song and it will show up here.",
     "goLibrary": "Browse library",
-    "remove": "Remove from favorites"
+    "remove": "Remove from favorites",
+    "searchPlaceholder": "Search liked songs...",
+    "sortBy": "Sort by:",
+    "sortTitle": "Title (A - Z)",
+    "sortArtist": "Artist",
+    "sortAlbum": "Album",
+    "sortDuration": "Duration",
+    "viewList": "List view",
+    "viewGrid": "Grid view",
+    "noResults": "No results for that search."
   },
   "searchResults": {
     "pillAll": "All",

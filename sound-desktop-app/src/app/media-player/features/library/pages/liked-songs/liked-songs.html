@@ -23,44 +23,145 @@
       </a>
     </div>
   } @else {
-    <div class="w-full bg-white dark:bg-[#181818] rounded-xl border border-slate-200 dark:border-white/[0.08] overflow-hidden shadow-sm dark:shadow-none">
-      @for (track of library.likedTracks(); track track.id; let i = $index) {
-        <div
-          (click)="playTrack(track)" (keydown.enter)="playTrack(track)" tabindex="0" role="button"
-          class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0"
-        >
-          <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
-            @if (isCurrentTrack(track)) {
-              <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] animate-pulse">graphic_eq</span>
-            } @else {
-              <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
-              <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] hidden group-hover:inline fill">play_arrow</span>
-            }
-          </div>
-          <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
-            <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onCoverError($event)" />
-            <div class="truncate min-w-0">
-              <div class="text-[14px] leading-[20px] font-semibold truncate"
-                [class]="isCurrentTrack(track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'">{{ track.title }}</div>
-              <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
+    <!-- Action bar: buscador + orden + vista -->
+    <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-white/[0.08]">
+      <div class="relative w-full sm:max-w-xs">
+        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-[#6a6a6a]">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+        </span>
+        <input
+          #q
+          [value]="search()"
+          (input)="setSearch(q.value)"
+          type="text"
+          [placeholder]="'liked.searchPlaceholder' | translate"
+          class="w-full h-10 pl-10 pr-4 bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all"
+        />
+      </div>
+      <div class="flex items-center gap-3 self-end sm:self-auto">
+        <label class="flex items-center gap-2 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">
+          <span class="hidden md:inline">{{ 'liked.sortBy' | translate }}</span>
+          <span class="relative">
+            <select
+              #sortSel
+              (change)="setSort(sortSel.value === 'artist' || sortSel.value === 'album' || sortSel.value === 'duration' ? sortSel.value : 'title')"
+              class="appearance-none bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white rounded-lg pl-3 pr-8 py-1.5 text-[12px] leading-[16px] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+            >
+              <option value="title" [selected]="sort() === 'title'">{{ 'liked.sortTitle' | translate }}</option>
+              <option value="artist" [selected]="sort() === 'artist'">{{ 'liked.sortArtist' | translate }}</option>
+              <option value="album" [selected]="sort() === 'album'">{{ 'liked.sortAlbum' | translate }}</option>
+              <option value="duration" [selected]="sort() === 'duration'">{{ 'liked.sortDuration' | translate }}</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 dark:text-[#b3b3b3] text-sm">expand_more</span>
+          </span>
+        </label>
+        <div class="flex items-center bg-white dark:bg-[#181818] rounded-full p-1 border border-slate-200 dark:border-white/[0.08] gap-1">
+          <button type="button" (click)="setView('list')" [title]="'liked.viewList' | translate"
+            [class]="view() === 'list' ? 'w-7 h-7 rounded-full flex items-center justify-center bg-[color-mix(in_srgb,var(--accent)_20%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors'">
+            <span class="material-symbols-outlined text-base">view_list</span>
+          </button>
+          <button type="button" (click)="setView('grid')" [title]="'liked.viewGrid' | translate"
+            [class]="view() === 'grid' ? 'w-7 h-7 rounded-full flex items-center justify-center bg-[color-mix(in_srgb,var(--accent)_20%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors'">
+            <span class="material-symbols-outlined text-base">grid_view</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    @if (filtered().length === 0) {
+      <p class="py-10 text-center text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3]">{{ 'liked.noResults' | translate }}</p>
+    } @else if (view() === 'grid') {
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+        @for (track of filtered(); track track.id) {
+          <div
+            (click)="playTrack(track)" (keydown.enter)="playTrack(track)" (keydown.space)="playTrack(track); $event.preventDefault()" tabindex="0" role="button" [attr.aria-label]="track.title"
+            class="group relative p-3.5 rounded-xl bg-white dark:bg-[#181818] hover:bg-slate-100 dark:hover:bg-[#242424]/90 transition-all duration-200 border flex flex-col gap-3 cursor-pointer shadow-sm dark:shadow-none"
+            [class]="isCurrentTrack(track) ? 'border-[color-mix(in_srgb,var(--accent)_40%,transparent)]' : 'border-slate-200 dark:border-white/[0.08]'"
+          >
+            <div class="relative aspect-square w-full rounded-lg overflow-hidden bg-slate-100 dark:bg-[#242424] shadow-md">
+              <img class="w-full h-full object-cover" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onCoverError($event)" />
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span class="w-12 h-12 rounded-full bg-[var(--accent)] text-[#001f28] flex items-center justify-center shadow-lg active:scale-95">
+                  <span class="material-symbols-outlined text-2xl fill">{{ isCurrentTrack(track) ? 'pause' : 'play_arrow' }}</span>
+                </span>
+              </div>
+              @if (isCurrentTrack(track)) {
+                <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#0e0e0e]/90 backdrop-blur-md border border-[color-mix(in_srgb,var(--accent)_40%,transparent)] flex items-center gap-1.5 shadow">
+                  <span class="flex items-end gap-0.5 h-3">
+                    <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-1"></span>
+                    <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-2"></span>
+                    <span class="w-0.5 bg-[var(--accent)] rounded-full eq-bar-3"></span>
+                  </span>
+                  <span class="text-[10px] font-bold text-[var(--accent)] uppercase tracking-wider">Playing</span>
+                </div>
+              }
+              <shared-favorite-button
+                [liked]="true"
+                [label]="'liked.remove' | translate"
+                buttonClass="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center transition-all active:scale-95"
+                iconClass="text-[18px]"
+                (toggled)="unlike(track)"
+              />
+            </div>
+            <div class="flex flex-col gap-1 min-w-0">
+              <div class="flex items-center gap-1 min-w-0">
+                <span class="font-bold text-[16px] leading-[22px] truncate cursor-pointer hover:underline flex-1 min-w-0"
+                  [class]="isCurrentTrack(track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'">{{ track.title }}</span>
+              </div>
+              <span class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</span>
+              <span class="text-[11px] leading-[14px] font-mono text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ formatDuration(track.durationSec) }}</span>
             </div>
           </div>
-          <div class="hidden md:block md:col-span-4 lg:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.album }}</div>
-          <div class="hidden lg:block lg:col-span-2">
-            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)]">{{ track.format }}</span>
-          </div>
-          <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] tabular-nums">{{ formatDuration(track.durationSec) }}</div>
-          <div class="col-span-2 md:col-span-1 text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-1">
-            <shared-favorite-button
-              [liked]="true"
-              [label]="'liked.remove' | translate"
-              buttonClass="p-1.5 rounded-full hover:text-red-500 dark:hover:text-red-400 transition-colors active:scale-95"
-              iconClass="text-[20px]"
-              (toggled)="unlike(track)"
-            />
-          </div>
+        }
+      </div>
+    } @else {
+      <div class="w-full bg-white dark:bg-[#181818] rounded-xl border border-slate-200 dark:border-white/[0.08] overflow-hidden shadow-sm dark:shadow-none">
+        <div class="hidden md:grid grid-cols-12 gap-4 px-4 py-2.5 text-[11px] leading-[14px] font-medium text-slate-500 dark:text-[#6a6a6a] border-b border-slate-200 dark:border-white/[0.08] uppercase tracking-wider">
+          <div class="col-span-1 text-center">#</div>
+          <div class="col-span-4">{{ 'library.colTitle' | translate }}</div>
+          <div class="col-span-3">{{ 'library.colAlbum' | translate }}</div>
+          <div class="col-span-2">{{ 'library.colFormat' | translate }}</div>
+          <div class="col-span-1">{{ 'library.colSize' | translate }}</div>
+          <div class="col-span-1 text-right">{{ 'library.colDuration' | translate }}</div>
         </div>
-      }
-    </div>
+        @for (track of filtered(); track track.id; let i = $index) {
+          <div
+            (click)="playTrack(track)" (keydown.enter)="playTrack(track)" tabindex="0" role="button"
+            class="grid grid-cols-5 md:grid-cols-12 gap-4 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group cursor-pointer border-b border-slate-100 dark:border-white/5 last:border-b-0"
+          >
+            <div class="hidden lg:flex lg:col-span-1 text-center items-center justify-center">
+              @if (isCurrentTrack(track)) {
+                <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] animate-pulse">graphic_eq</span>
+              } @else {
+                <span class="text-[14px] leading-[20px] text-slate-500 dark:text-[#6a6a6a] group-hover:hidden">{{ i + 1 }}</span>
+                <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] hidden group-hover:inline fill">play_arrow</span>
+              }
+            </div>
+            <div class="col-span-3 md:col-span-5 lg:col-span-4 flex items-center gap-3 min-w-0">
+              <img class="w-10 h-10 rounded object-cover shrink-0" [src]="coverFor(track)" [alt]="track.title" loading="lazy" (error)="onCoverError($event)" />
+              <div class="truncate min-w-0">
+                <div class="text-[14px] leading-[20px] font-semibold truncate"
+                  [class]="isCurrentTrack(track) ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-900 dark:text-white'">{{ track.title }}</div>
+                <div class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.artist }}</div>
+              </div>
+            </div>
+            <div class="hidden md:block md:col-span-4 lg:col-span-3 text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ track.album }}</div>
+            <div class="hidden lg:block lg:col-span-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)]">{{ track.format }}</span>
+            </div>
+            <div class="hidden md:block md:col-span-2 lg:col-span-1 text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] tabular-nums">{{ formatDuration(track.durationSec) }}</div>
+            <div class="col-span-2 md:col-span-1 text-slate-500 dark:text-[#b3b3b3] text-right flex items-center justify-end gap-1">
+              <shared-favorite-button
+                [liked]="true"
+                [label]="'liked.remove' | translate"
+                buttonClass="p-1.5 rounded-full hover:text-red-500 dark:hover:text-red-400 transition-colors active:scale-95"
+                iconClass="text-[20px]"
+                (toggled)="unlike(track)"
+              />
+            </div>
+          </div>
+        }
+      </div>
+    }
   }
 </div>
