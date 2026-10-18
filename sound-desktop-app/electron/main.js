@@ -6,6 +6,8 @@ const crypto = require('crypto');
 const { pathToFileURL } = require('url');
 const { Readable } = require('node:stream');
 
+app.setName('Sound');
+
 // Esquemas privilegiados para poder usarlos en <img>, <audio> y fetch desde el renderer
 // bypassCSP/corsEnabled: evita "Media load rejected by URL safety check" en <audio>/<img>.
 protocol.registerSchemesAsPrivileged([
@@ -491,6 +493,8 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1600,
     height: 900,
+    title: 'Sound',
+    icon: path.join(__dirname, '..', 'public', 'sound-logo.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'), // Importante para seguridad
       nodeIntegration: false,
@@ -500,6 +504,7 @@ function createWindow() {
 
   // Se oculta el menu de windows
   win.setMenuBarVisibility(false);
+  win.setTitle('Sound');
   win.webContents.openDevTools();
 
   // En desarrollo, cargamos el servidor de Angular

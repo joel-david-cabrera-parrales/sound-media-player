@@ -1,5 +1,6 @@
 {
   "name": "sound-desktop-app",
+  "productName": "Sound",
   "version": "0.0.0",
   "main": "electron/main.js",
   "scripts": {
