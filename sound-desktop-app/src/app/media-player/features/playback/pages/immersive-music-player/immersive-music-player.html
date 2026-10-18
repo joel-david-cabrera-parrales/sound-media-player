@@ -59,33 +59,19 @@
 
   <!-- ZONA CENTRAL: Canvas Inmersivo Libre para Espectro Visual -->
   <main class="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none px-6 min-h-0">
-    <!-- Track Meta móvil -->
-    <div class="mt-4 flex items-center gap-3 md:hidden pointer-events-auto">
-      <img [alt]="trackTitle()" class="w-12 h-12 rounded-md object-cover border border-slate-200 dark:border-white/[0.08]"
+    <!-- Track Meta inferior izquierda -->
+    <div class="absolute bottom-6 left-6 flex items-center gap-3 pointer-events-auto bg-white/70 dark:bg-[#121212]/70 backdrop-blur-md rounded-xl border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-none p-3 z-50">
+      <img [alt]="trackTitle()" class="w-12 h-12 rounded-md object-cover border border-slate-200 dark:border-white/[0.08] shrink-0"
         [src]="coverUrl()" (error)="onCoverError()" />
-      <div class="text-left">
+      <div class="min-w-0">
         @if (currentTrack()) {
-          <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate max-w-[40vw]">{{
-            trackTitle() }}</p>
-          <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate max-w-[40vw]">{{ trackArtist() }}
-          </p>
+          <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate">{{ trackTitle() }}</p>
+          <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ trackArtist() }}</p>
         } @else {
-          <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate max-w-[40vw]">{{
-            'shell.dock.idleTitle' | translate }}</p>
-          <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3] truncate max-w-[40vw]">{{
-            'shell.dock.idleSubtitle' | translate }}</p>
+          <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</p>
+          <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</p>
         }
       </div>
-    </div>
-    <!-- Track Meta desktop -->
-    <div class="mt-4 hidden md:flex flex-col items-center gap-1 pointer-events-auto text-center">
-      @if (currentTrack()) {
-        <p class="text-[22px] leading-[28px] font-bold text-slate-900 dark:text-white truncate max-w-[60vw]">{{ trackTitle() }}</p>
-        <p class="text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3] truncate max-w-[60vw]">{{ trackArtist() }}</p>
-      } @else {
-        <p class="text-[22px] leading-[28px] font-bold text-slate-900 dark:text-white truncate max-w-[60vw]">{{ 'shell.dock.idleTitle' | translate }}</p>
-        <p class="text-[14px] leading-[20px] text-slate-500 dark:text-[#b3b3b3] truncate max-w-[60vw]">{{ 'shell.dock.idleSubtitle' | translate }}</p>
-      }
     </div>
   </main>
 </section>

@@ -19,10 +19,10 @@
     <div class="flex flex-col min-w-0">
       @if (currentTrack(); as track) {
         <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ track.title }}</span>
-        <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ track.artist }} • {{ track.album }}</span>
+        <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ track.artist }} • {{ track.album }}</span>
       } @else {
         <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</span>
-        <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</span>
+        <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</span>
       }
     </div>
     <shared-favorite-button
