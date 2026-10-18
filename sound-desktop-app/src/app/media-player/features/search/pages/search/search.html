@@ -2,182 +2,194 @@
   <!-- Buscador + filtros -->
   <div class="flex flex-col md:flex-row md:items-center gap-3">
     <div class="relative flex-1">
-      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] text-[20px]">search</span>
-      <input
-        type="text"
-        [value]="query()"
-        (input)="setQuery($any($event.target).value)"
+      <span
+        class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] text-[20px]">search</span>
+      <input type="text" [value]="query()" (input)="setQuery($any($event.target).value)"
         [placeholder]="'search.placeholder' | translate"
-        class="w-full pl-11 pr-10 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white text-[14px] placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[var(--accent)]"
-      />
+        class="w-full pl-11 pr-10 py-2.5 rounded-full bg-white dark:bg-[#181818] border border-slate-300 dark:border-white/16 text-slate-900 dark:text-white text-[14px] placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] focus:outline-none focus:border-[var(--accent)]" />
       @if (query()) {
-        <button
-          type="button"
-          (click)="clearQuery()"
-          [attr.aria-label]="'search.clear' | translate"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white"
-        >
-          <span class="material-symbols-outlined text-[20px]">cancel</span>
-        </button>
+      <button type="button" (click)="clearQuery()" [attr.aria-label]="'search.clear' | translate"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white">
+        <span class="material-symbols-outlined text-[20px]">cancel</span>
+      </button>
       }
     </div>
-    <div class="flex items-center gap-2 flex-shrink-0">
+    <!-- <div class="flex items-center gap-2 flex-shrink-0">
       <button type="button" (click)="setFilter('all')" [class]="activeFilter() === 'all' ? 'bg-[var(--accent)] text-[#001f28] font-bold' : 'bg-white dark:bg-[#181818] text-slate-600 dark:text-[#b3b3b3] border border-slate-300 dark:border-white/16'" class="px-4 py-2 rounded-full text-[13px] transition-all active:scale-95">{{ 'search.filterAll' | translate }}</button>
       <button type="button" (click)="setFilter('music')" [class]="activeFilter() === 'music' ? 'bg-[var(--accent)] text-[#001f28] font-bold' : 'bg-white dark:bg-[#181818] text-slate-600 dark:text-[#b3b3b3] border border-slate-300 dark:border-white/16'" class="px-4 py-2 rounded-full text-[13px] transition-all active:scale-95">{{ 'search.filterMusic' | translate }}</button>
       <button type="button" (click)="setFilter('podcasts')" [class]="activeFilter() === 'podcasts' ? 'bg-[var(--accent)] text-[#001f28] font-bold' : 'bg-white dark:bg-[#181818] text-slate-600 dark:text-[#b3b3b3] border border-slate-300 dark:border-white/16'" class="px-4 py-2 rounded-full text-[13px] transition-all active:scale-95">{{ 'search.filterPodcasts' | translate }}</button>
       <button type="button" (click)="setFilter('live')" [class]="activeFilter() === 'live' ? 'bg-[var(--accent)] text-[#001f28] font-bold' : 'bg-white dark:bg-[#181818] text-slate-600 dark:text-[#b3b3b3] border border-slate-300 dark:border-white/16'" class="px-4 py-2 rounded-full text-[13px] transition-all active:scale-95">{{ 'search.filterLive' | translate }}</button>
-    </div>
+    </div> -->
   </div>
 
   <!-- Resultados en vivo -->
   @if (query() || selectedGenreId()) {
-    <section class="space-y-3">
-      <div class="flex items-center gap-2 flex-wrap">
-        <h2 class="text-[18px] leading-[24px] font-semibold text-slate-900 dark:text-white">{{ 'search.resultsTitle' | translate }}</h2>
-        @if (selectedGenreId()) {
-          <button type="button" (click)="clearGenreFilter()" class="flex items-center gap-1 px-3 py-1 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] text-[12px] font-semibold text-[var(--accent-ink)] dark:text-[var(--accent)]">
-            {{ selectedGenreLabel() }}
-            <span class="material-symbols-outlined text-[16px]">close</span>
-          </button>
-        }
-      </div>
-      @if (results().length === 0) {
-        @if (activeFilter() === 'podcasts' || activeFilter() === 'live') {
-          <p class="text-[13px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.noPodcasts' | translate }}</p>
-        } @else {
-          <p class="text-[13px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.noResults' | translate: { q: query() } }}</p>
-        }
-      } @else {
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-          @for (item of results(); track item.track ? item.track.id : item.kind + ':' + item.label) {
-            <button
-              type="button"
-              (click)="item.kind === 'track' && item.track ? playTrack(item.track) : item.kind === 'artist' && item.artistName ? selectArtist(item.artistName) : item.genreId ? openGenre(item.genreId, item.label) : null"
-              class="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all text-left group"
-            >
-              <img class="w-11 h-11 rounded-lg object-cover shrink-0" [src]="item.cover" [alt]="item.label" loading="lazy" (error)="onImgError($event)" />
-              <span class="min-w-0 flex-1">
-                <span class="block text-[14px] font-semibold text-slate-900 dark:text-white truncate">{{ item.label }}</span>
-                <span class="block text-[11px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ typeLabel(item.kind) }} • {{ item.sub }}</span>
-              </span>
-              <span class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">play_arrow</span>
-            </button>
-          }
-        </div>
+  <section class="space-y-3">
+    <div class="flex items-center gap-2 flex-wrap">
+      <h2 class="text-[18px] leading-[24px] font-semibold text-slate-900 dark:text-white">{{ 'search.resultsTitle' |
+        translate }}</h2>
+      @if (selectedGenreId()) {
+      <button type="button" (click)="clearGenreFilter()"
+        class="flex items-center gap-1 px-3 py-1 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] text-[12px] font-semibold text-[var(--accent-ink)] dark:text-[var(--accent)]">
+        {{ selectedGenreLabel() }}
+        <span class="material-symbols-outlined text-[16px]">close</span>
+      </button>
       }
-    </section>
+    </div>
+    @if (results().length === 0) {
+    @if (activeFilter() === 'podcasts' || activeFilter() === 'live') {
+    <p class="text-[13px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.noPodcasts' | translate }}</p>
+    } @else {
+    <p class="text-[13px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.noResults' | translate: { q: query() } }}</p>
+    }
+    } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      @for (item of results(); track item.track ? item.track.id : item.kind + ':' + item.label) {
+      <button type="button"
+        (click)="item.kind === 'track' && item.track ? playTrack(item.track) : item.kind === 'artist' && item.artistName ? selectArtist(item.artistName) : item.genreId ? openGenre(item.genreId, item.label) : null"
+        class="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all text-left group">
+        <img class="w-11 h-11 rounded-lg object-cover shrink-0" [src]="item.cover" [alt]="item.label" loading="lazy"
+          (error)="onImgError($event)" />
+        <span class="min-w-0 flex-1">
+          <span class="block text-[14px] font-semibold text-slate-900 dark:text-white truncate">{{ item.label }}</span>
+          <span class="block text-[11px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ typeLabel(item.kind) }} • {{
+            item.sub }}</span>
+        </span>
+        <span
+          class="material-symbols-outlined text-[20px] text-[var(--accent-ink)] dark:text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">play_arrow</span>
+      </button>
+      }
+    </div>
+    }
+  </section>
   } @else {
-    <!-- Búsquedas recientes -->
-    <section class="space-y-3">
-      <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2">
-          <h2 class="text-[18px] leading-[24px] font-semibold text-slate-900 dark:text-white">{{ 'search.recentTitle' | translate }}</h2>
-          @if (history().length > 0) {
-            <span class="px-2 py-0.5 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] text-[10px] font-bold text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ 'search.historyActive' | translate }}</span>
-          }
-        </div>
+  <!-- Búsquedas recientes -->
+  <section class="space-y-3">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <h2 class="text-[18px] leading-[24px] font-semibold text-slate-900 dark:text-white">{{ 'search.recentTitle' |
+          translate }}</h2>
         @if (history().length > 0) {
-          <button type="button" (click)="clearHistory()" class="text-[12px] text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
-            {{ 'search.clearHistory' | translate }}
-          </button>
+        <span
+          class="px-2 py-0.5 rounded-full bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] text-[10px] font-bold text-[var(--accent-ink)] dark:text-[var(--accent)]">{{
+          'search.historyActive' | translate }}</span>
         }
       </div>
-      @if (history().length === 0) {
-        <p class="text-[13px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.historyEmpty' | translate }}</p>
-      } @else {
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          @for (entry of history(); track entry.kind + ':' + entry.text + ':' + (entry.refId ?? '')) {
-            <div class="relative flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all group">
-              <button type="button" (click)="openHistory(entry)" class="flex items-center gap-3 min-w-0 flex-1 text-left">
-                <span class="w-11 h-11 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] shrink-0 overflow-hidden">
-                  <span class="material-symbols-outlined text-[22px]">{{ entry.kind === 'artist' ? 'artist' : entry.kind === 'genre' ? 'category' : 'music_note' }}</span>
-                </span>
-                <span class="min-w-0">
-                  <span class="block text-[14px] font-semibold text-slate-900 dark:text-white truncate">{{ entry.text }}</span>
-                  <span class="block text-[11px] text-slate-500 dark:text-[#b3b3b3]">{{ typeLabel(entry.kind) }}</span>
-                </span>
-              </button>
-              <button type="button" (click)="removeHistory(entry)" [attr.aria-label]="'search.remove' | translate" class="p-1 rounded-full text-slate-400 dark:text-[#6a6a6a] hover:text-red-600 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                <span class="material-symbols-outlined text-[18px]">close</span>
-              </button>
-            </div>
-          }
-        </div>
+      @if (history().length > 0) {
+      <button type="button" (click)="clearHistory()"
+        class="text-[12px] text-slate-500 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+        {{ 'search.clearHistory' | translate }}
+      </button>
       }
-    </section>
+    </div>
+    @if (history().length === 0) {
+    <p class="text-[13px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.historyEmpty' | translate }}</p>
+    } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      @for (entry of history(); track entry.kind + ':' + entry.text + ':' + (entry.refId ?? '')) {
+      <div
+        class="relative flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all group">
+        <button type="button" (click)="openHistory(entry)" class="flex items-center gap-3 min-w-0 flex-1 text-left">
+          <span
+            class="w-11 h-11 rounded-lg bg-slate-100 dark:bg-[#242424] flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] shrink-0 overflow-hidden">
+            <span class="material-symbols-outlined text-[22px]">{{ entry.kind === 'artist' ? 'artist' : entry.kind ===
+              'genre' ? 'category' : 'music_note' }}</span>
+          </span>
+          <span class="min-w-0">
+            <span class="block text-[14px] font-semibold text-slate-900 dark:text-white truncate">{{ entry.text
+              }}</span>
+            <span class="block text-[11px] text-slate-500 dark:text-[#b3b3b3]">{{ typeLabel(entry.kind) }}</span>
+          </span>
+        </button>
+        <button type="button" (click)="removeHistory(entry)" [attr.aria-label]="'search.remove' | translate"
+          class="p-1 rounded-full text-slate-400 dark:text-[#6a6a6a] hover:text-red-600 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      }
+    </div>
+    }
+  </section>
   }
 
   <!-- Explorar todo: géneros importados -->
   <section class="space-y-4">
     <div class="flex items-center justify-between gap-3 flex-wrap">
       <div>
-        <h2 class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white">{{ 'search.exploreTitle' | translate }}</h2>
-        <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.exploreSubtitle' | translate }}</p>
+        <h2 class="text-[20px] leading-[26px] font-semibold text-slate-900 dark:text-white">{{ 'search.exploreTitle' |
+          translate }}</h2>
+        <p class="text-[12px] leading-[16px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.exploreSubtitle' | translate
+          }}</p>
       </div>
       @if (genreCards().length > 1) {
-        <label class="flex items-center gap-2 text-[12px] text-slate-500 dark:text-[#b3b3b3]">
-          {{ 'search.sortBy' | translate }}
-          <select
-            [value]="genreSort()"
-            (change)="setGenreSort($any($event.target).value === 'az' ? 'az' : 'popular')"
-            class="px-3 py-1.5 rounded-lg bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-[12px] font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-[var(--accent)]"
-          >
-            <option value="popular">{{ 'search.sortPopular' | translate }}</option>
-            <option value="az">{{ 'search.sortAZ' | translate }}</option>
-          </select>
-        </label>
+      <label class="flex items-center gap-2 text-[12px] text-slate-500 dark:text-[#b3b3b3]">
+        {{ 'search.sortBy' | translate }}
+        <select [value]="genreSort()" (change)="setGenreSort($any($event.target).value === 'az' ? 'az' : 'popular')"
+          class="px-3 py-1.5 rounded-lg bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-[12px] font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-[var(--accent)]">
+          <option value="popular">{{ 'search.sortPopular' | translate }}</option>
+          <option value="az">{{ 'search.sortAZ' | translate }}</option>
+        </select>
+      </label>
       }
     </div>
     @if (genreCards().length === 0) {
-      <div class="p-8 rounded-xl bg-white dark:bg-[#181818] border border-dashed border-slate-300 dark:border-white/16 text-center">
-        <p class="text-[14px] font-semibold text-slate-900 dark:text-white mb-1">{{ 'search.emptyLibraryTitle' | translate }}</p>
-        <p class="text-[12px] text-slate-500 dark:text-[#b3b3b3] mb-4">{{ 'search.emptyLibraryDesc' | translate }}</p>
-        <a routerLink="/media-player/import-local-files" class="inline-block px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">{{ 'search.goImport' | translate }}</a>
-      </div>
+    <div
+      class="p-8 rounded-xl bg-white dark:bg-[#181818] border border-dashed border-slate-300 dark:border-white/16 text-center">
+      <p class="text-[14px] font-semibold text-slate-900 dark:text-white mb-1">{{ 'search.emptyLibraryTitle' | translate
+        }}</p>
+      <p class="text-[12px] text-slate-500 dark:text-[#b3b3b3] mb-4">{{ 'search.emptyLibraryDesc' | translate }}</p>
+      <a routerLink="/media-player/import-local-files"
+        class="inline-block px-5 py-2.5 rounded-full bg-[var(--accent)] text-[#001f28] font-bold text-[14px] hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:hover:bg-[color-mix(in_srgb,var(--accent)_80%,white)] transition-all active:scale-95">{{
+        'search.goImport' | translate }}</a>
+    </div>
     } @else {
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        @for (card of genreCards(); track card.id) {
-          <div
-            role="button"
-            tabindex="0"
-            (click)="openGenre(card.id, card.label)"
-            (keydown.enter)="openGenre(card.id, card.label)"
-            [class]="selectedGenreId() === card.id ? 'ring-2 ring-[var(--accent)]' : ''"
-            class="group relative h-48 rounded-2xl p-5 overflow-hidden cursor-pointer bg-gradient-to-br border border-white/10 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] {{ card.bg }} {{ card.glow }}"
-          >
-            <h3 class="text-[20px] font-extrabold tracking-tight max-w-[65%] z-10 relative leading-snug drop-shadow-sm text-white">{{ card.label }}</h3>
-            <span class="inline-block mt-2 z-10 relative text-[11px] font-semibold px-2 py-0.5 rounded bg-black/30 backdrop-blur-md {{ card.tint }}">{{ songsCountLabel(card.count) }}</span>
-            <div class="absolute -bottom-4 -right-4 w-36 h-36 rounded-xl shadow-2xl overflow-hidden transform rotate-[25deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-all duration-300 border-2 border-white/20">
-              <img class="w-full h-full object-cover" [src]="card.cover" [alt]="card.label" loading="lazy" (error)="onGenreImgError($event)" />
-            </div>
-            <div class="absolute bottom-4 left-4 z-20 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
-              <button
-                type="button"
-                (click)="$event.stopPropagation(); playGenre(card.id, card.label)"
-                [attr.aria-label]="'shell.dock.play' | translate"
-                class="w-11 h-11 rounded-full bg-[var(--accent)] flex items-center justify-center text-black shadow-lg shadow-cyan-400/40 hover:scale-105 active:scale-95"
-              >
-                <span class="material-symbols-outlined text-2xl font-bold ml-0.5">play_arrow</span>
-              </button>
-            </div>
-          </div>
-        }
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      @for (card of genreCards(); track card.id) {
+      <div role="button" tabindex="0" (click)="openGenre(card.id, card.label)"
+        (keydown.enter)="openGenre(card.id, card.label)"
+        [class]="selectedGenreId() === card.id ? 'ring-2 ring-[var(--accent)]' : ''"
+        class="group relative h-48 rounded-2xl p-5 overflow-hidden cursor-pointer bg-gradient-to-br border border-white/10 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] {{ card.bg }} {{ card.glow }}">
+        <h3
+          class="text-[20px] font-extrabold tracking-tight max-w-[65%] z-10 relative leading-snug drop-shadow-sm text-white">
+          {{ card.label }}</h3>
+        <span
+          class="inline-block mt-2 z-10 relative text-[11px] font-semibold px-2 py-0.5 rounded bg-black/30 backdrop-blur-md {{ card.tint }}">{{
+          songsCountLabel(card.count) }}</span>
+        <div
+          class="absolute -bottom-4 -right-4 w-36 h-36 rounded-xl shadow-2xl overflow-hidden transform rotate-[25deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-all duration-300 border-2 border-white/20">
+          <img class="w-full h-full object-cover" [src]="card.cover" [alt]="card.label" loading="lazy"
+            (error)="onGenreImgError($event)" />
+        </div>
+        <div
+          class="absolute bottom-4 left-4 z-20 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+          <button type="button" (click)="$event.stopPropagation(); playGenre(card.id, card.label)"
+            [attr.aria-label]="'shell.dock.play' | translate"
+            class="w-11 h-11 rounded-full bg-[var(--accent)] flex items-center justify-center text-black shadow-lg shadow-cyan-400/40 hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined text-2xl font-bold ml-0.5">play_arrow</span>
+          </button>
+        </div>
       </div>
+      }
+    </div>
     }
   </section>
 
   <!-- Banner radar -->
-  <section class="flex flex-col md:flex-row md:items-center gap-4 p-5 rounded-2xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08]">
-    <div class="w-12 h-12 rounded-xl bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] shrink-0">
+  <section
+    class="flex flex-col md:flex-row md:items-center gap-4 p-5 rounded-2xl bg-white dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08]">
+    <div
+      class="w-12 h-12 rounded-xl bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] flex items-center justify-center text-[var(--accent-ink)] dark:text-[var(--accent)] shrink-0">
       <span class="material-symbols-outlined text-[26px]">radar</span>
     </div>
     <div class="min-w-0 flex-1">
-      <p class="text-[11px] font-bold tracking-wider text-[var(--accent-ink)] dark:text-[var(--accent)] uppercase">{{ 'search.radarKicker' | translate }}</p>
+      <p class="text-[11px] font-bold tracking-wider text-[var(--accent-ink)] dark:text-[var(--accent)] uppercase">{{
+        'search.radarKicker' | translate }}</p>
       <p class="text-[16px] font-bold text-slate-900 dark:text-white">{{ 'search.radarTitle' | translate }}</p>
       <p class="text-[12px] text-slate-500 dark:text-[#b3b3b3]">{{ 'search.radarDesc' | translate }}</p>
     </div>
-    <button type="button" (click)="openRadarPrefs()" [title]="'search.radarCta' | translate" class="px-5 py-2.5 rounded-full bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all active:scale-95 shrink-0 flex items-center gap-2">
+    <button type="button" (click)="openRadarPrefs()" [title]="'search.radarCta' | translate"
+      class="px-5 py-2.5 rounded-full bg-white dark:bg-[#242424] border border-slate-300 dark:border-white/16 text-[13px] font-semibold text-slate-900 dark:text-white hover:border-[color-mix(in_srgb,var(--accent)_40%,transparent)] transition-all active:scale-95 shrink-0 flex items-center gap-2">
       <span class="material-symbols-outlined text-[18px] text-[var(--accent-ink)] dark:text-[var(--accent)]">tune</span>
       {{ 'search.radarCta' | translate }}
     </button>

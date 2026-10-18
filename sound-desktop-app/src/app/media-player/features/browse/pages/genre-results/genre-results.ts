@@ -1,6 +1,6 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, type ParamMap, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
 import { TrackContextMenu } from '../../../../../shared/components/track-context-menu/track-context-menu';
@@ -28,9 +28,7 @@ export class GenreResults {
   private readonly route = inject(ActivatedRoute);
   private readonly sanitizer = inject(DomSanitizer);
 
-  private readonly genreId = toSignal(this.route.paramMap, {
-    initialValue: this.route.snapshot.paramMap,
-  });
+  private readonly genreId: Signal<ParamMap>;
 
   protected readonly genre = computed<{ id: string; label: string } | null>(() => {
     const id = this.genreId().get('id');
@@ -46,6 +44,10 @@ export class GenreResults {
   });
 
   constructor() {
+    this.genreId = toSignal(this.route.paramMap, {
+      initialValue: this.route.snapshot.paramMap,
+    });
+
     effect(() => {
       const id = this.genreId().get('id');
       if (!id) return;

@@ -1,44 +1,38 @@
-<header class="relative z-30 h-16 flex-shrink-0 bg-white/85 dark:bg-[#121212]/85 backdrop-blur-xl border-b border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 md:gap-4">
+<header
+  class="relative z-30 h-16 flex-shrink-0 bg-white/85 dark:bg-[#121212]/85 backdrop-blur-xl border-b border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 md:gap-4">
   <!-- Left: Hamburger (mobile) + Search Box & Categorical Pills -->
   <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0 max-w-2xl">
     <!-- Hamburger: opens sidebar drawer on mobile -->
-    <button
-      type="button"
-      (click)="toggleSidebar()"
-      aria-label="{{ 'shell.topbar.openMenu' | translate }}"
-      class="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors flex-shrink-0"
-    >
+    <button type="button" (click)="toggleSidebar()" aria-label="{{ 'shell.topbar.openMenu' | translate }}"
+      class="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors flex-shrink-0">
       <span class="material-symbols-outlined text-[22px]">menu</span>
     </button>
     <!-- Search Input: 'Buscar en archivos locales...' -->
     <div class="relative flex-1 min-w-0 max-w-md">
-      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-[#6a6a6a]">
+      <div
+        class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-[#6a6a6a]">
         <span class="material-symbols-outlined text-[18px]">search</span>
       </div>
-      <input
-        [(ngModel)]="search"
-        (keydown.enter)="submitSearch()"
+      <input [(ngModel)]="search" (keydown.enter)="submitSearch()"
         class="w-full h-10 pl-10 pr-10 bg-slate-100 dark:bg-[#181818] hover:bg-slate-200 dark:hover:bg-[#242424] focus:bg-white dark:focus:bg-[#181818] border border-slate-200 dark:border-white/[0.08] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] rounded-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#6a6a6a] text-[14px] leading-[20px] transition-all duration-200"
-        [placeholder]="'shell.topbar.searchPlaceholder' | translate"
-        type="text" />
-      <button type="button" (click)="openSearchPrefs()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.topbar.filters' | translate">
+        [placeholder]="'shell.topbar.searchPlaceholder' | translate" type="text" />
+      <button type="button" (click)="openSearchPrefs()"
+        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors"
+        [title]="'shell.topbar.filters' | translate">
         <span class="material-symbols-outlined text-[18px]">tune</span>
       </button>
     </div>
     <!-- Filter Pills: Todo & Carpetas -->
     <div class="hidden sm:flex items-center gap-2 flex-shrink-0">
       <!-- Active Pill: Todo -->
-      <button
-        type="button"
-        (click)="setPill('todo')"
+      <button type="button" (click)="setPill('todo')"
         [class]="activePill === 'todo'
           ? 'bg-[var(--accent)] text-[#001f28] font-bold rounded-full px-4 py-1.5 text-[12px] leading-[16px] dark:shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_35%,transparent)] transition-all'
-          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-slate-200 dark:border-white/[0.08]'"
-      >
+          : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-slate-200 dark:border-white/[0.08]'">
         {{ 'shell.topbar.all' | translate }}
       </button>
       <!-- Inactive Pill: Carpetas -->
-      <button
+      <!-- <button
         type="button"
         (click)="setPill('carpetas')"
         [class]="activePill === 'carpetas'
@@ -46,21 +40,27 @@
           : 'bg-slate-100 dark:bg-[#242424] text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-[#2a2a2a] rounded-full px-4 py-1.5 text-[12px] leading-[16px] transition-colors border border-slate-200 dark:border-white/[0.08]'"
       >
         {{ 'shell.topbar.folders' | translate }}
-      </button>
+      </button> -->
     </div>
   </div>
   <!-- Right Side: Topbar Trailing Actions -->
   <div class="flex items-center gap-2 md:gap-3 flex-shrink-0">
     <!-- Theme Toggle -->
-    <button type="button" (click)="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="(isDarkTheme() ? 'shell.topbar.toLight' : 'shell.topbar.toDark') | translate">
+    <button type="button" (click)="toggleTheme()"
+      class="w-9 h-9 rounded-full flex items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors"
+      [title]="(isDarkTheme() ? 'shell.topbar.toLight' : 'shell.topbar.toDark') | translate">
       <span class="material-symbols-outlined text-[20px]">{{ isDarkTheme() ? 'dark_mode' : 'light_mode' }}</span>
     </button>
     <!-- History Action -->
-    <button type="button" (click)="openHistory()" class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors" [title]="'shell.topbar.history' | translate">
+    <button type="button" (click)="openHistory()"
+      class="hidden md:flex w-9 h-9 rounded-full items-center justify-center text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors"
+      [title]="'shell.topbar.history' | translate">
       <span class="material-symbols-outlined text-[20px]">history</span>
     </button>
     <!-- Notifications: sin sistema de avisos, deshabilitado con title (sin badge permanente). -->
-    <button type="button" disabled class="relative w-9 h-9 rounded-full hidden sm:flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] opacity-50 cursor-not-allowed" [title]="'shell.topbar.notifications' | translate" [attr.aria-label]="'shell.topbar.notifications' | translate">
+    <button type="button" disabled
+      class="relative w-9 h-9 rounded-full hidden sm:flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] opacity-50 cursor-not-allowed"
+      [title]="'shell.topbar.notifications' | translate" [attr.aria-label]="'shell.topbar.notifications' | translate">
       <span class="material-symbols-outlined text-[20px]">notifications</span>
     </button>
     <!-- User Avatar + Account Menu -->
@@ -68,27 +68,30 @@
       <button type="button" (click)="toggleAccountMenu()" [attr.aria-expanded]="accountMenuOpen()" aria-haspopup="menu"
         [attr.aria-label]="'account.menuLabel' | translate"
         class="relative w-9 h-9 rounded-full overflow-hidden ring-1 ring-slate-300 dark:ring-white/16 hover:ring-[var(--accent)] transition-all">
-        <img class="w-full h-full object-cover" [alt]="'common.photoAlt' | translate" [src]="avatarUrl()" (error)="onAvatarError($event)" />
+        <img class="w-full h-full object-cover" [alt]="'common.photoAlt' | translate" [src]="avatarUrl()"
+          (error)="onAvatarError($event)" />
       </button>
       @if (accountMenuOpen()) {
-        <div class="fixed inset-0 z-[65]" (click)="closeAccountMenu()" aria-hidden="true"></div>
-        <div role="menu" [attr.aria-label]="'account.menuLabel' | translate"
-          class="fixed top-[68px] right-4 md:right-6 z-[70] w-64 rounded-xl border border-slate-200 dark:border-white/16 bg-white dark:bg-[#181818] shadow-2xl p-2 select-none">
-          <div class="flex items-center gap-3 px-2.5 py-2 border-b border-slate-200 dark:border-white/[0.08] mb-1">
-            <img class="w-9 h-9 rounded-full object-cover flex-shrink-0" [src]="avatarUrl()" [alt]="'common.photoAlt' | translate" (error)="onAvatarError($event)" />
-            <span class="text-[14px] leading-[18px] font-semibold text-slate-900 dark:text-white truncate">{{ userName() }}</span>
-          </div>
-          <a routerLink="/library/settings" (click)="closeAccountMenu()" role="menuitem"
-            class="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] text-slate-700 dark:text-[#e5e2e1] hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors">
-            <span class="material-symbols-outlined text-[18px] text-slate-400 dark:text-[#6a6a6a]">manage_accounts</span>
-            <span>{{ 'account.profile' | translate }}</span>
-          </a>
-          <button type="button" (click)="quitApp()" role="menuitem"
-            class="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors">
-            <span class="material-symbols-outlined text-[18px]">logout</span>
-            <span>{{ 'account.quit' | translate }}</span>
-          </button>
+      <div class="fixed inset-0 z-[65]" (click)="closeAccountMenu()" aria-hidden="true"></div>
+      <div role="menu" [attr.aria-label]="'account.menuLabel' | translate"
+        class="fixed top-[68px] right-4 md:right-6 z-[70] w-64 rounded-xl border border-slate-200 dark:border-white/16 bg-white dark:bg-[#181818] shadow-2xl p-2 select-none">
+        <div class="flex items-center gap-3 px-2.5 py-2 border-b border-slate-200 dark:border-white/[0.08] mb-1">
+          <img class="w-9 h-9 rounded-full object-cover flex-shrink-0" [src]="avatarUrl()"
+            [alt]="'common.photoAlt' | translate" (error)="onAvatarError($event)" />
+          <span class="text-[14px] leading-[18px] font-semibold text-slate-900 dark:text-white truncate">{{ userName()
+            }}</span>
         </div>
+        <a routerLink="/library/settings" (click)="closeAccountMenu()" role="menuitem"
+          class="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] text-slate-700 dark:text-[#e5e2e1] hover:bg-slate-100 dark:hover:bg-[#242424] transition-colors">
+          <span class="material-symbols-outlined text-[18px] text-slate-400 dark:text-[#6a6a6a]">manage_accounts</span>
+          <span>{{ 'account.profile' | translate }}</span>
+        </a>
+        <button type="button" (click)="quitApp()" role="menuitem"
+          class="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          <span>{{ 'account.quit' | translate }}</span>
+        </button>
+      </div>
       }
     </div>
   </div>

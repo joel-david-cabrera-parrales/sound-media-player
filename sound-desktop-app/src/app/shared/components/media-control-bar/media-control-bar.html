@@ -1,139 +1,122 @@
-<footer class="fixed bottom-0 left-0 w-full h-[76px] sm:h-[90px] bg-white/90 dark:bg-[#121212]/90 backdrop-blur-2xl border-t border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 z-40 select-none">
+<footer
+  class="fixed bottom-0 left-0 w-full h-[76px] sm:h-[90px] bg-white/90 dark:bg-[#121212]/90 backdrop-blur-2xl border-t border-slate-200 dark:border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-3 z-40 select-none">
   <!-- Left Segment: Track Information (Minimalist State) -->
   <div class="flex items-center gap-3.5 min-w-0 flex-1 sm:flex-none sm:w-1/4 sm:min-w-[200px]">
-    <a
-      routerLink="/library/immersive/immersive"
-      [attr.aria-label]="'shell.dock.expand' | translate"
+    <a routerLink="/library/immersive/immersive" [attr.aria-label]="'shell.dock.expand' | translate"
       [title]="'shell.dock.expand' | translate"
-      class="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-slate-100 dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] flex-shrink-0 overflow-hidden"
-    >
+      class="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-slate-100 dark:bg-[#181818] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-400 dark:text-[#6a6a6a] flex-shrink-0 overflow-hidden">
       @if (coverUrl(); as cover) {
-        <img class="absolute inset-0 w-full h-full object-cover" [src]="cover" [alt]="currentTrack()?.title ?? ''" loading="lazy" (error)="onCoverError($event)" />
+      <img class="absolute inset-0 w-full h-full object-cover" [src]="cover" [alt]="currentTrack()?.title ?? ''"
+        loading="lazy" (error)="onCoverError($event)" />
       } @else {
-        <span class="material-symbols-outlined text-[24px]">music_note</span>
+      <span class="material-symbols-outlined text-[24px]">music_note</span>
       }
-      <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+      <span
+        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
         <span class="material-symbols-outlined text-white text-lg">open_in_full</span>
       </span>
     </a>
     <div class="flex flex-col min-w-0">
       @if (currentTrack(); as track) {
-        <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ track.title }}</span>
-        <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ track.artist }} • {{ track.album }}</span>
+      <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ track.title
+        }}</span>
+      <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ track.artist }} • {{
+        track.album }}</span>
       } @else {
-        <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</span>
-        <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</span>
+      <span class="text-[14px] leading-[20px] font-semibold text-slate-900 dark:text-white truncate">{{
+        'shell.dock.idleTitle' | translate }}</span>
+      <span class="text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] truncate">{{ 'shell.dock.idleSubtitle'
+        | translate }}</span>
       }
     </div>
-    <shared-favorite-button
-      [liked]="isFavorite()"
-      [label]="'shell.dock.favorite' | translate"
-      [disabled]="!hasTrack()"
-      buttonClass="hidden sm:block ml-2 transition-colors flex-shrink-0 disabled:opacity-30"
-      iconClass="text-[20px]"
-      (toggled)="toggleFavorite()"
-    />
+    <shared-favorite-button [liked]="isFavorite()" [label]="'shell.dock.favorite' | translate" [disabled]="!hasTrack()"
+      buttonClass="hidden sm:block ml-2 transition-colors flex-shrink-0 disabled:opacity-30" iconClass="text-[20px]"
+      (toggled)="toggleFavorite()" />
   </div>
   <!-- Center Segment: Playback Controls & Time Scrubber -->
   <div class="flex flex-col items-center justify-center gap-2 max-w-xl flex-1 sm:w-2/4 min-w-0">
     <!-- Transport Actions -->
     <div class="flex items-center gap-4 sm:gap-5">
-      <button
-        type="button"
-        (click)="toggleShuffle()"
-        [attr.aria-pressed]="isShuffled()"
+      <button type="button" (click)="toggleShuffle()" [attr.aria-pressed]="isShuffled()"
         [class]="isShuffled() ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
-        class="hidden sm:block transition-colors"
-        [title]="'shell.dock.shuffle' | translate"
-      >
+        class="hidden sm:block transition-colors" [title]="'shell.dock.shuffle' | translate">
         <span class="material-symbols-outlined text-[19px]">shuffle</span>
       </button>
-      <button type="button" (click)="previousTrack()" [disabled]="!hasTrack()" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none" [title]="'shell.dock.previous' | translate">
+      <button type="button" (click)="previousTrack()" [disabled]="!hasTrack()"
+        class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
+        [title]="'shell.dock.previous' | translate">
         <span class="material-symbols-outlined text-[22px]">skip_previous</span>
       </button>
       <!-- Primary Play Trigger with Electric Glow -->
-      <button
-        type="button"
-        (click)="togglePlay()"
-        [disabled]="!hasTrack()"
+      <button type="button" (click)="togglePlay()" [disabled]="!hasTrack()"
         class="w-10 h-10 rounded-full bg-[var(--accent)] text-[#0e0e0e] flex items-center justify-center hover:scale-105 dark:shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_45%,transparent)] transition-all disabled:opacity-30 disabled:pointer-events-none"
-        [title]="(isPlaying() ? 'shell.dock.pause' : 'shell.dock.play') | translate"
-      >
-        <span class="material-symbols-outlined text-[24px] fill pl-0.5">{{ isPlaying() ? 'pause' : 'play_arrow' }}</span>
+        [title]="(isPlaying() ? 'shell.dock.pause' : 'shell.dock.play') | translate">
+        <span class="material-symbols-outlined text-[24px] fill pl-0.5">{{ isPlaying() ? 'pause' : 'play_arrow'
+          }}</span>
       </button>
-      <button type="button" (click)="nextTrack()" [disabled]="!hasTrack()" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none" [title]="'shell.dock.next' | translate">
+      <button type="button" (click)="nextTrack()" [disabled]="!hasTrack()"
+        class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
+        [title]="'shell.dock.next' | translate">
         <span class="material-symbols-outlined text-[22px]">skip_next</span>
       </button>
-      <button
-        type="button"
-        (click)="cycleRepeat()"
-        [attr.aria-pressed]="repeatMode() !== 0"
+      <button type="button" (click)="cycleRepeat()" [attr.aria-pressed]="repeatMode() !== 0"
         [class]="repeatMode() === 0 ? 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white' : 'text-[var(--accent-ink)] dark:text-[var(--accent)]'"
-        class="hidden sm:block transition-colors relative"
-        [title]="'shell.dock.repeat' | translate"
-      >
+        class="hidden sm:block transition-colors relative" [title]="'shell.dock.repeat' | translate">
         <span class="material-symbols-outlined text-[19px]">{{ repeatMode() === 2 ? 'repeat_one' : 'repeat' }}</span>
       </button>
     </div>
     <!-- Scrubber Bar -->
     <div class="w-full flex items-center gap-3">
-      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-right tabular-nums">{{ displayElapsed() }}</span>
-      <div
-        role="slider"
-        tabindex="0"
-        [attr.aria-label]="'shell.dock.seek' | translate"
-        [attr.aria-valuemin]="0"
-        [attr.aria-valuemax]="100"
-        [attr.aria-valuenow]="displayProgress().toFixed(0)"
+      <span
+        class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-right tabular-nums">{{
+        displayElapsed() }}</span>
+      <div role="slider" tabindex="0" [attr.aria-label]="'shell.dock.seek' | translate" [attr.aria-valuemin]="0"
+        [attr.aria-valuemax]="100" [attr.aria-valuenow]="displayProgress().toFixed(0)"
         [attr.aria-valuetext]="displayElapsed() + ' / ' + durationLabel()"
         class="relative flex-1 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer touch-none focus-visible:outline-2 focus-visible:outline-[var(--accent)]"
-        (pointerdown)="onSeekPointerDown($event)"
-        (pointermove)="onSeekPointerMove($event)"
-        (pointerup)="onSeekPointerUp($event)"
-        (pointercancel)="onSeekPointerCancel()"
-        (lostpointercapture)="onSeekLostCapture()"
-        (keydown)="onSeekKey($any($event))"
-      >
-        <div class="h-full bg-[var(--accent)] group-hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:group-hover:bg-[#b6ebff] transition-all rounded-full" [style.width.%]="displayProgress()"></div>
+        (pointerdown)="onSeekPointerDown($event)" (pointermove)="onSeekPointerMove($event)"
+        (pointerup)="onSeekPointerUp($event)" (pointercancel)="onSeekPointerCancel()"
+        (lostpointercapture)="onSeekLostCapture()" (keydown)="onSeekKey($any($event))">
+        <div
+          class="h-full bg-[var(--accent)] group-hover:bg-[color-mix(in_srgb,var(--accent)_85%,black)] dark:group-hover:bg-[#b6ebff] transition-all rounded-full"
+          [style.width.%]="displayProgress()"></div>
       </div>
-      <span class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-left tabular-nums">{{ durationLabel() }}</span>
+      <span
+        class="hidden sm:block text-[11px] leading-[14px] text-slate-500 dark:text-[#6a6a6a] w-8 text-left tabular-nums">{{
+        durationLabel() }}</span>
     </div>
   </div>
   <!-- Right Segment: Volume & Auxiliary Controls -->
   <div class="hidden md:flex items-center justify-end gap-3 w-1/4 min-w-[200px]">
-    <a routerLink="/library/lyrics" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.lyrics' | translate">
+    <a routerLink="/library/lyrics"
+      class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors"
+      [title]="'shell.dock.lyrics' | translate">
       <span class="material-symbols-outlined text-[19px]">mic</span>
     </a>
-    <button type="button" (click)="toggleQueue()" [attr.aria-pressed]="isQueueOpen()" [class]="isQueueOpen() ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'" class="hidden lg:block transition-colors" [title]="'shell.dock.queue' | translate">
+    <button type="button" (click)="toggleQueue()" [attr.aria-pressed]="isQueueOpen()"
+      [class]="isQueueOpen() ? 'text-[var(--accent-ink)] dark:text-[var(--accent)]' : 'text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white'"
+      class="hidden lg:block transition-colors" [title]="'shell.dock.queue' | translate">
       <span class="material-symbols-outlined text-[19px]">queue_music</span>
     </button>
-    <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.devices' | translate">
+    <!-- <button type="button" class="hidden lg:block text-slate-400 dark:text-[#6a6a6a] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.devices' | translate">
       <span class="material-symbols-outlined text-[19px]">speaker_group</span>
-    </button>
+    </button> -->
     <!-- Volume Slider -->
     <div class="hidden sm:flex items-center gap-2 ml-1">
-      <button type="button" (click)="toggleMute()" [attr.aria-pressed]="isMuted()" class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors" [title]="'shell.dock.mute' | translate">
-        <span class="material-symbols-outlined text-[20px]">{{ isMuted() || volume() === 0 ? 'volume_off' : 'volume_up' }}</span>
+      <button type="button" (click)="toggleMute()" [attr.aria-pressed]="isMuted()"
+        class="text-slate-600 dark:text-[#b3b3b3] hover:text-slate-900 dark:hover:text-white transition-colors"
+        [title]="'shell.dock.mute' | translate">
+        <span class="material-symbols-outlined text-[20px]">{{ isMuted() || volume() === 0 ? 'volume_off' : 'volume_up'
+          }}</span>
       </button>
-      <div
-        role="slider"
-        tabindex="0"
-        [attr.aria-label]="'shell.dock.volume' | translate"
-        [attr.aria-valuemin]="0"
-        [attr.aria-valuemax]="100"
-        [attr.aria-valuenow]="isMuted() ? 0 : volume()"
+      <div role="slider" tabindex="0" [attr.aria-label]="'shell.dock.volume' | translate" [attr.aria-valuemin]="0"
+        [attr.aria-valuemax]="100" [attr.aria-valuenow]="isMuted() ? 0 : volume()"
         class="w-20 h-1 bg-slate-200 dark:bg-[#242424] rounded-full overflow-hidden group cursor-pointer touch-none focus-visible:outline-2 focus-visible:outline-[var(--accent)]"
-        (pointerdown)="onVolumePointerDown($event)"
-        (pointermove)="onVolumePointerMove($event)"
-        (pointerup)="onVolumePointerUp()"
-        (pointercancel)="onVolumePointerCancel()"
-        (lostpointercapture)="onVolumeLostCapture()"
-        (keydown)="onVolumeKey($any($event))"
-      >
-        <div
-          class="h-full bg-slate-400 dark:bg-[#b3b3b3] group-hover:bg-[var(--accent)] rounded-full transition-colors"
-          [style.width.%]="isMuted() ? 0 : volume()"
-        ></div>
+        (pointerdown)="onVolumePointerDown($event)" (pointermove)="onVolumePointerMove($event)"
+        (pointerup)="onVolumePointerUp()" (pointercancel)="onVolumePointerCancel()"
+        (lostpointercapture)="onVolumeLostCapture()" (keydown)="onVolumeKey($any($event))">
+        <div class="h-full bg-slate-400 dark:bg-[#b3b3b3] group-hover:bg-[var(--accent)] rounded-full transition-colors"
+          [style.width.%]="isMuted() ? 0 : volume()"></div>
       </div>
     </div>
   </div>
