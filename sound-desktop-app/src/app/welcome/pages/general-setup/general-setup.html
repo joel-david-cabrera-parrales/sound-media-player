@@ -26,9 +26,9 @@
     </div>
   </header>
 
-  <!-- Interactive 3-Second Audio Tuning Experience -->
+  <!-- Interactive Audio Tuning Experience -->
   <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-4 max-w-xl mx-auto w-full text-center">
-    <!-- Central Acoustic Synthesizer Visualizer (No simple spinner) -->
+    <!-- Central Acoustic Synthesizer Visualizer -->
     <div class="relative w-64 h-64 mb-8 flex items-center justify-center">
       <!-- Sonar ripple wave bursts -->
       <div class="absolute inset-4 rounded-full border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] sonar-1 pointer-events-none"></div>
@@ -44,7 +44,7 @@
 
       <!-- Core Glass Container -->
       <div class="relative w-40 h-40 rounded-full bg-white/90 dark:bg-[#131316]/90 border border-slate-200 dark:border-white/15 backdrop-blur-2xl shadow-xl dark:shadow-[0_0_60px_color-mix(in_srgb,var(--accent)_35%,transparent)] flex flex-col items-center justify-center overflow-hidden">
-        <!-- Live Acoustic Equalizer Bars in Center -->
+        <!-- Live Equalizer Bars in Center -->
         <div class="flex items-center gap-1.5 h-16 px-2">
           <div class="w-1.5 bg-gradient-to-t from-[var(--accent-deep)] to-[var(--accent)] rounded-full dark:shadow-[0_0_8px_var(--accent)]" style="animation: eqBar 1.1s ease-in-out infinite 0.1s;"></div>
           <div class="w-1.5 bg-gradient-to-t from-[var(--accent-deep)] to-[var(--accent)] rounded-full dark:shadow-[0_0_8px_var(--accent)]" style="animation: eqBar 0.9s ease-in-out infinite 0.3s;"></div>
@@ -63,38 +63,67 @@
         {{ 'welcome.setup.title' | translate }}
       </h2>
       <p class="text-slate-500 dark:text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-        {{ 'welcome.setup.subtitle' | translate }}
+        {{ scanning() ? 'welcome.setup.scanning' : 'welcome.setup.subtitle' | translate }}
       </p>
 
-      <!-- 3-Second Custom Progress Meter -->
-      <div class="w-full bg-slate-100 dark:bg-[#131316] border border-slate-200 dark:border-white/10 rounded-full h-3 p-0.5 mb-8 shadow-inner overflow-hidden">
-        <div class="h-full bg-gradient-to-r from-[var(--accent-deep)] via-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_80%,white)] rounded-full dark:shadow-[0_0_14px_var(--accent)] animate-progress-3s"></div>
-      </div>
-
-      <!-- Live Step Verification Cards (Replaces a plain spinner with meaningful feedback) -->
-      <div class="grid grid-cols-1 gap-3 text-left w-full sm:grid-cols-2">
-        <!-- Step 2 -->
-        <div class="step-check-2 p-3.5 rounded-2xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 flex items-center gap-3">
-          <div class="w-7 h-7 rounded-lg bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-sm">folder_special</span>
-          </div>
-          <div>
-            <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ 'welcome.setup.localFiles' | translate }}</span>
-            <span class="text-[10px] text-slate-500 dark:text-neutral-400">{{ 'welcome.setup.indexerReady' | translate }}</span>
-          </div>
+      <!-- Real Scan Progress Meter -->
+      @if (scanning()) {
+        <div class="w-full bg-slate-100 dark:bg-[#131316] border border-slate-200 dark:border-white/10 rounded-full h-3 p-0.5 mb-8 shadow-inner overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-[var(--accent-deep)] via-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_80%,white)] rounded-full dark:shadow-[0_0_14px_var(--accent)]"
+            [style.width.%]="scanPercent()"></div>
         </div>
 
-        <!-- Step 3 -->
-        <div class="step-check-3 p-3.5 rounded-2xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 flex items-center gap-3">
-          <div class="w-7 h-7 rounded-lg bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-sm">celebration</span>
+        <!-- Current Folder + Track Count -->
+        <div class="space-y-2 mb-8">
+          <div class="flex items-center justify-between text-xs text-slate-500 dark:text-neutral-400">
+            <span>{{ 'welcome.setup.currentFolder' | translate }}</span>
+            <span>{{ scanProgress()?.folderId ?? '-' }}</span>
           </div>
-          <div>
-            <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ 'welcome.setup.birthdayMix' | translate }}</span>
-            <span class="text-[10px] text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ 'welcome.setup.synced' | translate }}</span>
+          <div class="text-[20px] font-black text-slate-900 dark:text-white">
+            {{ scannedTracks() }} {{ 'welcome.setup.tracksIndexed' | translate }}
+          </div>
+          @if (scanError()) {
+            <div class="text-[11px] text-red-500 dark:text-red-400 font-medium">
+              {{ 'welcome.setup.scanError' | translate }}: {{ scanError() }}
+            </div>
+          }
+        </div>
+
+        <button type="button" (click)="skipScan()"
+          class="text-[12px] text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white underline underline-offset-4">
+          {{ 'welcome.setup.skip' | translate }}
+        </button>
+      } @else {
+        <!-- Fallback progress (no Electron or no folders) -->
+        <div class="w-full bg-slate-100 dark:bg-[#131316] border border-slate-200 dark:border-white/10 rounded-full h-3 p-0.5 mb-8 shadow-inner overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-[var(--accent-deep)] via-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_80%,white)] rounded-full dark:shadow-[0_0_14px_var(--accent)] animate-progress-3s"></div>
+        </div>
+
+        <!-- Live Step Verification Cards -->
+        <div class="grid grid-cols-1 gap-3 text-left w-full sm:grid-cols-2">
+          <!-- Step 2 -->
+          <div class="step-check-2 p-3.5 rounded-2xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 flex items-center gap-3">
+            <div class="w-7 h-7 rounded-lg bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-sm">folder_special</span>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ 'welcome.setup.localFiles' | translate }}</span>
+              <span class="text-[10px] text-slate-500 dark:text-neutral-400">{{ 'welcome.setup.indexerReady' | translate }}</span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-check-3 p-3.5 rounded-2xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 flex items-center gap-3">
+            <div class="w-7 h-7 rounded-lg bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent-ink)] dark:text-[var(--accent)] flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-sm">celebration</span>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-900 dark:text-white block">{{ 'welcome.setup.birthdayMix' | translate }}</span>
+              <span class="text-[10px] text-[var(--accent-ink)] dark:text-[var(--accent)]">{{ 'welcome.setup.synced' | translate }}</span>
+            </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   </main>
 </section>
