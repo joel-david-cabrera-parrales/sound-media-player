@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
-import { LocalMusicService } from '../../services/local-music.service';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { FavoriteButton } from '../../../../../shared/components/favorite-button/favorite-button';
+import { LocalMusicService } from '../../../../services/local-music.service';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { coverUrlFor, formatTrackDuration, type Track } from '../../../../models/track.model';
 
 @Component({
   selector: 'media-player-liked-songs',

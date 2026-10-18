@@ -1,21 +1,21 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
-import { TrackContextMenu } from '../../../shared/components/track-context-menu/track-context-menu';
-import { AddToPlayListModal } from '../../../shared/components/add-to-playlist-modal/add-to-playlist-modal';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { FavoriteButton } from '../../../../../shared/components/favorite-button/favorite-button';
+import { TrackContextMenu } from '../../../../../shared/components/track-context-menu/track-context-menu';
+import { AddToPlayListModal } from '../../../../../shared/components/add-to-playlist-modal/add-to-playlist-modal';
 import {
   PlaylistFormModal,
   type PlaylistFormValue,
-} from '../../../shared/components/playlist-form-modal/playlist-form-modal';
-import { TrackMenuService } from '../../../shared/services/track-menu.service';
-import { PlaylistsService } from '../../../playlist/services/playlists.service';
-import { LocalMusicService } from '../../services/local-music.service';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
-import { trackCoverCached } from '../../../shared/utils/cover-cache';
-import { normalizeText } from '../../../shared/utils/text';
+} from '../../../../../shared/components/playlist-form-modal/playlist-form-modal';
+import { TrackMenuService } from '../../../../../shared/services/track-menu.service';
+import { PlaylistsService } from '../../../../../playlist/services/playlists.service';
+import { LocalMusicService } from '../../../../services/local-music.service';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { formatTrackDuration, formatTrackSize, type Track } from '../../../../models/track.model';
+import { trackCoverCached } from '../../../../../shared/utils/cover-cache';
+import { normalizeText } from '../../../../../shared/utils/text';
 
 type SortMode = 'title' | 'artist' | 'album' | 'duration';
 type ViewMode = 'grid' | 'list';

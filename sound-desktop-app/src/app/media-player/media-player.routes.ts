@@ -6,11 +6,11 @@ import { ImmersiveMediaPlayerLayout } from './layouts/immersive-media-player/imm
 import { ImportLocalFiles } from './pages/import-local-files/import-local-files';
 import { ArtistProfile } from './pages/artist-profile/artist-profile';
 import { Artist } from './pages/artist/artist';
-import { Library } from './pages/library/library';
+import { Library } from './features/library/pages/library/library';
 import { Search } from './pages/search/search';
 import { SearchResults } from './pages/search-results/search-results';
 import { GenreResults } from './pages/genre-results/genre-results';
-import { LikedSongs } from './pages/liked-songs/liked-songs';
+import { LikedSongs } from './features/library/pages/liked-songs/liked-songs';
 import { Lyrics } from './pages/lyrics/lyrics';
 import { Settings } from './pages/settings/settings';
 
