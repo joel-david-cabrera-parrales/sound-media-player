@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { MediaPlayerLayout } from './layouts/media-player/media-player-layout';
-import { Home } from './pages/home/home';
+import { Home } from './features/home/pages/home/home';
 import { ImmersiveMusicPlayer } from './pages/immersive-music-player/immersive-music-player';
 import { ImmersiveMediaPlayerLayout } from './layouts/immersive-media-player/immersive-media-player';
 import { ImportLocalFiles } from './pages/import-local-files/import-local-files';

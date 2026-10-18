@@ -1,14 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { ProfileService } from '../../../shared/services/profile.service';
-import { LocalMusicService, normalizeArtistName, type LocalArtist } from '../../services/local-music.service';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { formatTrackDuration, type Track } from '../../models/track.model';
-import { trackCoverCached } from '../../../shared/utils/cover-cache';
-import { genreImage } from '../../models/genre-images';
-import { DEFAULT_GENRE_COVER } from '../../models/genre-taxonomy';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { ProfileService } from '../../../../../shared/services/profile.service';
+import { LocalMusicService, normalizeArtistName, type LocalArtist } from '../../../../services/local-music.service';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { formatTrackDuration, type Track } from '../../../../models/track.model';
+import { trackCoverCached } from '../../../../../shared/utils/cover-cache';
+import { genreImage } from '../../../../models/genre-images';
+import { DEFAULT_GENRE_COVER } from '../../../../models/genre-taxonomy';
 
 interface GenreStat {
   id: string;
