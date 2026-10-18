@@ -1,12 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { TranslationService } from '../../../shared/services/translation.service';
-import { SoundwaveShader } from '../../components/soundwave-shader/soundwave-shader';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { QueueUiService } from '../../../shared/services/queue-ui.service';
-import { coverUrlFor } from '../../models/track.model';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { TranslationService } from '../../../../../shared/services/translation.service';
+import { SoundwaveShader } from '../../../../components/soundwave-shader/soundwave-shader';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { QueueUiService } from '../../../../../shared/services/queue-ui.service';
+import { coverUrlFor } from '../../../../models/track.model';
 
 const FALLBACK_COVER = '/images/immersive-cover.svg';
 

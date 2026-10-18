@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { MediaPlayerLayout } from './layouts/media-player/media-player-layout';
 import { Home } from './features/home/pages/home/home';
-import { ImmersiveMusicPlayer } from './pages/immersive-music-player/immersive-music-player';
+import { ImmersiveMusicPlayer } from './features/playback/pages/immersive-music-player/immersive-music-player';
 import { ImmersiveMediaPlayerLayout } from './layouts/immersive-media-player/immersive-media-player';
-import { ImportLocalFiles } from './pages/import-local-files/import-local-files';
+import { ImportLocalFiles } from './features/import/pages/import-local-files/import-local-files';
 import { ArtistProfile } from './features/browse/pages/artist-profile/artist-profile';
 import { Artist } from './features/browse/pages/artist/artist';
 import { Library } from './features/library/pages/library/library';
@@ -11,8 +11,8 @@ import { Search } from './features/search/pages/search/search';
 import { SearchResults } from './features/search/pages/search-results/search-results';
 import { GenreResults } from './features/browse/pages/genre-results/genre-results';
 import { LikedSongs } from './features/library/pages/liked-songs/liked-songs';
-import { Lyrics } from './pages/lyrics/lyrics';
-import { Settings } from './pages/settings/settings';
+import { Lyrics } from './features/lyrics/pages/lyrics/lyrics';
+import { Settings } from './features/settings/pages/settings/settings';
 
 export const routes: Routes = [
   {

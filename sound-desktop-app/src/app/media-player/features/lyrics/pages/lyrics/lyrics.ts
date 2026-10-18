@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor } from '../../models/track.model';
-import type { Track } from '../../models/track.model';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { coverUrlFor } from '../../../../models/track.model';
+import type { Track } from '../../../../models/track.model';
 
 @Component({
   selector: 'media-player-lyrics',

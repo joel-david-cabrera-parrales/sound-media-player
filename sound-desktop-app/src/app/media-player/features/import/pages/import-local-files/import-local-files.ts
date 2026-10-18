@@ -1,12 +1,12 @@
 import { Component, ElementRef, ViewChild, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
-import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
-import { LocalMusicService } from '../../services/local-music.service';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../models/track.model';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
+import { FavoriteButton } from '../../../../../shared/components/favorite-button/favorite-button';
+import { LocalMusicService } from '../../../../services/local-music.service';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../../../models/track.model';
 
 @Component({
   selector: 'media-player-import-local-files',

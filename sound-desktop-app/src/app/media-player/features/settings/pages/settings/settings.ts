@@ -1,13 +1,13 @@
 import { Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { fullNameValidator, pastDateValidator } from '../../../shared/validators/profile.validators';
-import { ProfileService } from '../../../shared/services/profile.service';
-import { ThemeService } from '../../../shared/services/theme.service';
-import { ACCENTS, type AccentId, type ThemeMode } from '../../../shared/models/user-settings';
-import { TranslationService } from '../../../shared/services/translation.service';
-import type { AppLanguage } from '../../../shared/utils/profile-language';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { fullNameValidator, pastDateValidator } from '../../../../../shared/validators/profile.validators';
+import { ProfileService } from '../../../../../shared/services/profile.service';
+import { ThemeService } from '../../../../../shared/services/theme.service';
+import { ACCENTS, type AccentId, type ThemeMode } from '../../../../../shared/models/user-settings';
+import { TranslationService } from '../../../../../shared/services/translation.service';
+import type { AppLanguage } from '../../../../../shared/utils/profile-language';
 
 const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
 const DEFAULT_AVATAR = '/images/avatar-default.svg';
