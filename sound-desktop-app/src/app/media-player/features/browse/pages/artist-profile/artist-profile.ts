@@ -2,15 +2,15 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { FavoriteButton } from '../../../shared/components/favorite-button/favorite-button';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { FavoriteButton } from '../../../../../shared/components/favorite-button/favorite-button';
 import {
   LocalArtist,
   LocalMusicService,
   normalizeArtistName,
-} from '../../services/local-music.service';
-import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
-import { AudioPlayerService } from '../../services/audio-player.service';
+} from '../../../../services/local-music.service';
+import { coverUrlFor, formatTrackDuration, type Track } from '../../../../models/track.model';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
 
 interface AlbumGroup {
   name: string;

@@ -1,15 +1,15 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
 import {
   LocalArtist,
   LocalMusicService,
   normalizeArtistName,
-} from '../../services/local-music.service';
-import { coverUrlFor } from '../../models/track.model';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { normalizeText } from '../../../shared/utils/text';
+} from '../../../../services/local-music.service';
+import { coverUrlFor } from '../../../../models/track.model';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { normalizeText } from '../../../../../shared/utils/text';
 
 type SortMode = 'name' | 'tracks' | 'recent';
 type ViewMode = 'grid' | 'list';

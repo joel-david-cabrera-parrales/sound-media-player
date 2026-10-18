@@ -2,16 +2,16 @@ import { Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-import { TrackContextMenu } from '../../../shared/components/track-context-menu/track-context-menu';
-import { AddToPlayListModal } from '../../../shared/components/add-to-playlist-modal/add-to-playlist-modal';
-import { TranslationService } from '../../../shared/services/translation.service';
-import { TrackMenuService } from '../../../shared/services/track-menu.service';
-import { LocalMusicService } from '../../services/local-music.service';
-import { AudioPlayerService } from '../../services/audio-player.service';
-import { coverUrlFor, formatTrackDuration, type Track } from '../../models/track.model';
-import { genreImage } from '../../models/genre-images';
-import { DEFAULT_GENRE_COVER, genreLabel, isGenreId } from '../../models/genre-taxonomy';
+import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
+import { TrackContextMenu } from '../../../../../shared/components/track-context-menu/track-context-menu';
+import { AddToPlayListModal } from '../../../../../shared/components/add-to-playlist-modal/add-to-playlist-modal';
+import { TranslationService } from '../../../../../shared/services/translation.service';
+import { TrackMenuService } from '../../../../../shared/services/track-menu.service';
+import { LocalMusicService } from '../../../../services/local-music.service';
+import { AudioPlayerService } from '../../../../services/audio-player.service';
+import { coverUrlFor, formatTrackDuration, type Track } from '../../../../models/track.model';
+import { genreImage } from '../../../../models/genre-images';
+import { DEFAULT_GENRE_COVER, genreLabel, isGenreId } from '../../../../models/genre-taxonomy';
 
 @Component({
   selector: 'media-player-genre-results',
