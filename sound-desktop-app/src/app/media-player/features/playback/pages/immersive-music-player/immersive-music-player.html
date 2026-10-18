@@ -59,19 +59,20 @@
 
   <!-- ZONA CENTRAL: Canvas Inmersivo Libre para Espectro Visual -->
   <main class="relative z-10 flex-1 flex flex-col items-center justify-center pointer-events-none px-6 min-h-0">
-    <!-- Track Meta inferior izquierda -->
-    <div class="absolute bottom-6 left-6 flex items-center gap-3 pointer-events-auto bg-white/70 dark:bg-[#121212]/70 backdrop-blur-md rounded-xl border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-none p-3 z-50">
-      <img [alt]="trackTitle()" class="w-12 h-12 rounded-md object-cover border border-slate-200 dark:border-white/[0.08] shrink-0"
-        [src]="coverUrl()" (error)="onCoverError()" />
-      <div class="min-w-0">
-        @if (currentTrack()) {
-          <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate">{{ trackTitle() }}</p>
-          <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ trackArtist() }}</p>
-        } @else {
-          <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</p>
-          <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</p>
-        }
-      </div>
-    </div>
   </main>
+
+  <!-- Track Meta inferior izquierda -->
+  <div class="fixed bottom-6 left-6 flex items-center gap-3 pointer-events-auto bg-white/70 dark:bg-[#121212]/70 backdrop-blur-md rounded-xl border border-slate-200 dark:border-white/[0.08] shadow-sm dark:shadow-none p-3 z-50">
+    <img [alt]="trackTitle()" class="w-12 h-12 rounded-md object-cover border border-slate-200 dark:border-white/[0.08] shrink-0"
+      [src]="coverUrl()" (error)="onCoverError()" />
+    <div class="min-w-0">
+      @if (currentTrack()) {
+        <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate">{{ trackTitle() }}</p>
+        <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ trackArtist() }}</p>
+      } @else {
+        <p class="text-[14px] leading-[18px] font-bold text-slate-900 dark:text-white truncate">{{ 'shell.dock.idleTitle' | translate }}</p>
+        <p class="text-[11px] leading-[14px] text-slate-500 dark:text-[#b3b3b3] truncate">{{ 'shell.dock.idleSubtitle' | translate }}</p>
+      }
+    </div>
+  </div>
 </section>
