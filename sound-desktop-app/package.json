@@ -1,7 +1,8 @@
 {
   "name": "sound-desktop-app",
   "productName": "Sound",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Reproductor de música de escritorio (Electron + Angular 21) con biblioteca local de alta resolución, sincronización en el flujo de bienvenida y perfiles de usuario. Por Joel Cabrera.",
   "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
@@ -12,7 +13,17 @@
     "electron": "electron .",
     "electron-dev": "concurrently \"npm start\" \"wait-on http://localhost:4205 && npm run electron\""
   },
-  "private": true,
+  "author": {
+    "name": "Joel Cabrera",
+    "url": "https://github.com/joel-david-cabrera-parrales"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joel-david-cabrera-parrales/sound-media-player.git"
+  },
+  "homepage": "https://github.com/joel-david-cabrera-parrales/sound-media-player#readme",
+  "private": false,
   "packageManager": "npm@11.16.0",
   "dependencies": {
     "@angular/common": "^21.2.0",
