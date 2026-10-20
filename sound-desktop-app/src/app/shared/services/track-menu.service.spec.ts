@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { TrackMenuService } from './track-menu.service';
-import type { Track } from '../../../media-player/models/track.model';
+import type { Track } from '../../media-player/models/track.model';
 
 const TRACK = {
   id: 't1',
@@ -45,9 +45,9 @@ describe('TrackMenuService', () => {
     service.openMenu(TRACK, event);
     service.openAssign();
     expect(service.menu()).toBeNull();
-    expect(service.assignOpen()).toBeTrue();
+    expect(service.assignOpen()).toBeTruthy();
     service.closeAssign();
-    expect(service.assignOpen()).toBeFalse();
+    expect(service.assignOpen()).toBeFalsy();
   });
 
   it('should queue a track and toast', () => {

@@ -21,7 +21,7 @@
         {{ 'welcome.setup.finishing' | translate }}
       </span>
       <div class="w-24 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-        <div class="w-full h-full bg-[var(--accent)] rounded-full dark:shadow-[0_0_8px_var(--accent)]"></div>
+        <div class="w-full h-full bg-gradient-to-r from-[var(--accent-deep)] via-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_80%,white)] rounded-full dark:shadow-[0_0_8px_var(--accent)]"></div>
       </div>
     </div>
   </header>
@@ -63,38 +63,38 @@
         {{ 'welcome.setup.title' | translate }}
       </h2>
       <p class="text-slate-500 dark:text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-        {{ scanning() ? 'welcome.setup.scanning' : 'welcome.setup.subtitle' | translate }}
+        {{ syncing() ? 'welcome.setup.syncing' : 'welcome.setup.subtitle' | translate }}
       </p>
 
-      <!-- Real Scan Progress Meter -->
-      @if (scanning()) {
+      @if (syncing()) {
+        <!-- Sync Progress Meter -->
         <div class="w-full bg-slate-100 dark:bg-[#131316] border border-slate-200 dark:border-white/10 rounded-full h-3 p-0.5 mb-8 shadow-inner overflow-hidden">
           <div class="h-full bg-gradient-to-r from-[var(--accent-deep)] via-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_80%,white)] rounded-full dark:shadow-[0_0_14px_var(--accent)]"
-            [style.width.%]="scanPercent()"></div>
+            [style.width.%]="syncPercent()"></div>
         </div>
 
-        <!-- Current Folder + Track Count -->
+        <!-- Sync Stats -->
         <div class="space-y-2 mb-8">
           <div class="flex items-center justify-between text-xs text-slate-500 dark:text-neutral-400">
             <span>{{ 'welcome.setup.currentFolder' | translate }}</span>
-            <span>{{ scanProgress()?.folderId ?? '-' }}</span>
+            <span>{{ folders().length }} {{ 'welcome.setup.folders' | translate }}</span>
           </div>
           <div class="text-[20px] font-black text-slate-900 dark:text-white">
-            {{ scannedTracks() }} {{ 'welcome.setup.tracksIndexed' | translate }}
+            {{ syncedTracks() }} {{ 'welcome.setup.syncedTracks' | translate }}
           </div>
-          @if (scanError()) {
+          @if (syncError()) {
             <div class="text-[11px] text-red-500 dark:text-red-400 font-medium">
-              {{ 'welcome.setup.scanError' | translate }}: {{ scanError() }}
+              {{ 'welcome.setup.syncError' | translate }}: {{ syncError() }}
             </div>
           }
         </div>
 
         <button type="button" (click)="skipScan()"
           class="text-[12px] text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white underline underline-offset-4">
-          {{ 'welcome.setup.skip' | translate }}
+          {{ 'welcome.setup.syncSkip' | translate }}
         </button>
       } @else {
-        <!-- Fallback progress (no Electron or no folders) -->
+        <!-- Fallback progress (sync complete or no Electron) -->
         <div class="w-full bg-slate-100 dark:bg-[#131316] border border-slate-200 dark:border-white/10 rounded-full h-3 p-0.5 mb-8 shadow-inner overflow-hidden">
           <div class="h-full bg-gradient-to-r from-[var(--accent-deep)] via-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_80%,white)] rounded-full dark:shadow-[0_0_14px_var(--accent)] animate-progress-3s"></div>
         </div>
