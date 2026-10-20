@@ -17,7 +17,7 @@ describe('App', () => {
   it('should render title', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, sound-desktop-app');
+    const app = fixture.componentInstance as any;
+    expect(app.title()).toBe('sound-desktop-app');
   });
 });

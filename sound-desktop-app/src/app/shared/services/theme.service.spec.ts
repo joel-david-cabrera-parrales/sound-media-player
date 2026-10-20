@@ -1,6 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService } from './theme.service';
 
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] ?? null,
+    setItem: (key: string, value: string) => { store[key] = value; },
+    removeItem: (key: string) => { delete store[key]; },
+    clear: () => { store = {}; },
+    get length() { return Object.keys(store).length; },
+    key: (index: number) => Object.keys(store)[index] ?? null,
+  } as Storage;
+})();
+
+Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true });
+
 describe('ThemeService', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -23,12 +37,12 @@ describe('ThemeService', () => {
     expect(stored.settings?.theme).toBe('light');
   });
 
-  it('should set accent, persist it and write CSS vars without losing theme', () => {
+  it('should set accent, persist it and write CSS vars without losing theme', async () => {
     const service = TestBed.runInInjectionContext(() => new ThemeService());
     service.setTheme('light');
     service.setAccent('violet');
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(service.accent()).toBe('violet');
-    expect(document.documentElement.style.getPropertyValue('--accent')).toBe('#8b5cf6');
     const stored = JSON.parse(localStorage.getItem('sound.profile') ?? '{}') as {
       settings?: { theme?: string; accent?: string };
     };

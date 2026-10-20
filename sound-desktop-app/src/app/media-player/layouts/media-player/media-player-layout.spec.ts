@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
+import { of } from 'rxjs';
 
 import { MediaPlayerLayout } from './media-player-layout';
 
@@ -10,7 +11,24 @@ describe('MediaPlayerLayout', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MediaPlayerLayout],
-      providers: [{ provide: Router, useValue: { navigate: () => Promise.resolve(true) } }],
+      providers: [
+        {
+          provide: Router,
+          useValue: {
+            navigate: () => Promise.resolve(true),
+            events: of(new NavigationStart(1, '/')),
+          },
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: {}, queryParams: {}, data: {} },
+            params: of({}),
+            queryParams: of({}),
+            data: of({}),
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MediaPlayerLayout);

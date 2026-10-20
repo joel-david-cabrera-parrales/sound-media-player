@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { Home } from './home';
 
@@ -10,7 +11,18 @@ describe('Home', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Home],
-      providers: [{ provide: Router, useValue: { navigate: () => Promise.resolve(true) } }],
+      providers: [
+        { provide: Router, useValue: { navigate: () => Promise.resolve(true) } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: {}, queryParams: {}, data: {} },
+            params: of({}),
+            queryParams: of({}),
+            data: of({}),
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Home);
