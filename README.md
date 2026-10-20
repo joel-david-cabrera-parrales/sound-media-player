@@ -6,17 +6,17 @@ Reproductor de música de escritorio moderno con biblioteca local de alta resolu
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Electron Main Process                        │
-│  electron/main.js                                                 │
-│  - BrowserWindow creation                                         │
-│  - Custom protocols (sound-audio://, sound-cover://, ...)        │
-│  - IPC handlers (library:scanFolder, dialog:*, app:*)            │
-└───────────────────────────┬───────────────────────────────────────┘
+│                     Electron Main Process                       │
+│  electron/main.js                                               │
+│  - BrowserWindow creation                                       │
+│  - Custom protocols (sound-audio://, sound-cover://, ...)       │
+│  - IPC handlers (library:scanFolder, dialog:*, app:*)           │
+└───────────────────────────┬─────────────────────────────────────┘
                             │ IPC / contextBridge
                             ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                  Renderer Process (Angular 21)                   │
-│  http://localhost:4205 (dev) / file:// (prod)                    │
+┌───────────────────────────────────────────────────────────────┐
+│                  Renderer Process (Angular 21)                │
+│  http://localhost:4205 (dev) / file:// (prod)                 │
 │  ┌─────────────────┬─────────────────┬──────────────────────┐ │
 │  │  Welcome Module │ Media Player    │ Playlist Module      │ │
 │  │  - Splash       │  - Player       │  - Lists             │ │
@@ -24,7 +24,7 @@ Reproductor de música de escritorio moderno con biblioteca local de alta resolu
 │  │  - General setup│  - Import       │                      │ │
 │  │    (Sync)       │  - Settings     │                      │ │
 │  └─────────────────┴─────────────────┴──────────────────────┘ │
-└───────────────────────────┬───────────────────────────────────────┘
+└───────────────────────────┬───────────────────────────────────┘
                             │ localStorage
                             ▼
                    ┌────────────────┐
@@ -37,14 +37,14 @@ Reproductor de música de escritorio moderno con biblioteca local de alta resolu
 
 ## Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| Electron 44 | Desktop app runtime |
-| Angular 21 | Web framework (standalone components) |
-| TypeScript 5.9 | Language |
-| Tailwind CSS 4.3 | Styling |
-| Vitest / Angular TestBed | Unit testing |
-| RxJS | Reactive programming |
+| Technology               | Purpose                               |
+| ------------------------ | ------------------------------------- |
+| Electron 44              | Desktop app runtime                   |
+| Angular 21               | Web framework (standalone components) |
+| TypeScript 5.9           | Language                              |
+| Tailwind CSS 4.3         | Styling                               |
+| Vitest / Angular TestBed | Unit testing                          |
+| RxJS                     | Reactive programming                  |
 
 ## Características
 
@@ -109,14 +109,14 @@ Esto levanta el servidor Angular en `http://localhost:4205` y abre Electron cone
 
 ### Comandos disponibles
 
-| Comando | Descripción |
-|---------|-------------|
-| `npm start` | Servidor Angular (puerto 4205) |
-| `npm run electron` | Electron solamente |
-| `npm run electron-dev` | Angular + Electron juntos |
-| `npm run build` | Build de producción (Angular) |
-| `npm test` | Ejecutar suite de pruebas (44 tests) |
-| `npm run watch` | Build en modo watch |
+| Comando                | Descripción                          |
+| ---------------------- | ------------------------------------ |
+| `npm start`            | Servidor Angular (puerto 4205)       |
+| `npm run electron`     | Electron solamente                   |
+| `npm run electron-dev` | Angular + Electron juntos            |
+| `npm run build`        | Build de producción (Angular)        |
+| `npm test`             | Ejecutar suite de pruebas (44 tests) |
+| `npm run watch`        | Build en modo watch                  |
 
 ## Pruebas
 
