@@ -55,6 +55,38 @@ Reproductor de música de escritorio moderno con biblioteca local de alta resolu
 - 🎨 **Diseño moderno**: tema oscuro/claro, ecualizador visual, acentos personalizables
 - 💾 **Persistencia local**: todo se guarda en `localStorage` (perfil, carpetas, pistas, likes, follows)
 
+## Screenshots
+
+### 🏠 Pantalla de Inicio & Bienvenida
+
+| Welcome | Home |
+|---------|------|
+| ![Welcome](screenshots/welcome.png) | ![Home](screenshots/home.png) |
+
+### 🎵 Reproductor & Biblioteca
+
+| Player | Library |
+|--------|---------|
+| ![Player](screenshots/player.png) | ![Library](screenshots/library.png) |
+
+### 🔍 Búsqueda & Artistas
+
+| Search | Search Results | Artists |
+|--------|---------------|---------|
+| ![Search](screenshots/search.png) | ![Search Results](screenshots/search-results.png) | ![Artists](screenshots/artists.png) |
+
+### 📋 Cola & Preferencias
+
+| Queue | User Preferences | Profile |
+|-------|-----------------|---------|
+| ![Queue](screenshots/queue.png) | ![User Preferences](screenshots/user-preference.png) | ![Profile](screenshots/profile.png) |
+
+### 📂 Importar Archivos Locales
+
+![Import Local Files](screenshots/import-local-files.png)
+
+---
+
 ## Estructura del Repositorio
 
 ```
