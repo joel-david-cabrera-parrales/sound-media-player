@@ -505,7 +505,7 @@ function createWindow() {
   // Se oculta el menu de windows
   win.setMenuBarVisibility(false);
   win.setTitle('Sound');
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // En desarrollo, cargamos el servidor de Angular
   win.loadURL('http://localhost:4205');
