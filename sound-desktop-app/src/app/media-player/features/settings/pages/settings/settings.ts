@@ -8,9 +8,10 @@ import { ThemeService } from '../../../../../shared/services/theme.service';
 import { ACCENTS, type AccentId, type ThemeMode } from '../../../../../shared/models/user-settings';
 import { TranslationService } from '../../../../../shared/services/translation.service';
 import type { AppLanguage } from '../../../../../shared/utils/profile-language';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
-const DEFAULT_AVATAR = '/images/avatar-default.svg';
+const DEFAULT_AVATAR = appAssetUrl('/images/avatar-default.svg');
 
 @Component({
   selector: 'media-player-settings',

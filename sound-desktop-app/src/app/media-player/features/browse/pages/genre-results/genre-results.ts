@@ -12,6 +12,7 @@ import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, type Track } from '../../../../models/track.model';
 import { genreImage } from '../../../../models/genre-images';
 import { DEFAULT_GENRE_COVER, genreLabel, isGenreId } from '../../../../models/genre-taxonomy';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 @Component({
   selector: 'media-player-genre-results',
@@ -82,7 +83,7 @@ export class GenreResults {
 
   protected onCoverError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith(DEFAULT_GENRE_COVER)) img.src = DEFAULT_GENRE_COVER;
+    if (img.src !== DEFAULT_GENRE_COVER) img.src = DEFAULT_GENRE_COVER;
   }
 
   protected coverFor(track: Track): string | SafeUrl {
@@ -95,7 +96,8 @@ export class GenreResults {
 
   protected onTrackImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) img.src = fallback;
   }
 
   protected formatDuration(totalSec: number | null): string {

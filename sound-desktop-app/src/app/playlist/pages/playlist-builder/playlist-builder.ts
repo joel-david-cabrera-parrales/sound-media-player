@@ -12,6 +12,7 @@ import type { Playlist } from '../../models/playlist';
 import { LocalMusicService } from '../../../media-player/services/local-music.service';
 import { AudioPlayerService } from '../../../media-player/services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, type Track } from '../../../media-player/models/track.model';
+import { appAssetUrl } from '../../../shared/utils/app-asset-url';
 
 const PAGE_SIZE = 5;
 
@@ -83,7 +84,7 @@ export class PlaylistBuilder {
 
   protected heroCover(): string | SafeUrl {
     const cover = this.playlist()?.coverUrl;
-    if (!cover) return '/images/track-cover.svg';
+    if (!cover) return appAssetUrl('/images/track-cover.svg');
     if (cover.startsWith('sound-photo:') || cover.startsWith('data:')) {
       return this.sanitizer.bypassSecurityTrustUrl(cover);
     }
@@ -92,7 +93,8 @@ export class PlaylistBuilder {
 
   protected onImgError(event: Event, fallback: string): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith(fallback)) img.src = fallback;
+    const assetFallback = appAssetUrl(fallback);
+    if (img.src !== assetFallback) img.src = assetFallback;
   }
 
   protected formatDuration(totalSec: number | null): string {

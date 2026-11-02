@@ -7,6 +7,7 @@ import { LocalMusicService } from '../../../../services/local-music.service';
 import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, type Track } from '../../../../models/track.model';
 import { normalizeText } from '../../../../../shared/utils/text';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 type SortMode = 'title' | 'artist' | 'album' | 'duration';
 type ViewMode = 'grid' | 'list';
@@ -63,8 +64,9 @@ export class LikedSongs {
 
   protected onCoverError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) {
-      img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) {
+      img.src = fallback;
     }
   }
 

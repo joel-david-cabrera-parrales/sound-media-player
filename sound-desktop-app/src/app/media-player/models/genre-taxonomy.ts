@@ -1,4 +1,5 @@
 import type { Track } from './track.model';
+import { appAssetUrl } from '../../shared/utils/app-asset-url';
 
 /** Un género canónico de la taxonomía (promovida desde shared/mocks). */
 export interface GenreEntry {
@@ -12,7 +13,7 @@ export interface GenreEntry {
 export const OTHER_GENRE_ID = 'miscellaneous';
 
 /** Imagen por defecto para géneros sin carátula (incluye Otros). */
-export const DEFAULT_GENRE_COVER = '/images/genre-default.svg';
+export const DEFAULT_GENRE_COVER = appAssetUrl('/images/genre-default.svg');
 
 export const GENRE_TAXONOMY: GenreEntry[] = [
   { id: "miscellaneous", es: "Varios", en: "Miscellaneous", synonyms: ["Varios"] },

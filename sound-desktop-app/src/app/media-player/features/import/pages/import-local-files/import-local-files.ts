@@ -7,6 +7,7 @@ import { FavoriteButton } from '../../../../../shared/components/favorite-button
 import { LocalMusicService } from '../../../../services/local-music.service';
 import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, formatTrackSize, type Track } from '../../../../models/track.model';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 @Component({
   selector: 'media-player-import-local-files',
@@ -19,7 +20,7 @@ export class ImportLocalFiles {
   protected readonly player = inject(AudioPlayerService);
   private readonly router = inject(Router);
   private readonly sanitizer = inject(DomSanitizer);
-  protected readonly trackCover = '/images/track-cover.svg';
+  protected readonly trackCover = appAssetUrl('/images/track-cover.svg');
 
   protected readonly isDragging = signal(false);
   protected readonly showDropHint = signal(false);

@@ -10,6 +10,7 @@ import { LocalMusicService } from '../../../media-player/services/local-music.se
 import { AudioPlayerService } from '../../../media-player/services/audio-player.service';
 import { formatTrackDuration, type Track } from '../../../media-player/models/track.model';
 import { safeUrlCached, trackCoverCached } from '../../../shared/utils/cover-cache';
+import { appAssetUrl } from '../../../shared/utils/app-asset-url';
 
 type DetailSort = 'added' | 'title' | 'artist' | 'duration';
 
@@ -127,7 +128,7 @@ export class PlaylistDetail {
       return cover;
     }
     const first = this.rows().find((r) => r.track.coverCacheKey)?.track ?? this.rows()[0]?.track;
-    if (!first) return '/images/track-cover.svg';
+    if (!first) return appAssetUrl('/images/track-cover.svg');
     return this.coverFor(first);
   }
 
@@ -137,7 +138,8 @@ export class PlaylistDetail {
 
   protected onImgError(event: Event, fallback: string): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith(fallback)) img.src = fallback;
+    const assetFallback = appAssetUrl(fallback);
+    if (img.src !== assetFallback) img.src = assetFallback;
   }
 
   protected formatDuration(totalSec: number | null): string {
@@ -155,7 +157,7 @@ export class PlaylistDetail {
     const first = this.store
       .resolveTracks(playlist, this.library.tracks())
       .find((t) => !!t.coverCacheKey);
-    if (!first) return '/images/track-cover.svg';
+    if (!first) return appAssetUrl('/images/track-cover.svg');
     return this.coverFor(first);
   }
 

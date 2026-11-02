@@ -1,4 +1,5 @@
 import { DEFAULT_GENRE_COVER } from './genre-taxonomy';
+import { appAssetUrl } from '../../shared/utils/app-asset-url';
 
 /** Mapa explícito id de género -> imagen en public/genres-images. */
 /** Generado por script: match normalizado (sin tildes/acentos) + relaciones. */
@@ -218,5 +219,5 @@ export const GENRE_IMAGES: Record<string, string> = {
 export function genreImage(id: string): string {
   const file = GENRE_IMAGES[id];
   if (!file) return DEFAULT_GENRE_COVER;
-  return encodeURI('/genres-images/' + file);
+  return appAssetUrl('/genres-images/' + file);
 }
