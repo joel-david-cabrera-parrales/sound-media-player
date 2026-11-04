@@ -7,6 +7,7 @@ import { PlaylistsService } from '../../services/playlists.service';
 import type { Playlist } from '../../models/playlist';
 import { LocalMusicService } from '../../../media-player/services/local-music.service';
 import { coverUrlFor, type Track } from '../../../media-player/models/track.model';
+import { appAssetUrl } from '../../../shared/utils/app-asset-url';
 
 @Component({
   selector: 'playlist-list',
@@ -15,6 +16,7 @@ import { coverUrlFor, type Track } from '../../../media-player/models/track.mode
   styleUrl: './playlists-list.css',
 })
 export class PlaylistsList {
+  protected readonly fallbackCover = appAssetUrl('/images/track-cover.svg');
   protected readonly store = inject(PlaylistsService);
   protected readonly library = inject(LocalMusicService);
   private readonly router = inject(Router);
@@ -44,7 +46,7 @@ export class PlaylistsList {
   }
 
   private safeUrl(url: string): string | SafeUrl {
-    if (!url) return '/images/track-cover.svg';
+    if (!url) return appAssetUrl('/images/track-cover.svg');
     if (url.startsWith('sound-photo:') || url.startsWith('sound-cover:') || url.startsWith('data:')) {
       return this.sanitizer.bypassSecurityTrustUrl(url);
     }
@@ -53,7 +55,8 @@ export class PlaylistsList {
 
   protected onCoverError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) img.src = fallback;
   }
 
   protected openCreate(): void {

@@ -16,6 +16,7 @@ import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { formatTrackDuration, formatTrackSize, type Track } from '../../../../models/track.model';
 import { trackCoverCached } from '../../../../../shared/utils/cover-cache';
 import { normalizeText } from '../../../../../shared/utils/text';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 type SortMode = 'title' | 'artist' | 'album' | 'duration';
 type ViewMode = 'grid' | 'list';
@@ -27,6 +28,7 @@ type ViewMode = 'grid' | 'list';
   styleUrl: './library.css',
 })
 export class Library {
+  protected readonly fallbackCover = appAssetUrl('/images/track-cover.svg');
   protected readonly library = inject(LocalMusicService);
   protected readonly player = inject(AudioPlayerService);
   protected readonly menu = inject(TrackMenuService);
@@ -92,8 +94,9 @@ export class Library {
 
   protected onCoverError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) {
-      img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) {
+      img.src = fallback;
     }
   }
 

@@ -10,6 +10,7 @@ import {
 import { coverUrlFor } from '../../../../models/track.model';
 import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { normalizeText } from '../../../../../shared/utils/text';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 type SortMode = 'name' | 'tracks' | 'recent';
 type ViewMode = 'grid' | 'list';
@@ -65,11 +66,11 @@ export class Artist {
       return this.sanitizer.bypassSecurityTrustUrl(artist.artistImageUrl);
     }
     const track = artist.coverTrack;
-    if (!track?.coverCacheKey) return '/images/avatar-default.svg';
+    if (!track?.coverCacheKey) return appAssetUrl('/images/avatar-default.svg');
     const url = coverUrlFor(track, '');
     return url.startsWith('sound-cover:')
       ? this.sanitizer.bypassSecurityTrustUrl(url)
-      : url || '/images/avatar-default.svg';
+      : url || appAssetUrl('/images/avatar-default.svg');
   }
 
   protected isPlaying(artist: LocalArtist): boolean {
@@ -92,8 +93,9 @@ export class Artist {
 
   protected onPhotoError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/avatar-default.svg')) {
-      img.src = '/images/avatar-default.svg';
+    const fallback = appAssetUrl('/images/avatar-default.svg');
+    if (img.src !== fallback) {
+      img.src = fallback;
     }
   }
 

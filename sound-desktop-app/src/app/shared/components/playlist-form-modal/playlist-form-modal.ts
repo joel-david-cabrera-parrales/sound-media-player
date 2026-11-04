@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { migrateLegacyPhotoUrl } from '../../utils/profile-photo';
+import { appAssetUrl } from '../../utils/app-asset-url';
 
 export interface PlaylistFormValue {
   name: string;
@@ -10,7 +11,7 @@ export interface PlaylistFormValue {
   coverUrl: string | null;
 }
 
-const DEFAULT_COVER = '/images/track-cover.svg';
+const DEFAULT_COVER = appAssetUrl('/images/track-cover.svg');
 const MAX_COVER_BYTES = 4 * 1024 * 1024;
 
 function toSoundPhotoUrl(filePath: string): string {

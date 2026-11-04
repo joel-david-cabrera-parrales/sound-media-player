@@ -20,7 +20,7 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url('/fonts/inter/inter-latin-wght-normal.woff2') format('woff2');
+  src: url('../public/fonts/inter/inter-latin-wght-normal.woff2') format('woff2');
 }
 
 @font-face {
@@ -28,7 +28,7 @@
   font-style: normal;
   font-weight: 100 700;
   font-display: block;
-  src: url('/fonts/material-symbols/material-symbols-outlined-latin-400-normal.woff2') format('woff2');
+  src: url('../public/fonts/material-symbols/material-symbols-outlined-latin-400-normal.woff2') format('woff2');
 }
 
 .material-symbols-outlined {

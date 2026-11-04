@@ -10,9 +10,10 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { PROFILE_STORAGE_KEY } from '../../guards/profile-setup.guard';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { fullNameValidator, pastDateValidator } from '../../../shared/validators/profile.validators';
+import { appAssetUrl } from '../../../shared/utils/app-asset-url';
 
 const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
-const DEFAULT_AVATAR = '/images/avatar-default.svg';
+const DEFAULT_AVATAR = appAssetUrl('/images/avatar-default.svg');
 
 function toSoundPhotoUrl(filePath: string): string {
   // Formato query con host ficticio: Chromium rechaza rutas en posición de host.

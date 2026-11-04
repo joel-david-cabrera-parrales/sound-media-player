@@ -56,7 +56,7 @@
               @for (cover of mosaic(playlist).slice(0, 4); track $index) {
                 <img class="w-full h-full object-cover" [src]="cover" alt="" loading="lazy" (error)="onCoverError($event)" />
               } @empty {
-                <img class="col-span-2 row-span-2 w-full h-full object-cover" src="/images/track-cover.svg" alt="" />
+                <img class="col-span-2 row-span-2 w-full h-full object-cover" [src]="fallbackCover" alt="" />
               }
             </div>
             <h3 class="text-slate-900 dark:text-white font-bold text-[16px] leading-[22px] truncate">{{ playlist.name }}</h3>

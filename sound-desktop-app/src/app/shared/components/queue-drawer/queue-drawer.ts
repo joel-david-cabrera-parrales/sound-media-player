@@ -10,6 +10,7 @@ import {
   type Track,
 } from '../../../media-player/models/track.model';
 import { trackCoverCached } from '../../utils/cover-cache';
+import { appAssetUrl } from '../../utils/app-asset-url';
 
 /**
  * Escala z documentada: dock 40 < drawer overlay 65 / panel 70 <
@@ -173,7 +174,8 @@ export class QueueDrawer {
 
   protected onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) img.src = fallback;
   }
 
   protected formatDuration(totalSec: number | null): string {

@@ -9,6 +9,7 @@ import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { coverUrlFor, formatTrackDuration, type Track } from '../../../../models/track.model';
 import { safeUrlCached, trackCoverCached } from '../../../../../shared/utils/cover-cache';
 import { normalizeText as norm } from '../../../../../shared/utils/text';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 export type ResultsFilter = 'all' | 'songs' | 'artists' | 'albums' | 'playlists';
 
@@ -194,7 +195,7 @@ export class SearchResults implements OnDestroy {
         kind: 'genre',
         title: genres[0],
         subtitle: '',
-        cover: '/images/genre-default.svg',
+        cover: appAssetUrl('/images/genre-default.svg'),
         track: tracks.find((t) => t.genre?.trim() === genres[0]) ?? null,
         artistUuid: null,
         stats: [`${count}`],
@@ -256,7 +257,7 @@ export class SearchResults implements OnDestroy {
 
   protected playlistCover(playlistId: string): string | SafeUrl {
     const playlist = this.store.getById(playlistId);
-    if (!playlist) return '/images/track-cover.svg';
+    if (!playlist) return appAssetUrl('/images/track-cover.svg');
     if (playlist.coverUrl) {
       const url = playlist.coverUrl;
       if (url.startsWith('sound-photo:') || url.startsWith('data:') || url.startsWith('sound-cover:')) {
@@ -267,7 +268,7 @@ export class SearchResults implements OnDestroy {
     const first = this.store
       .resolveTracks(playlist, this.library.tracks())
       .find((t) => !!t.coverCacheKey);
-    if (!first) return '/images/track-cover.svg';
+    if (!first) return appAssetUrl('/images/track-cover.svg');
     return this.coverFor(first);
   }
 
@@ -404,9 +405,9 @@ export class SearchResults implements OnDestroy {
   }
 
   protected artistCover(artist: LocalArtist): string | SafeUrl {
-    if (!artist.coverTrack) return '/images/avatar-default.svg';
+    if (!artist.coverTrack) return appAssetUrl('/images/avatar-default.svg');
     const url = coverUrlFor(artist.coverTrack, '');
-    if (!url) return '/images/avatar-default.svg';
+    if (!url) return appAssetUrl('/images/avatar-default.svg');
     return url.startsWith('sound-cover:')
       ? safeUrlCached(this.sanitizer, url)
       : url;
@@ -418,7 +419,8 @@ export class SearchResults implements OnDestroy {
 
   protected onImgError(event: Event, fallback: string): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith(fallback)) img.src = fallback;
+    const assetFallback = appAssetUrl(fallback);
+    if (img.src !== assetFallback) img.src = assetFallback;
   }
 
   protected formatDuration(totalSec: number | null): string {

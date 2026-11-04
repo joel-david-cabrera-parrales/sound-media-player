@@ -8,6 +8,7 @@ import { CoverService } from '../../services/cover.service';
 import { TrackCard } from '../track-card/track-card';
 import { TrackRow } from '../track-row/track-row';
 import { EmptyState } from '../empty-state/empty-state';
+import { appAssetUrl } from '../../utils/app-asset-url';
 
 type SortMode = 'title' | 'artist' | 'album' | 'duration';
 type ViewMode = 'grid' | 'list';
@@ -80,8 +81,9 @@ export class TrackList {
 
   protected onCoverError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) {
-      img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) {
+      img.src = fallback;
     }
   }
 

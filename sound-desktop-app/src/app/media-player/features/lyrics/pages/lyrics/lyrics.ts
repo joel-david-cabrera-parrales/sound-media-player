@@ -5,6 +5,7 @@ import { TranslatePipe } from '../../../../../shared/pipes/translate.pipe';
 import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { coverUrlFor } from '../../../../models/track.model';
 import type { Track } from '../../../../models/track.model';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 @Component({
   selector: 'media-player-lyrics',
@@ -28,6 +29,7 @@ export class Lyrics {
 
   protected onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) img.src = fallback;
   }
 }

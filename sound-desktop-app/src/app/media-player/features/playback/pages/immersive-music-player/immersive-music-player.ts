@@ -7,8 +7,9 @@ import { SoundwaveShader } from '../../../../components/soundwave-shader/soundwa
 import { AudioPlayerService } from '../../../../services/audio-player.service';
 import { QueueUiService } from '../../../../../shared/services/queue-ui.service';
 import { coverUrlFor } from '../../../../models/track.model';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
-const FALLBACK_COVER = '/images/immersive-cover.svg';
+const FALLBACK_COVER = appAssetUrl('/images/immersive-cover.svg');
 
 @Component({
   selector: 'media-player-immersive-music-player',

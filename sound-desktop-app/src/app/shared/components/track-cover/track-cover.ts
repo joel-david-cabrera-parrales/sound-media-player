@@ -2,6 +2,7 @@ import { Component, input, computed, inject, effect } from '@angular/core';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { CoverService } from '../../services/cover.service';
 import type { Track } from '../../../media-player/models/track.model';
+import { appAssetUrl } from '../../utils/app-asset-url';
 
 @Component({
   selector: 'shared-track-cover',
@@ -11,7 +12,7 @@ import type { Track } from '../../../media-player/models/track.model';
 })
 export class TrackCover {
   readonly track = input<Track | null>(null);
-  readonly fallback = input<string>('/images/track-cover.svg');
+  readonly fallback = input<string>(appAssetUrl('/images/track-cover.svg'));
   readonly alt = input<string>('');
   readonly klass = input<string>('');
   readonly width = input<string>('');
@@ -28,8 +29,9 @@ export class TrackCover {
 
   protected onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith(this.fallback())) {
-      img.src = this.fallback();
+    const fallback = appAssetUrl(this.fallback());
+    if (img.src !== fallback) {
+      img.src = fallback;
     }
   }
 }

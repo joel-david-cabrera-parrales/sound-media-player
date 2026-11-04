@@ -8,3 +8,6 @@ frontend-design/**/*.json
 sound-desktop-app/.dockerignore
 sound-desktop-app/Dockerfile
 sound-desktop-app/docker-compose.yml
+
+/.vscode
+sound-desktop-app/release/

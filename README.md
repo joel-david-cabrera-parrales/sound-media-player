@@ -150,6 +150,16 @@ Esto levanta el servidor Angular en `http://localhost:4205` y abre Electron cone
 | `npm test`             | Ejecutar suite de pruebas (44 tests) |
 | `npm run watch`        | Build en modo watch                  |
 
+### Generar instalador de Windows
+
+Desde `sound-desktop-app`, ejecuta:
+
+```bash
+npm run dist:win
+```
+
+El comando compila Angular y genera un instalador NSIS de 64 bits en `release/`. El asistente permite elegir la carpeta de instalación y crea accesos directos en el menú Inicio y el escritorio.
+
 ## Pruebas
 
 El proyecto incluye **44 tests unitarios** que cubren componentes, servicios y el flujo de bienvenida. Todos pasan.
