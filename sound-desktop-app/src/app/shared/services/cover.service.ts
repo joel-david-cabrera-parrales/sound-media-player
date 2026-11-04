@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { coverUrlFor, type Track } from '../../media-player/models/track.model';
 import { trackCoverCached } from '../../shared/utils/cover-cache';
+import { appAssetUrl } from '../utils/app-asset-url';
 
-const TRACK_COVER_FALLBACK = '/images/track-cover.svg';
+const TRACK_COVER_FALLBACK = appAssetUrl('/images/track-cover.svg');
 
 type SanitizerLike = { bypassSecurityTrustUrl(value: string): SafeUrl };
 

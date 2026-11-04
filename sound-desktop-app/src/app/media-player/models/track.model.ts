@@ -1,3 +1,5 @@
+import { appAssetUrl } from '../../shared/utils/app-asset-url';
+
 export interface Track {
   id: string;
   folderId: string;
@@ -68,8 +70,8 @@ export function coverUrlFor(track: Track, fallback = '/images/track-cover.svg'):
     try {
       return api.toCoverUrl(track.coverCacheKey);
     } catch {
-      return fallback;
+      return appAssetUrl(fallback);
     }
   }
-  return fallback;
+  return appAssetUrl(fallback);
 }

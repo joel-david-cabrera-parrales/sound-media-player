@@ -505,10 +505,14 @@ function createWindow() {
   // Se oculta el menu de windows
   win.setMenuBarVisibility(false);
   win.setTitle('Sound');
-  // win.webContents.openDevTools();
-
-  // En desarrollo, cargamos el servidor de Angular
-  win.loadURL('http://localhost:4205');
+  if (app.isPackaged) {
+    // El build de Angular se incluye en el paquete de Electron.
+    win.loadFile(path.join(__dirname, '..', 'dist', 'sound-desktop-app', 'browser', 'index.html'));
+  } else {
+    // En desarrollo, cargamos el servidor de Angular.
+    win.webContents.openDevTools();
+    win.loadURL('http://localhost:4205');
+  }
 }
 
 app.whenReady().then(() => {

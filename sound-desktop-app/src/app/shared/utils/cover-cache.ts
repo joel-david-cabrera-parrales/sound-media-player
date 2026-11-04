@@ -1,5 +1,6 @@
 import { type SafeUrl } from '@angular/platform-browser';
 import { coverUrlFor, type Track } from '../../media-player/models/track.model';
+import { appAssetUrl } from './app-asset-url';
 
 type SanitizerLike = { bypassSecurityTrustUrl(value: string): SafeUrl };
 
@@ -41,7 +42,7 @@ export function trackCoverCached(
 ): string | SafeUrl {
   const key = track.coverCacheKey ? `c:${track.coverCacheKey}` : `n:${track.id}`;
   const cachedUrl = urlCache.get(key);
-  const url = cachedUrl ?? coverUrlFor(track, fallback);
+  const url = cachedUrl ?? coverUrlFor(track, appAssetUrl(fallback));
   if (cachedUrl === undefined) {
     urlCache.set(key, url);
     prune(urlCache);

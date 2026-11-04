@@ -8,10 +8,12 @@
     "ng": "ng",
     "start": "ng serve --port=4205",
     "build": "ng build",
+    "build:desktop": "ng build --base-href ./",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron": "electron .",
-    "electron-dev": "concurrently \"npm start\" \"wait-on http://localhost:4205 && npm run electron\""
+    "electron-dev": "concurrently \"npm start\" \"wait-on http://localhost:4205 && npm run electron\"",
+    "dist:win": "npm run build:desktop && electron-builder --win nsis"
   },
   "author": {
     "name": "Joel Cabrera",
@@ -45,10 +47,50 @@
     "@angular/compiler-cli": "^21.2.0",
     "concurrently": "10.0.5",
     "electron": "44.5.1",
+    "electron-builder": "^26.18.0",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8",
     "wait-on": "9.5.1"
+  },
+  "build": {
+    "appId": "com.joelcabrera.sound",
+    "productName": "Sound",
+    "asar": true,
+    "files": [
+      "electron/**/*",
+      "dist/sound-desktop-app/browser/**/*",
+      "public/sound-logo.ico",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "public",
+      "output": "release"
+    },
+    "win": {
+      "icon": "public/sound-installer.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Sound-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "public/sound-installer.ico",
+      "uninstallerIcon": "public/sound-installer.ico",
+      "installerHeaderIcon": "public/sound-installer.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Sound",
+      "uninstallDisplayName": "Sound"
+    }
   }
 }

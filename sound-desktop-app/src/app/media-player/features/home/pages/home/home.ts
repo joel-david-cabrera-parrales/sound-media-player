@@ -9,6 +9,7 @@ import { formatTrackDuration, type Track } from '../../../../models/track.model'
 import { trackCoverCached } from '../../../../../shared/utils/cover-cache';
 import { genreImage } from '../../../../models/genre-images';
 import { DEFAULT_GENRE_COVER } from '../../../../models/genre-taxonomy';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 interface GenreStat {
   id: string;
@@ -72,7 +73,7 @@ export class Home {
 
   protected onGenreImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith(DEFAULT_GENRE_COVER)) img.src = DEFAULT_GENRE_COVER;
+    if (img.src !== DEFAULT_GENRE_COVER) img.src = DEFAULT_GENRE_COVER;
   }
 
   protected coverFor(track: Track): string | SafeUrl {
@@ -80,7 +81,7 @@ export class Home {
   }
 
   protected artistCover(artist: LocalArtist): string | SafeUrl {
-    if (!artist.coverTrack) return '/images/avatar-default.svg';
+    if (!artist.coverTrack) return appAssetUrl('/images/avatar-default.svg');
     return this.coverFor(artist.coverTrack);
   }
 
@@ -90,7 +91,8 @@ export class Home {
 
   protected onImgError(event: Event, fallback: string): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith(fallback)) img.src = fallback;
+    const assetFallback = appAssetUrl(fallback);
+    if (img.src !== assetFallback) img.src = assetFallback;
   }
 
   protected formatDuration(totalSec: number | null): string {

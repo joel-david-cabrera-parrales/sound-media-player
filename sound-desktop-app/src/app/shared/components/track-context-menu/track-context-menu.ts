@@ -3,6 +3,7 @@ import { DomSanitizer, type SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TrackMenuService } from '../../services/track-menu.service';
 import { coverUrlFor, type Track } from '../../../media-player/models/track.model';
+import { appAssetUrl } from '../../utils/app-asset-url';
 
 @Component({
   selector: 'shared-track-context-menu',
@@ -39,6 +40,7 @@ export class TrackContextMenu {
 
   protected onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) img.src = fallback;
   }
 }

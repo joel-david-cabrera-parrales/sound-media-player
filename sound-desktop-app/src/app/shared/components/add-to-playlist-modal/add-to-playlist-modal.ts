@@ -6,6 +6,7 @@ import { TranslationService } from '../../services/translation.service';
 import { PlaylistsService } from '../../../playlist/services/playlists.service';
 import { PlaylistFormModal, type PlaylistFormValue } from '../playlist-form-modal/playlist-form-modal';
 import { normalizeText } from '../../utils/text';
+import { appAssetUrl } from '../../utils/app-asset-url';
 
 @Component({
   selector: 'shared-add-to-playlist-modal',
@@ -58,7 +59,7 @@ export class AddToPlayListModal {
   }
 
   protected playlistCover(playlistId: string): string | SafeUrl {    const playlist = this.store.getById(playlistId);
-    if (!playlist) return '/images/track-cover.svg';
+    if (!playlist) return appAssetUrl('/images/track-cover.svg');
     if (playlist.coverUrl) {
       const url = playlist.coverUrl;
       if (url.startsWith('sound-photo:') || url.startsWith('data:') || url.startsWith('sound-cover:')) {
@@ -66,12 +67,13 @@ export class AddToPlayListModal {
       }
       return url;
     }
-    return '/images/track-cover.svg';
+    return appAssetUrl('/images/track-cover.svg');
   }
 
   protected onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) img.src = fallback;
   }
 
   protected toggleIn(playlistId: string): void {

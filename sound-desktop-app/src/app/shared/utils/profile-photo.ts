@@ -1,6 +1,8 @@
 export const PROFILE_STORAGE_KEY = 'sound.profile';
 
-export const DEFAULT_AVATAR = '/images/avatar-default.svg';
+import { appAssetUrl } from './app-asset-url';
+
+export const DEFAULT_AVATAR = appAssetUrl('/images/avatar-default.svg');
 
 /**
  * Migra URLs legacy de foto (`sound-photo:///C:/...` o la forma normalizada

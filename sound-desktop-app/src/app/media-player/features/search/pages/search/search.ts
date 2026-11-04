@@ -9,6 +9,7 @@ import { coverUrlFor, type Track } from '../../../../models/track.model';
 import { genreImage } from '../../../../models/genre-images';
 import { DEFAULT_GENRE_COVER, genreLabel } from '../../../../models/genre-taxonomy';
 import { normalizeText } from '../../../../../shared/utils/text';
+import { appAssetUrl } from '../../../../../shared/utils/app-asset-url';
 
 type SearchFilter = 'all' | 'music' | 'podcasts' | 'live';
 type GenreSort = 'popular' | 'az';
@@ -171,7 +172,7 @@ export class Search {
               track: null,
               artistName: a.name,
               genreId: null,
-              cover: a.coverTrack ? this.coverFor(a.coverTrack) : '/images/track-cover.svg',
+              cover: a.coverTrack ? this.coverFor(a.coverTrack) : appAssetUrl('/images/track-cover.svg'),
             });
             if (out.length >= 8) break;
           }
@@ -245,14 +246,15 @@ export class Search {
 
   protected onGenreImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/genre-default.svg')) {
+    if (img.src !== DEFAULT_GENRE_COVER) {
       img.src = DEFAULT_GENRE_COVER;
     }
   }
 
   protected onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('/images/track-cover.svg')) img.src = '/images/track-cover.svg';
+    const fallback = appAssetUrl('/images/track-cover.svg');
+    if (img.src !== fallback) img.src = fallback;
   }
 
   /** Etiqueta localizada del género para el chip (no el id crudo). */
